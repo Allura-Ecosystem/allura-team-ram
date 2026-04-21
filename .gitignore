@@ -3,6 +3,12 @@
 !.sisyphus/rules/
 node_modules/
 
+# Opencode - ignore everything except skills and essential config
+.opencode/
+!.opencode/skills/
+!.opencode/background-tasks.json
+!.opencode/mcp.json
+
 # Build output
 dist/
 
