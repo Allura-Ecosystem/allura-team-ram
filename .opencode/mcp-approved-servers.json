@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "approved_by": "brooks-architect",
+  "last_updated": "2026-04-11T00:00:00Z",
+  "servers": {
+    "allura-memory": {
+      "status": "approved",
+      "approved_at": "2026-04-11T00:00:00Z",
+      "approved_by": "brooks-architect",
+      "tools": ["memory_add", "memory_search", "memory_get", "memory_list", "memory_delete"],
+      "category": "database",
+      "essential": true,
+      "rationale": "Core memory system for episodic and semantic storage. Required for all harness operations: event logging, session tracking, ADR storage, performance history, and memory promotion (SOC2 mode)."
+    }
+  },
+  "pending": {},
+  "denied": {}
+}

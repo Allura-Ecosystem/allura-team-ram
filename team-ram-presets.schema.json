@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Team RAM Preset Configuration",
+  "description": "Schema for .opencode/team-ram-presets.jsonc - Team RAM agent model presets and fallback chains.",
+  "type": "object",
+  "required": ["preset", "presets"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Schema reference for IDE validation"
+    },
+    "preset": {
+      "type": "string",
+      "description": "Currently active preset name",
+      "enum": ["ollama", "openai", "anthropic", "mixed"]
+    },
+    "presets": {
+      "type": "object",
+      "description": "Named preset configurations",
+      "properties": {
+        "ollama": {
+          "$ref": "#/definitions/agentPresetMap",
+          "description": "Ollama-first preset. All models use local Ollama with cloud connector. Zero API costs."
+        },
+        "openai": {
+          "$ref": "#/definitions/agentPresetMap",
+          "description": "OpenAI preset. Uses GPT-5.5 for high-reasoning agents, GPT-5.4 for fast agents."
+        },
+        "anthropic": {
+          "$ref": "#/definitions/agentPresetMap",
+          "description": "Anthropic preset. Claude-opus-4-6 for architect, sonnet-4 for others, haiku-4-5 for fast."
+        },
+        "mixed": {
+          "$ref": "#/definitions/agentPresetMap",
+          "description": "Mixed preset. Combines best models per agent from all providers."
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/agentPresetMap",
+        "description": "Custom preset definitions"
+      }
+    },
+    "fallback": {
+      "type": "object",
+      "description": "Model fallback chain configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable fallback chains",
+          "default": true
+        },
+        "timeoutMs": {
+          "type": "number",
+          "description": "Time in milliseconds before aborting and trying next model",
+          "default": 15000
+        },
+        "retryDelayMs": {
+          "type": "number",
+          "description": "Delay between retry attempts",
+          "default": 500
+        },
+        "retry_on_empty": {
+          "type": "boolean",
+          "description": "Treat silent empty provider responses as failures",
+          "default": true
+        },
+        "chains": {
+          "type": "object",
+          "description": "Per-agent fallback model chains",
+          "patternProperties": {
+            "^(brooks|jobs|bahari|scout|woz|bellard|carmack|pike|fowler|knuth|hightower)$": {
+              "type": "array",
+              "description": "Ordered fallback models for this agent",
+              "items": {
+                "type": "string",
+                "description": "Model ID in provider/model-id format"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "agentPresetMap": {
+      "type": "object",
+      "description": "Map of agent names to their model configurations in a preset",
+      "properties": {
+        "brooks":      { "$ref": "#/definitions/agentConfig" },
+        "jobs":        { "$ref": "#/definitions/agentConfig" },
+        "bahari":      { "$ref": "#/definitions/agentConfig" },
+        "scout":       { "$ref": "#/definitions/agentConfig" },
+        "woz":         { "$ref": "#/definitions/agentConfig" },
+        "bellard":     { "$ref": "#/definitions/agentConfig" },
+        "carmack":     { "$ref": "#/definitions/agentConfig" },
+        "pike":        { "$ref": "#/definitions/agentConfig" },
+        "fowler":      { "$ref": "#/definitions/agentConfig" },
+        "knuth":       { "$ref": "#/definitions/agentConfig" },
+        "hightower":   { "$ref": "#/definitions/agentConfig" }
+      }
+    },
+    "agentConfig": {
+      "type": "object",
+      "required": ["model"],
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "Model ID in provider/model-id format (e.g., ollama/glm-5.1:cloud, openai/gpt-5.5)",
+          "examples": [
+            "ollama/glm-5.1:cloud",
+            "ollama/deepseek-v4-pro:cloud",
+            "ollama/kimi-k2.6:cloud",
+            "ollama/nemotron-3-super:cloud",
+            "ollama/qwen3-coder-next:cloud",
+            "ollama/qwen3:0.6b",
+            "openai/gpt-5.5",
+            "openai/gpt-5.4-mini",
+            "anthropic/claude-opus-4-6",
+            "anthropic/claude-sonnet-4",
+            "anthropic/claude-haiku-4-5"
+          ]
+        },
+        "variant": {
+          "type": "string",
+          "description": "Reasoning effort level",
+          "enum": ["low", "medium", "high"],
+          "default": "medium"
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

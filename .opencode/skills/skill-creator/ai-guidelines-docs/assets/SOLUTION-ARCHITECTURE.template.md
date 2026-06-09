@@ -1,0 +1,1 @@
+../../../templates/SOLUTION-ARCHITECTURE.template.md

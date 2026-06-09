@@ -1,0 +1,91 @@
+{
+  "name": "team-ram-harness",
+  "version": "0.2.0",
+  "description": "Team RAM OpenCode Harness — self-evolving multi-agent orchestration with 10 specialists, SONA learning, coherence monitoring, and HITL governance. Portable harness for deterministic AI-powered software development.",
+  "author": {
+    "name": "Team RAM Contributors"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/Charitablebusinessronin/team_durham.git",
+  "mcp": "./.mcp.json",
+  "hooks": "./hooks/hooks.json",
+  "keywords": [
+    "opencode",
+    "harness",
+    "team-ram",
+    "multi-agent",
+    "orchestration",
+    "sona",
+    "self-evolving",
+    "ai-agents",
+    "allura",
+    "governance"
+  ],
+  "skills": "./.opencode/skills/",
+  "agents": [
+    "./.opencode/agent/brooks.md",
+    "./.opencode/agent/jobs.md",
+    "./.opencode/agent/bahari.md",
+    "./.opencode/agent/woz.md",
+    "./.opencode/agent/scout.md",
+    "./.opencode/agent/pike.md",
+    "./.opencode/agent/fowler.md",
+    "./.opencode/agent/bellard.md",
+    "./.opencode/agent/carmack.md",
+    "./.opencode/agent/knuth.md",
+    "./.opencode/agent/hightower.md"
+  ],
+  "commands": [
+    "./.opencode/command/start-session.md",
+    "./.opencode/command/architect.md",
+    "./.opencode/command/debug.md",
+    "./.opencode/command/commit.md",
+    "./.opencode/command/party.md",
+    "./.opencode/command/task.md",
+    "./.opencode/command/test.md",
+    "./.opencode/command/scout.md",
+    "./.opencode/command/orchestrate.md",
+    "./.opencode/command/goal.md",
+    "./.opencode/command/analyst.md",
+    "./.opencode/command/analyze-patterns.md",
+    "./.opencode/command/clean.md",
+    "./.opencode/command/context.md",
+    "./.opencode/command/add-context.md",
+    "./.opencode/command/curator-team-promote.md",
+    "./.opencode/command/harness-status.md",
+    "./.opencode/command/intent-gate.md",
+    "./.opencode/command/mcp-approve.md",
+    "./.opencode/command/mcp-discover.md",
+    "./.opencode/command/mcp-load.md",
+    "./.opencode/command/optimize.md",
+    "./.opencode/command/quickprompt.md",
+    "./.opencode/command/run-day.md",
+    "./.opencode/command/run-night.md",
+    "./.opencode/command/scribe.md",
+    "./.opencode/command/skill-load.md",
+    "./.opencode/command/skill-propose.md",
+    "./.opencode/command/ultra.md",
+    "./.opencode/command/update.md",
+    "./.opencode/command/validate-repo.md"
+  ],
+  "interface": {
+    "displayName": "Team RAM Harness",
+    "shortDescription": "Self-evolving multi-agent orchestration for software development",
+    "longDescription": "A portable harness with 10 specialist AI agents (Brooks, Woz, Scout, and 7 more), 35+ workflow commands, 26+ skills, SONA-powered learning that improves agents from execution history, coherence monitoring for conceptual integrity, HITL governance for all self-modifications, and optional Allura Brain memory integration. Operates in DAY_BUILD (interactive) and NIGHT_BUILD (autonomous) modes.",
+    "developerName": "Team RAM",
+    "category": "Coding",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Interactive",
+      "Memory"
+    ],
+    "brandColor": "#7C3AED",
+    "defaultPrompt": [
+      "Start a session and check harness health",
+      "Debug this failing test",
+      "Party mode: implement user authentication",
+      "Run architecture review on this codebase"
+    ]
+  }
+}

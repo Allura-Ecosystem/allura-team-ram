@@ -1,0 +1,91 @@
+// Team RAM Model Presets & Fallback Chains
+// Single source of truth. Edit here. Run `./scripts/apply-preset.sh` to propagate.
+// $schema: "./team-ram-presets.schema.json" (when available)
+
+{
+  "//": "Active preset. Switch with: ./scripts/apply-preset.sh <name>",
+  "preset": "ollama",
+
+  "presets": {
+    // Default: ollama-first. Zero API costs, all models run through Ollama cloud connector.
+    "ollama": {
+      "brooks":      { "model": "ollama/glm-5.1:cloud",        "variant": "high"  },
+      "jobs":        { "model": "ollama/deepseek-v4-pro:cloud","variant": "high"  },
+      "bahari":      { "model": "ollama/kimi-k2.6:cloud",      "variant": "medium"},
+      "scout":       { "model": "ollama/nemotron-3-super:cloud","variant": "low"  },
+      "woz":         { "model": "ollama/qwen3-coder-next:cloud", "variant": "medium"},
+      "bellard":     { "model": "ollama/glm-5.1:cloud",        "variant": "medium"},
+      "carmack":     { "model": "ollama/qwen3-coder-next:cloud", "variant": "medium"},
+      "pike":        { "model": "ollama/deepseek-v4-pro:cloud",  "variant": "medium"},
+      "fowler":      { "model": "ollama/glm-5.1:cloud",        "variant": "medium"},
+      "knuth":       { "model": "ollama/qwen3-coder-next:cloud", "variant": "medium"},
+      "hightower":   { "model": "ollama/deepseek-v4-pro:cloud","variant": "medium"}
+    },
+
+    // OpenAI — when credits are available. Uses the strongest models per role.
+    "openai": {
+      "brooks":      { "model": "openai/gpt-5.5",       "variant": "high"  },
+      "jobs":        { "model": "openai/gpt-5.5",       "variant": "high"  },
+      "bahari":      { "model": "openai/gpt-5.4-mini",  "variant": "medium"},
+      "scout":       { "model": "openai/gpt-5.4-mini",  "variant": "low"  },
+      "woz":         { "model": "openai/gpt-5.5",       "variant": "medium"},
+      "bellard":     { "model": "openai/gpt-5.4-mini",  "variant": "medium"},
+      "carmack":     { "model": "openai/gpt-5.4-mini",  "variant": "medium"},
+      "pike":        { "model": "openai/gpt-5.4-mini",  "variant": "medium"},
+      "fowler":      { "model": "openai/gpt-5.5",       "variant": "medium"},
+      "knuth":       { "model": "openai/gpt-5.5",       "variant": "medium"},
+      "hightower":   { "model": "openai/gpt-5.5",       "variant": "medium"}
+    },
+
+    // Anthropic — when Claude credits are available. Best for deep reasoning and architecture.
+    "anthropic": {
+      "brooks":      { "model": "anthropic/claude-opus-4-6",  "variant": "high"  },
+      "jobs":        { "model": "anthropic/claude-opus-4-6",  "variant": "high"  },
+      "bahari":      { "model": "anthropic/claude-sonnet-4",  "variant": "medium"},
+      "scout":       { "model": "anthropic/claude-haiku-4-5", "variant": "low"  },
+      "woz":         { "model": "anthropic/claude-sonnet-4",  "variant": "medium"},
+      "bellard":     { "model": "anthropic/claude-sonnet-4",  "variant": "medium"},
+      "carmack":     { "model": "anthropic/claude-sonnet-4",  "variant": "medium"},
+      "pike":        { "model": "anthropic/claude-sonnet-4",  "variant": "medium"},
+      "fowler":      { "model": "anthropic/claude-sonnet-4",  "variant": "medium"},
+      "knuth":       { "model": "anthropic/claude-sonnet-4",  "variant": "medium"},
+      "hightower":   { "model": "anthropic/claude-sonnet-4",  "variant": "medium"}
+    },
+
+    // Mixed — best available per role, combining providers for cost/quality.
+    "mixed": {
+      "brooks":      { "model": "ollama/glm-5.1:cloud",        "variant": "high"  },
+      "jobs":        { "model": "openai/gpt-5.5",             "variant": "high"  },
+      "bahari":      { "model": "ollama/kimi-k2.6:cloud",      "variant": "medium"},
+      "scout":       { "model": "ollama/nemotron-3-super:cloud","variant": "low"  },
+      "woz":         { "model": "ollama/qwen3-coder-next:cloud", "variant": "medium"},
+      "bellard":     { "model": "anthropic/claude-sonnet-4",    "variant": "medium"},
+      "carmack":     { "model": "ollama/qwen3-coder-next:cloud","variant": "medium"},
+      "pike":        { "model": "openai/gpt-5.4-mini",          "variant": "medium"},
+      "fowler":      { "model": "ollama/glm-5.1:cloud",        "variant": "medium"},
+      "knuth":       { "model": "openai/gpt-5.5",             "variant": "medium"},
+      "hightower":   { "model": "ollama/deepseek-v4-pro:cloud","variant": "medium"}
+    }
+  },
+
+  "fallback": {
+    "//": "Model fallback chains. Requires @razroo/opencode-model-fallback plugin OR OpenCode native fallbacks.",
+    "enabled": true,
+    "timeoutMs": 15000,
+    "retryDelayMs": 500,
+    "retry_on_empty": true,
+    "chains": {
+      "brooks":      ["ollama/glm-5.1:cloud",        "ollama/deepseek-v4-pro:cloud",    "ollama/qwen3-coder-next:cloud"],
+      "jobs":        ["ollama/deepseek-v4-pro:cloud","ollama/kimi-k2.6:cloud",           "ollama/glm-5.1:cloud"        ],
+      "bahari":      ["ollama/kimi-k2.6:cloud",      "ollama/deepseek-v4-pro:cloud",    "ollama/glm-5.1:cloud"        ],
+      "scout":       ["ollama/nemotron-3-super:cloud","ollama/qwen3:0.6b"                                ],
+      "woz":         ["ollama/qwen3-coder-next:cloud","ollama/deepseek-v4-pro:cloud",    "ollama/glm-5.1:cloud"        ],
+      "bellard":     ["ollama/glm-5.1:cloud",        "ollama/nemotron-3-super:cloud",   "ollama/qwen3-coder-next:cloud"],
+      "carmack":     ["ollama/qwen3-coder-next:cloud","ollama/nemotron-3-super:cloud",   "ollama/deepseek-v4-pro:cloud"],
+      "pike":        ["ollama/deepseek-v4-pro:cloud","ollama/nemotron-3-super:cloud",   "ollama/glm-5.1:cloud"        ],
+      "fowler":      ["ollama/glm-5.1:cloud",        "ollama/deepseek-v4-pro:cloud",    "ollama/nemotron-3-super:cloud"],
+      "knuth":       ["ollama/qwen3-coder-next:cloud","ollama/deepseek-v4-pro:cloud",    "ollama/glm-5.1:cloud"        ],
+      "hightower":   ["ollama/deepseek-v4-pro:cloud","ollama/glm-5.1:cloud",           "ollama/qwen3-coder-next:cloud"]
+    }
+  }
+}

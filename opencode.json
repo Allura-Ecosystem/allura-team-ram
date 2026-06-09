@@ -1,0 +1,192 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "brooks",
+  "model": "ollama/glm-5.1:cloud",
+  "instructions": [
+    ".opencode/AGENTS.md",
+    ".opencode/agent/brooks.md",
+    ".opencode/agent/jobs.md",
+    ".opencode/AGENTS.md"
+  ],
+  "skills": {
+    "paths": [".opencode/skills"]
+  },
+  "plugins": [
+    "@razroo/opencode-model-fallback"
+  ],
+  "mcp": {
+    "allura-brain": {
+      "type": "remote",
+      "url": "http://localhost:5888/mcp",
+      "enabled": true,
+      "timeout": 60000
+    }
+  },
+  "provider": {
+    "openai": {
+      "options": {
+        "timeout": 600000,
+        "chunkTimeout": 60000
+      }
+    },
+    "ollama": {
+      "name": "Ollama",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://127.0.0.1:11434/v1",
+        "timeout": 600000,
+        "chunkTimeout": 60000
+      },
+      "models": {
+        "deepseek-v4-pro:cloud": {"name": "deepseek-v4-pro:cloud"},
+        "deepseek-v4-flash:cloud": {"name": "deepseek-v4-flash:cloud"},
+        "glm-5.1:cloud": {"name": "glm-5.1:cloud"},
+        "kimi-k2.6:cloud": {"name": "kimi-k2.6:cloud"},
+        "nemotron-3-super:cloud": {"name": "nemotron-3-super:cloud"},
+        "qwen3-coder-next:cloud": {"name": "qwen3-coder-next:cloud"},
+        "qwen3-coder:480b-cloud": {"name": "qwen3-coder:480b-cloud"},
+        "qwen3.5:397b-cloud": {"name": "qwen3.5:397b-cloud"},
+        "gemma4:31b-cloud": {"name": "gemma4:31b-cloud"},
+        "gpt-oss:120b-cloud": {"name": "gpt-oss:120b-cloud"},
+        "deepseek-v3.2:cloud": {"name": "deepseek-v3.2:cloud"},
+        "kimi-k2.5:cloud": {"name": "kimi-k2.5:cloud"},
+        "qwen3-vl:235b-cloud": {"name": "qwen3-vl:235b-cloud"},
+        "ministral-3:8b-cloud": {"name": "ministral-3:8b-cloud"},
+        "minimax-m2.7:cloud": {"name": "minimax-m2.7:cloud"},
+        "minimax-m2.5:cloud": {"name": "minimax-m2.5:cloud"},
+        "glm-5:cloud": {"name": "glm-5:cloud"},
+        "qwen3:0.6b": {"name": "qwen3:0.6b"},
+        "qwen3-embedding:8b": {"name": "qwen3-embedding:8b"},
+        "nomic-embed-text:latest": {"name": "nomic-embed-text:latest"}
+      }
+    }
+  },
+  "permission": {
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "bash": "allow",
+    "edit": "allow",
+    "write": "allow",
+    "skill": {
+      "allura-memory-skill": "allow",
+      "mcp-docker": "allow",
+      "team-ram-cowork": "allow",
+      "agent-bahari": "allow",
+      "*": "allow"
+    },
+    "task": "allow",
+    "webfetch": "allow",
+    "websearch": "allow",
+    "external_directory": "allow",
+    "todowrite": "allow",
+    "question": "deny"
+  },
+  "agent": {
+    "brooks": {
+      "mode": "primary",
+      "path": ".opencode/agent/brooks.md",
+      "model": "ollama/deepseek-v4-pro:cloud",
+      "fallback_model": "ollama/qwen3-coder-next:cloud",
+      "permission": {
+        "task": "allow",
+        "skill": {"*": "allow"}
+      }
+    },
+    "jobs": {
+      "mode": "primary",
+      "path": ".opencode/agent/jobs.md",
+      "model": "ollama/deepseek-v4-pro:cloud",
+      "fallback_model": "ollama/kimi-k2.6:cloud",
+      "permission": {
+        "skill": {"*": "allow"}
+      }
+    },
+    "bahari": {
+      "mode": "primary",
+      "path": ".opencode/agent/bahari.md",
+      "model": "ollama/kimi-k2.6:cloud",
+      "fallback_model": "ollama/deepseek-v4-pro:cloud",
+      "permission": {
+        "task": "allow",
+        "skill": {"*": "allow"}
+      }
+    },
+    "scout": {
+      "mode": "subagent",
+      "path": ".opencode/agent/scout.md",
+      "model": "ollama/nemotron-3-super:cloud",
+      "fallback_model": "ollama/qwen3:0.6b",
+      "permission": {
+        "edit": "allow",
+        "write": "allow",
+        "task": "allow",
+        "skill": {"*": "allow"}
+      }
+    },
+    "woz": {
+      "mode": "subagent",
+      "path": ".opencode/agent/woz.md",
+      "model": "ollama/qwen3-coder-next:cloud",
+      "fallback_model": "ollama/deepseek-v4-pro:cloud",
+      "permission": {
+        "task": "allow",
+        "skill": {"*": "allow"}
+      }
+    },
+    "bellard": {
+      "mode": "subagent",
+      "path": ".opencode/agent/bellard.md",
+      "model": "ollama/glm-5.1:cloud",
+      "fallback_model": "ollama/nemotron-3-super:cloud",
+      "permission": {
+        "skill": {"*": "allow"}
+      }
+    },
+    "carmack": {
+      "mode": "subagent",
+      "path": ".opencode/agent/carmack.md",
+      "model": "ollama/qwen3-coder-next:cloud",
+      "fallback_model": "ollama/nemotron-3-super:cloud",
+      "permission": {
+        "skill": {"*": "allow"}
+      }
+    },
+    "pike": {
+      "mode": "subagent",
+      "path": ".opencode/agent/pike.md",
+      "model": "ollama/deepseek-v4-pro:cloud",
+      "fallback_model": "ollama/nemotron-3-super:cloud",
+      "permission": {
+        "skill": {"*": "allow"}
+      }
+    },
+    "fowler": {
+      "mode": "subagent",
+      "path": ".opencode/agent/fowler.md",
+      "model": "ollama/glm-5.1:cloud",
+      "fallback_model": "ollama/deepseek-v4-pro:cloud",
+      "permission": {
+        "skill": {"*": "allow"}
+      }
+    },
+    "knuth": {
+      "mode": "subagent",
+      "path": ".opencode/agent/knuth.md",
+      "model": "ollama/qwen3-coder-next:cloud",
+      "fallback_model": "ollama/deepseek-v4-pro:cloud",
+      "permission": {
+        "skill": {"*": "allow"}
+      }
+    },
+    "hightower": {
+      "mode": "subagent",
+      "path": ".opencode/agent/hightower.md",
+      "model": "ollama/deepseek-v4-pro:cloud",
+      "fallback_model": "ollama/glm-5.1:cloud",
+      "permission": {
+        "skill": {"*": "allow"}
+      }
+    }
+  }
+}

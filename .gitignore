@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+.idea/
+.vscode/settings.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test artifacts
+coverage/
+
+# Scratch directories
+my-project/
+
+# Database files
+*.db
+*.sqlite
+
+# Bun
+bun.lock
+.git

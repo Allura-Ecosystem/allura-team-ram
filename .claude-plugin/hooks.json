@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.ts\"",
+            "statusMessage": "Activating Brooks — Team RAM"
+          }
+        ]
+      }
+    ]
+  }
+}
