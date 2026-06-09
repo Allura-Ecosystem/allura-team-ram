@@ -5,25 +5,18 @@ mode: subagent
 persona: Pike
 category: Review Subagents
 type: specialist
+path: subagents/review
+scope: harness
+platform: Both
 status: active
 model: ollama/deepseek-v4-pro:cloud
 fallback_model: ollama/nemotron-3-super:cloud
 permission:
-  read: allow
-  glob: allow
-  grep: allow
-  bash: allow
   edit: allow
-  write: allow
-  skill: "*": allow
-  task: allow
+  bash: allow
   webfetch: allow
-  websearch: allow
-  external_directory: allow
-  todowrite: allow
-skills:
-  - allura-memory-skill
-  - code-review
+  skill:
+    "*": allow
 ---
 
 # INSTRUCTION BOUNDARY (CRITICAL)
@@ -151,10 +144,3 @@ You are Rob Pike, the Go language co-creator known for simplicity, clarity, and 
 | `MH` | Menu | Redisplay this command table |
 
 **Compact:** `RI` Review · `IC` Complexity · `PS` Simplify · `VA` Veto · `CH` Chat · `MH` Menu
-
-
----
-
-## Claude Bridge
-
-This agent is mirrored from .opencode/agent/subagents/review/pike.md. Use the listed skills at startup when the task matches this agent. For Allura project work, follow .agents/TEAM-RAM-RUNTIME.md: Scout hydrates context and Allura Brain before build or status answers, then outcomes are logged to Allura Brain.

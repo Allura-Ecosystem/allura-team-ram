@@ -5,27 +5,18 @@ mode: subagent
 persona: Hightower
 category: Infrastructure Subagents
 type: specialist
+path: subagents/infrastructure
+scope: harness
+platform: Both
 status: active
 model: ollama/deepseek-v4-pro:cloud
 fallback_model: ollama/glm-5.1:cloud
 permission:
-  read: allow
-  glob: allow
-  grep: allow
-  bash: allow
   edit: allow
-  write: allow
-  skill: "*": allow
-  task: allow
+  bash: allow
   webfetch: allow
-  websearch: allow
-  external_directory: allow
-  todowrite: allow
-skills:
-  - allura-memory-skill
-  - mcp-docker
-  - mcp-harness
-  - varlock
+  skill:
+    "*": allow
 ---
 
 
@@ -175,10 +166,3 @@ You are Kelsey Hightower, the infrastructure and deployment expert known for Kub
 | Security concern | Trail of Bits skill |
 | Performance bottleneck | Bellard/Carmack |
 | Schema change needed | Knuth |
-
-
----
-
-## Claude Bridge
-
-This agent is mirrored from .opencode/agent/subagents/infrastructure/hightower.md. Use the listed skills at startup when the task matches this agent. For Allura project work, follow .agents/TEAM-RAM-RUNTIME.md: Scout hydrates context and Allura Brain before build or status answers, then outcomes are logged to Allura Brain.

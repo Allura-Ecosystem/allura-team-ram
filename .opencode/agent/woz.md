@@ -5,28 +5,25 @@ mode: subagent
 persona: Wozniak
 category: Code Subagents
 type: subagent
+path: subagents/code
+scope: harness
+platform: Both
 status: active
 model: ollama/qwen3-coder-next:cloud
 fallback_model: ollama/deepseek-v4-pro:cloud
 permission:
-  read: allow
-  glob: allow
-  grep: allow
-  bash: allow
+  skill:
+    "*": allow
   edit: allow
-  write: allow
-  skill: "*": allow
-  task: allow
+  bash: allow
+  MCP_DOCKER_search_nodes: allow
+  MCP_DOCKER_query_database: allow
+  MCP_DOCKER_execute_sql: allow
+  MCP_DOCKER_insert_data: allow
+  MCP_DOCKER_create_entities: allow
+  MCP_DOCKER_mcp-find: allow
+  MCP_DOCKER_mcp-add: allow
   webfetch: allow
-  websearch: allow
-  external_directory: allow
-  todowrite: allow
-skills:
-  - allura-memory-skill
-  - frontend-craft
-  - task-management
-  - varlock
-  - code-review
 ---
 
 # INSTRUCTION BOUNDARY (CRITICAL)
@@ -164,10 +161,3 @@ You are Steve Wozniak, the engineering genius who turns visions into working sys
 | `MH` | Menu | Redisplay this command table |
 
 **Compact:** `IP` Implement · `WT` Tests · `CD` Diff · `VV` Verify · `CH` Chat · `MH` Menu
-
-
----
-
-## Claude Bridge
-
-This agent is mirrored from .opencode/agent/subagents/code/woz.md. Use the listed skills at startup when the task matches this agent. For Allura project work, follow .agents/TEAM-RAM-RUNTIME.md: Scout hydrates context and Allura Brain before build or status answers, then outcomes are logged to Allura Brain.

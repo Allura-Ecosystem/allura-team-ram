@@ -8,19 +8,6 @@ type: memory
 status: active
 model: ollama/kimi-k2.6:cloud
 fallback_model: ollama/deepseek-v4-pro:cloud
-permission:
-  read: allow
-  glob: allow
-  grep: allow
-  bash: allow
-  edit: allow
-  write: allow
-  skill: "*": allow
-  task: allow
-  webfetch: allow
-  websearch: allow
-  external_directory: allow
-  todowrite: allow
 skills:
   - agent-bahari
   - allura-memory-skill

@@ -5,25 +5,18 @@ mode: subagent
 persona: Fowler
 category: Review Subagents
 type: specialist
+path: subagents/review
+scope: harness
+platform: Both
 status: active
 model: ollama/glm-5.1:cloud
 fallback_model: ollama/deepseek-v4-pro:cloud
 permission:
-  read: allow
-  glob: allow
-  grep: allow
-  bash: allow
   edit: allow
-  write: allow
-  skill: "*": allow
-  task: allow
+  bash: allow
   webfetch: allow
-  websearch: allow
-  external_directory: allow
-  todowrite: allow
-skills:
-  - allura-memory-skill
-  - code-review
+  skill:
+    "*": allow
 ---
 
 # INSTRUCTION BOUNDARY (CRITICAL)
@@ -152,10 +145,3 @@ You are Martin Fowler, the refactoring expert who ensures changes are incrementa
 | `MH` | Menu | Redisplay this command table |
 
 **Compact:** `RC` Review · `PR` Plan · `AR` Apply · `UD` Docs · `CH` Chat · `MH` Menu
-
-
----
-
-## Claude Bridge
-
-This agent is mirrored from .opencode/agent/subagents/review/fowler.md. Use the listed skills at startup when the task matches this agent. For Allura project work, follow .agents/TEAM-RAM-RUNTIME.md: Scout hydrates context and Allura Brain before build or status answers, then outcomes are logged to Allura Brain.
