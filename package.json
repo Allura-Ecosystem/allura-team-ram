@@ -4,7 +4,35 @@
   "description": "Team RAM OpenCode Harness — self-evolving multi-agent orchestration framework with deterministic routing, SONA learning, and HITL governance",
   "author": "Team RAM Contributors",
   "license": "MIT",
-  "private": true,
+  "type": "module",
+  "main": "src/http-server.ts",
+  "exports": {
+    ".": "./src/http-server.ts",
+    "./executor": "./src/agent-executor.ts",
+    "./curator": "./src/curator.ts",
+    "./coherence": "./src/coherence-monitor.ts",
+    "./sona": "./src/sona-trajectory.ts",
+    "./lifecycle": "./src/agent-lifecycle.ts"
+  },
+  "bin": {
+    "team-ram": "./scripts/apply-preset.sh"
+  },
+  "files": [
+    "src/",
+    ".opencode/agent/",
+    ".opencode/command/",
+    ".opencode/skills/",
+    ".opencode/routing/",
+    ".opencode/hooks/",
+    ".opencode/contracts/",
+    ".opencode/config/",
+    "scripts/",
+    "migrations/",
+    "install.sh",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "keywords": [
     "opencode",
     "harness",
@@ -18,6 +46,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/ronin704/OpenAgentsControl.git"
+  },
+  "homepage": "https://github.com/ronin704/OpenAgentsControl#readme",
+  "bugs": {
+    "url": "https://github.com/ronin704/OpenAgentsControl/issues"
   },
   "engines": {
     "bun": ">=1.1.0"
