@@ -1,0 +1,362 @@
+{
+  "nextRevisionId": 13,
+  "nextAgentProposalId": 4,
+  "revisions": [
+    {
+      "id": 1,
+      "proposal": {
+        "skill_name": "rev-submit-1781161554624-skill",
+        "agent_id": "rev-submit-1781161554624",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-submit-1781161554624",
+        "proposed_change": "Update guidance for rev-submit-1781161554624",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:05:54.624Z"
+    },
+    {
+      "id": 2,
+      "proposal": {
+        "skill_name": "rev-pending-1781161554625-skill",
+        "agent_id": "rev-pending-1781161554625",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-pending-1781161554625",
+        "proposed_change": "Update guidance for rev-pending-1781161554625",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:05:54.625Z"
+    },
+    {
+      "id": 3,
+      "proposal": {
+        "skill_name": "rev-approve-1781161554625-skill",
+        "agent_id": "rev-approve-1781161554625",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-approve-1781161554625",
+        "proposed_change": "Update guidance for rev-approve-1781161554625",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:05:54.625Z"
+    },
+    {
+      "id": 4,
+      "proposal": {
+        "skill_name": "rev-reject-1781161554625-skill",
+        "agent_id": "rev-reject-1781161554625",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-reject-1781161554625",
+        "proposed_change": "Update guidance for rev-reject-1781161554625",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "rejected",
+      "created_at": "2026-06-11T07:05:54.625Z",
+      "curator_notes": "not needed",
+      "reviewed_at": "2026-06-11T07:05:54.625Z"
+    },
+    {
+      "id": 5,
+      "proposal": {
+        "skill_name": "rev-submit-1781161580024-skill",
+        "agent_id": "rev-submit-1781161580024",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-submit-1781161580024",
+        "proposed_change": "Update guidance for rev-submit-1781161580024",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:06:20.024Z"
+    },
+    {
+      "id": 6,
+      "proposal": {
+        "skill_name": "rev-pending-1781161580024-skill",
+        "agent_id": "rev-pending-1781161580024",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-pending-1781161580024",
+        "proposed_change": "Update guidance for rev-pending-1781161580024",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:06:20.024Z"
+    },
+    {
+      "id": 7,
+      "proposal": {
+        "skill_name": "rev-approve-1781161580024-skill",
+        "agent_id": "rev-approve-1781161580024",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-approve-1781161580024",
+        "proposed_change": "Update guidance for rev-approve-1781161580024",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:06:20.024Z"
+    },
+    {
+      "id": 8,
+      "proposal": {
+        "skill_name": "rev-reject-1781161580025-skill",
+        "agent_id": "rev-reject-1781161580025",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-reject-1781161580025",
+        "proposed_change": "Update guidance for rev-reject-1781161580025",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "rejected",
+      "created_at": "2026-06-11T07:06:20.025Z",
+      "curator_notes": "not needed",
+      "reviewed_at": "2026-06-11T07:06:20.025Z"
+    },
+    {
+      "id": 9,
+      "proposal": {
+        "skill_name": "rev-submit-1781161585620-skill",
+        "agent_id": "rev-submit-1781161585620",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-submit-1781161585620",
+        "proposed_change": "Update guidance for rev-submit-1781161585620",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:06:25.620Z"
+    },
+    {
+      "id": 10,
+      "proposal": {
+        "skill_name": "rev-pending-1781161585620-skill",
+        "agent_id": "rev-pending-1781161585620",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-pending-1781161585620",
+        "proposed_change": "Update guidance for rev-pending-1781161585620",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:06:25.620Z"
+    },
+    {
+      "id": 11,
+      "proposal": {
+        "skill_name": "rev-approve-1781161585620-skill",
+        "agent_id": "rev-approve-1781161585620",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-approve-1781161585620",
+        "proposed_change": "Update guidance for rev-approve-1781161585620",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:06:25.620Z"
+    },
+    {
+      "id": 12,
+      "proposal": {
+        "skill_name": "rev-reject-1781161585621-skill",
+        "agent_id": "rev-reject-1781161585621",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-reject-1781161585621",
+        "proposed_change": "Update guidance for rev-reject-1781161585621",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "rejected",
+      "created_at": "2026-06-11T07:06:25.621Z",
+      "curator_notes": "not needed",
+      "reviewed_at": "2026-06-11T07:06:25.621Z"
+    }
+  ],
+  "agentProposals": [
+    {
+      "id": 1,
+      "agent_name": "custom-workflow-1781161554606-specialist",
+      "task_type": "harness.custom.workflow-1781161554606",
+      "reason": "Coverage gap: no agent handles harness.custom.workflow-1781161554606 well",
+      "evidence": {
+        "patterns": [
+          {
+            "type": "coverage_gap",
+            "description": "No agent handles harness.custom.workflow-1781161554606 well",
+            "confidence": 0.82
+          }
+        ],
+        "inferredSpec": {
+          "name": "custom-workflow-1781161554606-specialist",
+          "description": "Specialist agent for harness.custom.workflow-1781161554606 — auto-proposed by Genesis Engine due to coverage gap",
+          "persona": "Custom-workflow-1781161554606 Specialist",
+          "category": "Generated",
+          "model": "sonnet",
+          "tools": [
+            "Read",
+            "Grep",
+            "Glob"
+          ],
+          "skills": [
+            "allura-memory-skill"
+          ],
+          "taskType": "harness.custom.workflow-1781161554606"
+        }
+      },
+      "sona_confidence": 0.82,
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:05:54.607Z"
+    },
+    {
+      "id": 2,
+      "agent_name": "analytics-ingest-1781161554623-specialist",
+      "task_type": "harness.analytics.ingest-1781161554623",
+      "reason": "Coverage gap: no agent handles harness.analytics.ingest-1781161554623 well",
+      "evidence": {
+        "patterns": [
+          {
+            "type": "coverage_gap",
+            "description": "No agent handles harness.analytics.ingest-1781161554623 well",
+            "confidence": 0.82
+          }
+        ],
+        "inferredSpec": {
+          "name": "analytics-ingest-1781161554623-specialist",
+          "description": "Specialist agent for harness.analytics.ingest-1781161554623 — auto-proposed by Genesis Engine due to coverage gap",
+          "persona": "Analytics-ingest-1781161554623 Specialist",
+          "category": "Generated",
+          "model": "sonnet",
+          "tools": [
+            "Read",
+            "Grep",
+            "Glob"
+          ],
+          "skills": [
+            "allura-memory-skill"
+          ],
+          "taskType": "harness.analytics.ingest-1781161554623"
+        }
+      },
+      "sona_confidence": 0.82,
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:05:54.623Z"
+    },
+    {
+      "id": 3,
+      "agent_name": "speckit-implement-code-specialist",
+      "task_type": "harness.speckit.implement-code",
+      "reason": "Coverage gap: no agent handles harness.speckit.implement-code well",
+      "evidence": {
+        "patterns": [
+          {
+            "type": "coverage_gap",
+            "description": "No agent handles harness.speckit.implement-code well",
+            "confidence": 0.82
+          }
+        ],
+        "inferredSpec": {
+          "name": "speckit-implement-code-specialist",
+          "description": "Specialist agent for harness.speckit.implement-code — auto-proposed by Genesis Engine due to coverage gap",
+          "persona": "Speckit-implement-code Specialist",
+          "category": "Generated",
+          "model": "sonnet",
+          "tools": [
+            "Read",
+            "Grep",
+            "Glob",
+            "Edit",
+            "Write",
+            "Bash"
+          ],
+          "skills": [
+            "allura-memory-skill"
+          ],
+          "taskType": "harness.speckit.implement-code"
+        }
+      },
+      "sona_confidence": 0.82,
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-06-11T07:05:54.623Z"
+    }
+  ]
+}

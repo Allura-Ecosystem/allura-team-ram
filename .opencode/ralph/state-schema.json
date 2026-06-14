@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "UltraLoopState",
+  "description": "State tracked per ultra loop iteration. Append-only when written to Allura Brain.",
+  "type": "object",
+  "required": ["loop_id", "iteration", "status", "objective", "validation_result"],
+  "properties": {
+    "loop_id": {
+      "type": "string",
+      "description": "Unique identifier for this loop run (UUID v4)"
+    },
+    "iteration": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Current iteration number (0 = pre-loop gate)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["running", "complete", "blocked", "struggling", "aborted"],
+      "description": "Current loop status"
+    },
+    "objective": {
+      "type": "string",
+      "description": "The task objective this loop is working toward"
+    },
+    "validation_result": {
+      "type": "string",
+      "enum": ["pass", "fail", "not_run", "error"],
+      "description": "Result of the last validation command"
+    },
+    "validation_error": {
+      "type": ["string", "null"],
+      "description": "Error message from validation, if any"
+    },
+    "files_changed": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Files modified in this iteration"
+    },
+    "slice_description": {
+      "type": ["string", "null"],
+      "description": "What this iteration attempted"
+    },
+    "struggle_count": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Consecutive iterations with no progress"
+    },
+    "max_iterations": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 10,
+      "description": "Maximum iterations before forced exit"
+    },
+    "exit_reason": {
+      "type": ["string", "null"],
+      "description": "Reason for loop exit (null while running)"
+    },
+    "group_id": {
+      "type": "string",
+      "pattern": "^allura-[a-z0-9-]+$",
+      "default": "allura-system",
+      "description": "Allura tenant namespace"
+    },
+    "agent_id": {
+      "type": "string",
+      "default": "ultra-loop",
+      "description": "Agent identity for Brain writes"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp"
+    }
+  },
+  "additionalProperties": false
+}

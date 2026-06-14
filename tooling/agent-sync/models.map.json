@@ -1,0 +1,31 @@
+{
+  "$comment": "SINGLE SOURCE OF TRUTH for agent bodies = .opencode/agent/core/*.md. The .claude/agents/*.md (Markdown) and .codex/agents/*.toml (TOML) files are GENERATED mirrors. Team RAM runs on THREE runtimes: codex, opencode, claude. The ONLY legitimate per-runtime differences are (a) the model and (b) the file format. Never hand-edit a mirror. Run sync-agents.mjs after editing a source agent; CI runs --check and fails on drift.",
+  "runtimes": ["codex", "opencode", "claude"],
+  "formats": { "codex": ".codex/agents/<name>.toml", "opencode": ".opencode/agent/core/<name>.md", "claude": ".claude/agents/<name>.md" },
+  "tiers": {
+    "ultrabrain": { "codex": "gpt-5.4", "opencode": "openai/gpt-5.4", "claude": "opus" },
+    "standard":   { "codex": "gpt-5.4-mini", "opencode": "ollama-cloud/minimax-m3", "claude": "sonnet" },
+    "cheap":      { "codex": "gpt-5.4-mini", "opencode": "ollama-cloud/minimax-m3", "claude": "haiku" }
+  },
+  "agents": {
+    "brooks":    { "tier": "ultrabrain", "role": "Chief Architect / orchestrator" },
+    "jobs":      { "tier": "ultrabrain", "role": "Intent Gate / scope owner" },
+    "woz":       { "tier": "standard",   "role": "Primary Builder" },
+    "scout":     { "tier": "cheap",      "role": "Recon / discovery" },
+    "pike":      { "tier": "standard",   "role": "Interface & simplicity gate" },
+    "bellard":   { "tier": "standard",   "role": "Performance & diagnostics" },
+    "fowler":    { "tier": "standard",   "role": "Maintainability gate / refactor" },
+    "carmack":   { "tier": "standard",   "role": "Performance & optimization" },
+    "hightower": { "tier": "standard",   "role": "DevOps / infrastructure" },
+    "knuth":     { "tier": "standard",   "role": "Data architect / schema" },
+    "bahari":    { "tier": "cheap",      "role": "Allura Memory Curator" },
+    "reality-checker-tram": { "tier": "cheap", "role": "Tier-2 Harness Auditor" }
+  },
+  "$verified": "Codex CLI v0.130.0 reports model 'gpt-5.4-mini medium' — so the Codex family is gpt-5.4 (confirmed: gpt-5.4-mini). Confirm 'gpt-5.4' (the larger ultrabrain sibling) exists via `codex` /model before relying on it.",
+  "$todo_verify": [
+    "opencode: confirm 'openai/gpt-5.4' resolves (or set to the provider/model you actually use); confirm an 'ollama-cloud' provider block is defined",
+    "claude aliases opus/sonnet/haiku resolve in the .claude runtime",
+    "Codex model is set in .codex/config.toml profiles / per-thread, NOT in the agent .toml"
+  ],
+  "$changes_2026-06-13": "Added 8 agents from Notion (woz, scout, pike, bellard, fowler, carmack, hightower, knuth). Added bahari (existing source, missing from map). Removed norvig and torvalds (not in Notion — aspirational ghosts). Kept reality-checker-tram (standalone auditor with full mirror)."
+}

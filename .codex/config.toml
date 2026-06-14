@@ -1,0 +1,2 @@
+[mcp_servers.allura-brain]
+url = "http://localhost:5888/mcp"

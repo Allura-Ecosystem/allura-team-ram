@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Read(.claude/**)",
+      "Edit(.claude/**)",
+      "Write(.claude/**)",
+      "Bash(bun run *)",
+      "Bash(bun install)",
+      "Bash(bun*)",
+      "Bash(cp *)",
+      "Bash(bun test)",
+      "Bash(git *)",
+      "Bash(docker *)",
+      "Bash(gh *)",
+      "Bash(npm run *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(mkdir *)",
+      "Bash(mv *)",
+      "Bash(rm -rf .tmp/*)",
+      "Bash(rm -rf node_modules/.cache/*)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf .env*)",
+      "Bash(cat .env*)",
+      "Bash(*secrets*)",
+      "Bash(*password*)",
+      "Bash(*token*)",
+      "Bash(curl *localhost*)",
+      "Bash(wget *localhost*)"
+    ],
+    "additionalDirectories": []
+  },
+  "experimentalAgentTeams": true,
+  "terminals": "tmux",
+  "mcpServers": {
+    "context7": {
+      "type": "http",
+      "url": "https://context7.com/api/mcp",
+      "headers": {
+        "Authorization": "Bearer ctx7sk-bbafee83-9f7a-4be1-9bdf-aba3f0359e02"
+      }
+    }
+  },
+  "commands": {
+    "mcp-discover": {
+      "source": ".claude/commands/mcp-discover.md",
+      "description": "Discover available MCP servers"
+    },
+    "mcp-approve": {
+      "source": ".claude/commands/mcp-approve.md",
+      "description": "Request MCP server approval"
+    },
+    "mcp-load": {
+      "source": ".claude/commands/mcp-load.md",
+      "description": "Load an approved MCP server"
+    },
+    "skill-propose": {
+      "source": ".claude/commands/skill-propose.md",
+      "description": "Propose a skill and show executor"
+    },
+    "skill-load": {
+      "source": ".claude/commands/skill-load.md",
+      "description": "Execute a skill with routing"
+    },
+    "harness-status": {
+      "source": ".claude/commands/harness-status.md",
+      "description": "Show harness health and loaded servers"
+    }
+  }
+}

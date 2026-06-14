@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "workspace": {
+    "name": "Allura-TeamRam",
+    "createdAt": 1781162563743,
+    "preset": "starter"
+  },
+  "authorizedRoots": [
+    "/home/ronin704/Projects/Allura-ecosystem/Allura-TeamRam"
+  ]
+}
