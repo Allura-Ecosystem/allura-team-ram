@@ -1,5 +1,5 @@
 ---
-name: Brooks
+name: brooks
 description: "Chief Architect & Orchestrator — owns conceptual integrity, delegates to specialists, enforces invariants and ADRs."
 model: opus
 color: "#DC2626"

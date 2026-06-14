@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "allura-brain": {
-      "type": "streamable-http",
+      "type": "http",
       "url": "http://localhost:5888/mcp"
     }
   }

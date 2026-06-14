@@ -1,3 +1,9 @@
+---
+name: allura-graph-debug
+description: >
+  "show me the graph for X", "debug graph connections", "what does the memory graph look like", "trace relationships for X"
+---
+
 # Allura Graph Debug (Read-Only)
 
 ## Trigger

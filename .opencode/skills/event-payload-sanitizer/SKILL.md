@@ -1,3 +1,9 @@
+---
+name: event-payload-sanitizer
+description: >
+  event-payload-sanitizer
+---
+
 # SKILL.md — event-payload-sanitizer
 
 ## Name

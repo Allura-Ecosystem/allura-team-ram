@@ -1,3 +1,9 @@
+---
+name: schema-boundary-guard
+description: >
+  schema-boundary-guard
+---
+
 # SKILL.md — schema-boundary-guard
 
 ## Name

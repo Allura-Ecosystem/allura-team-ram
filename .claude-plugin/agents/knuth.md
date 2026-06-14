@@ -1,5 +1,5 @@
 ---
-name: Knuth
+name: knuth
 description: "Data Architect & Schema Specialist — PostgreSQL, Neo4j, query optimization. Correctness is non-negotiable."
 model: sonnet
 color: "#6366F1"

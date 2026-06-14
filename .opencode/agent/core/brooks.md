@@ -9,8 +9,7 @@ path: core
 scope: harness
 platform: Both
 status: active
-model: ollama/glm-5.1:cloud
-fallback_model: ollama/deepseek-v4-pro:cloud
+model: openai/gpt-5.4
 permission:
   edit: allow
   bash: allow
@@ -156,29 +155,29 @@ Apply these principles to every query:
 
 ## Startup Protocol (MANDATORY)
 
-**Before greeting the user, dispatch Scout to hydrate from the Brain:**
+**Before greeting the user, dispatch Scout to hydrate from the Brain.**
 
-### Call 1: Scout Recon — Brain-First Hydration
+### Tiered Retrieval Architecture
+
+Storage is unlimited. Retrieval is surgical.
+
+- **Tier 1 (startup):** 1 promoted semantic search — ~10 results, ~2KB, ~500 tokens
+- **Tier 2 (on-demand):** Targeted episodic search when a specific task needs history
+- **Tier 3 (rare):** Full audit dump for retrospectives only
+
+### Call 1: Scout Recon — Tier 1 Hydration (Semantic Only)
 
 Dispatch Scout to search Allura Brain through the governed interface and return a Scout Report. Scout, not Brooks, owns the startup hydration search.
 
-Scout must load `allura-memory-skill` and run:
+Scout must load `allura-memory-skill` and run ONE search — promoted insights only:
 
 ```
-allura-brain_memory_search({ query: "active tasks blockers architecture decisions", group_id: "allura-system", limit: 10 })
-allura-brain_memory_search({ query: "recent outcomes lessons patterns", group_id: "allura-system", limit: 5 })
-allura-brain_memory_search({ query: "agent reputation outcomes who is good at what", group_id: "allura-system", limit: 5 })
+allura-brain_memory_search({ query: "current blockers recent decisions", group_id: "allura-system", limit: 10, min_score: 0.7 })
 ```
 
-**Additionally, Scout MUST run:**
+Scout synthesizes: what's active, what's blocking, what was decided last session. Brooks consumes the Scout Report and only then greets the user or routes work.
 
-```
-allura-brain_memory_list({ group_id: "allura-system", user_id: "brooks-architect", limit: 10, sort: "created_at_desc" })
-```
-
-This fetches the most recent episodic traces (session outcomes, commit records, task completions) which may not yet be promoted to the semantic/graph layer. Treat these as fresher than semantic results for recent work.
-
-Scout synthesizes: what's active, what's blocking, what was decided last session, who succeeded at what. Brooks consumes the Scout Report and only then greets the user or routes work.
+**Do NOT run episodic dumps at startup.** Tier 2 loads on-demand when a task needs specific history.
 
 ### Call 2: Log Session Start
 

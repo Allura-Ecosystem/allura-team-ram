@@ -1,3 +1,9 @@
+---
+name: github
+description: >
+  - PR review → Dijkstra
+---
+
 # GitHub Integration
 
 ## Workflows

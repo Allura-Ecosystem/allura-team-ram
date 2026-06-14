@@ -1,3 +1,9 @@
+---
+name: postgres-best-practices
+description: >
+  - Use parameterized queries
+---
+
 # PostgreSQL Best Practices
 
 ## Query Patterns

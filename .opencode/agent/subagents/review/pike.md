@@ -9,7 +9,7 @@ path: subagents/review
 scope: harness
 platform: Both
 status: active
-model: ollama/deepseek-v4-pro:cloud
+model: ollama/deepseek-v4-flash:cloud
 fallback_model: ollama/nemotron-3-super:cloud
 permission:
   edit: allow

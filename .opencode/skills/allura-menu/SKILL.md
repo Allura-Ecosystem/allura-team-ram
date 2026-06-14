@@ -1,24 +1,24 @@
 ---
 name: allura-menu
-description: "Allura-specific skill. Interactive menu for Allura Brain surgical team. Quick prompts for common Allura workflows. Not part of the generic default surface — requires Allura Brain infrastructure."
-allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
+description: "Interactive menu for Allura Memory surgical team. Quick prompts for common workflows."
+allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*", "allura-brain_*"]
 ---
 
 # Allura Menu — Quick Prompts
 
-> **This skill is Allura-specific.** It provides quick prompts for Allura Brain workflows and requires MCP_DOCKER tools and Allura Brain infrastructure. It is not part of the generic harness default surface.
+Interactive menu for common Allura Memory workflows.
 
 ## Menu Structure
 
 ```
 ╔═══════════════════════════════════════════════════════════════╗
-║                    ALLURA BRAIN MENU                          ║
+║                    ALLURA MEMORY MENU                        ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║  [1] 🚀 Start Session      — Load memory, verify infra       ║
 ║  [2] 📋 Create Task        — Generate structured task         ║
 ║  [3] 🎉 Party Mode         — Launch parallel agents           ║
 ║  [4] 📝 Quick Update        — Sync docs with memory            ║
-║  [5] 🔍 Code Review        — Team RAM review                  ║
+║  [5] 🔍 Code Review        — Surgical team review             ║
 ║  [6] 📊 Dashboard           — View system status               ║
 ║  [7] 🧠 Memory Query       — Search Allura Brain              ║
 ║  [8] 📤 Promote            — HITL promotion workflow           ║
@@ -34,9 +34,10 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 **Trigger:** `start-session`
 
 **What it does:**
+
 - Verifies Neo4j and PostgreSQL connectivity
-- Hydrates context from Allura Brain
-- Reads memory-bank files in order
+- Hydrates context from Allura Brain via Scout
+- Searches recent events and insights for blockers and decisions
 - Logs session start
 
 **Equivalent command:** `/start-session`
@@ -45,15 +46,16 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 
 ### [2] 📋 Create Task
 
-**Trigger:** `task-creator`
+**Trigger:** `task-management`
 
 **What it does:**
-- Gathers context from Allura Brain
-- Generates structured task file
-- Links to memory insights
-- Assigns to appropriate agent
 
-**Equivalent skill:** `task-creator <description>`
+- Creates structured task files with dependency resolution
+- Tracks progress via CLI (`router.sh status/next/blocked`)
+- Validates task integrity and dependency trees
+- Links to memory insights via Brain
+
+**Equivalent skill:** `task-management <description>`
 
 ---
 
@@ -62,6 +64,7 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 **Trigger:** `party-mode`
 
 **What it does:**
+
 - Launches all agents in parallel
 - Each agent works independently
 - Brooks synthesizes results
@@ -73,15 +76,16 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 
 ### [4] 📝 Quick Update
 
-**Trigger:** `quick-update`
+**Trigger:** `memory-client`
 
 **What it does:**
-- Updates memory-bank files
-- Syncs with Allura Brain
-- Logs changes
-- Maintains consistency
 
-**Equivalent skill:** `quick-update <target> <changes>`
+- Stores updates to Allura Brain via `allura-brain_*` tools
+- Search-before-write discipline (Hydrate → Plan → Build → Debug → Reflect)
+- Syncs with canonical docs in `docs/allura/`
+- Logs changes to PostgreSQL events
+
+**Equivalent skill:** `memory-client` (Build mode)
 
 ---
 
@@ -90,9 +94,10 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 **Trigger:** `code-review`
 
 **What it does:**
-- Pike reviews architecture and interface surface
+
+- Pike reviews architecture
 - Scout finds patterns
-- Fowler checks refactor and maintainability risks
+- UX reviews accessibility
 - Brooks synthesizes
 
 **Equivalent skill:** `code-review`
@@ -104,6 +109,7 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 **Trigger:** `dashboard`
 
 **What it does:**
+
 - Shows system status
 - Displays active tasks
 - Lists recent insights
@@ -118,6 +124,7 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 **Trigger:** `memory-query`
 
 **What it does:**
+
 - Searches Allura Brain
 - Returns relevant insights
 - Links to related entities
@@ -129,15 +136,16 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 
 ### [8] 📤 Promote
 
-**Trigger:** `curator-team-promote`
+**Trigger:** `hitl-governance`
 
 **What it does:**
+
 - Proposes promotion from PostgreSQL to Neo4j
-- Runs curator team workflow
-- Requires HITL approval
+- Runs HITL governance workflow (draft → evaluating → proposed → approved → promoted)
+- Requires human approval
 - Logs to audit trail
 
-**Equivalent command:** `/curator-team-promote`
+**Equivalent skill:** `hitl-governance`
 
 ---
 
@@ -148,6 +156,7 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 **Trigger:** `end-session`
 
 **What it does:**
+
 - Persists session reflection to Neo4j
 - Logs completion to PostgreSQL
 - Archives temporary files
@@ -162,6 +171,7 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 **Trigger:** `help`
 
 **What it does:**
+
 - Shows this menu
 - Lists available skills
 - Shows current context
@@ -173,32 +183,38 @@ allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*"]
 
 Type these directly in your IDE:
 
-| Prompt | Action |
-|--------|--------|
-| `start` | Start session |
-| `task <desc>` | Create task |
-| `party <task>` | Launch party mode |
-| `update <target>` | Quick update |
-| `review` | Code review |
-| `dash` | Dashboard |
-| `query <term>` | Memory query |
-| `promote` | HITL promotion |
-| `end <summary>` | End session |
+| Prompt            | Action            |
+| ----------------- | ----------------- |
+| `start`           | Start session     |
+| `task <desc>`     | Create/manage task |
+| `party <task>`    | Launch party mode |
+| `update <target>` | Memory client sync |
+| `review`          | Code review       |
+| `dash`            | Dashboard         |
+| `query <term>`    | Memory query      |
+| `promote`         | HITL promotion    |
+| `debug <issue>`   | Systematic debug  |
+| `end <summary>`   | End session       |
 
 ---
 
 ## Agent Shortcuts
 
-| Agent | Shortcut | Persona |
-|-------|----------|---------|
-| Brooks | `@brooks` | Frederick P. Brooks Jr. |
-| Jobs | `@jobs` | Steve Jobs |
-| Woz | `@woz` | Steve Wozniak |
-| Pike | `@pike` | Rob Pike |
-| Scout | `@scout` | Utility role |
-| Fowler | `@fowler` | Martin Fowler |
-| Bellard | `@bellard` | Fabrice Bellard |
-| Carmack | `@carmack` | John Carmack |
-| Knuth | `@knuth` | Donald Knuth |
-| Hightower | `@hightower` | Kelsey Hightower |
+> **Source of truth:** `.opencode/agent/*.md` — 10 canonical agents. This table is derived, not defining.
+
+| Agent      | Shortcut                 | Persona           | Role                        |
+| ---------- | ------------------------ | ----------------- | --------------------------- |
+| Brooks     | `@brooks-architect`      | Frederick Brooks  | Architect + Orchestrator    |
+| Jobs       | `@jobs-intent-gate`     | Steve Jobs        | Intent Gate + Scope Owner   |
+| Woz        | `@woz-builder`          | Steve Wozniak     | Primary Builder             |
+| Pike       | `@pike-interface-review` | Rob Pike          | Simplicity Gate (read-only) |
+| Scout      | `@scout-recon`          | (none)            | Fast Discovery (read-only)  |
+| Bellard    | `@bellard-diagnostics`  | Fabrice Bellard   | Diagnostics + Perf         |
+| Carmack    | `@carmack-perf`         | John Carmack      | Performance Specialist      |
+| Fowler     | `@fowler-refactor-gate` | Martin Fowler     | Maintainability Gate        |
+| Knuth      | `@knuth-data`           | Donald Knuth      | Data Architect              |
+| Hightower  | `@hightower-devops`     | Kelsey Hightower  | DevOps + Infrastructure     |
+
+---
+
 **Invoke with:** `allura-menu` or type any quick prompt directly.

@@ -1,5 +1,5 @@
 ---
-name: Carmack
+name: carmack
 description: "Performance & Optimization — API design, latency reduction, hot path optimization, and real-time systems."
 model: sonnet
 color: "#F97316"

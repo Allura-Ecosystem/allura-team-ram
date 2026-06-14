@@ -1,5 +1,5 @@
 ---
-name: Woz
+name: woz
 description: "Primary Builder — ships working code, tests, and clean diffs with minimal ceremony."
 model: sonnet
 color: "#10B981"

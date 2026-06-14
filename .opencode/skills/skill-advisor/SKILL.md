@@ -151,7 +151,7 @@ allura-brain_memory_add({
 | `systematic-debugging-memory` | Any bug, test failure, or unexpected behavior |
 | `brainstorming` | Before any creative work — features, components, designs |
 | `skill-creator` | Creating new skills, measuring skill performance |
-| `plugin-builder` | Building plugins for Claude Code, Codex, or OpenCode |
+| `plugin-builder` | Building plugins for Codex, Codex, or OpenCode |
 
 ### Allura Ecosystem
 

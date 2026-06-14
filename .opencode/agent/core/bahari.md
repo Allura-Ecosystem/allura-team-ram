@@ -6,8 +6,7 @@ persona: Bahari
 category: Product
 type: memory
 status: active
-model: ollama/kimi-k2.6:cloud
-fallback_model: ollama/deepseek-v4-pro:cloud
+model: ollama-cloud/minimax-m3
 skills:
   - agent-bahari
   - allura-memory-skill

@@ -1,3 +1,9 @@
+---
+name: allura-approve-promotion
+description: >
+  HITL curator action — "approve this proposal", "promote proposal X", "mark as canonical"
+---
+
 # Allura Approve Promotion
 
 ## Trigger

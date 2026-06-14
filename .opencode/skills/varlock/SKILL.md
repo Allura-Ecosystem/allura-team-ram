@@ -17,7 +17,7 @@ tags:
 
 Secure-by-default environment variable management.
 
-> **Repository:** https://github.com/wrsmith108/varlock-claude-skill
+> **Repository:** https://github.com/wrsmith108/varlock-Codex-skill
 > **Wraps:** https://varlock.dev by DMNO
 
 ## Core Principle: Secrets Never Exposed

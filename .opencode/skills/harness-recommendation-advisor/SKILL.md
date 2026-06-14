@@ -1,3 +1,9 @@
+---
+name: harness-recommendation-advisor
+description: >
+  harness-recommendation-advisor
+---
+
 # SKILL.md — harness-recommendation-advisor
 
 ## Name

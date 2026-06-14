@@ -1,3 +1,9 @@
+---
+name: memory-hygiene-auditor
+description: >
+  memory-hygiene-auditor
+---
+
 # SKILL.md — memory-hygiene-auditor
 
 ## Name

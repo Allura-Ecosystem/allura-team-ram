@@ -73,7 +73,7 @@ Task(subagent_type: "HIGHTOWER_DEVOPS", prompt: "Check Docker and CI config for 
 After all parallel agents complete:
 
 1. **Fowler gate** — run `bun run typecheck && bun run lint`
-2. **Pike gate** — review any new API or interface surface
+2. **Pike gate** — review any new API or interface surface (see `code-review` skill for gate criteria)
 3. **Bellard gate** — measure if a performance-sensitive path changed
 
 ### Phase 4: Synthesize and Commit
@@ -125,10 +125,14 @@ AFTER both report:
 
 1. **At least 2 agents per party** — no solo work in party mode
 2. **Woz is the default writer** — other specialists write only when explicitly authorized
-3. **Fowler gates every commit path** — no commit flow without typecheck and lint passing
+3. **Fowler gates every commit path** — no commit flow without typecheck and lint passing (see `code-review` skill for severity model)
 4. **Brooks never implements** — Brooks orchestrates, synthesizes, and approves direction
-5. **Use scoped DB rules when required** — if the active system requires `group_id`, include it on those operations
-6. **Respect append-only audit rules** — if the active system uses append-only events, do not mutate historical records
+5. **group_id on every DB operation** — required in this repo
+6. **Append-only on events table** — INSERT only in this repo
+
+## Harness Compatibility
+
+Subagent type names (e.g., `WOZ_BUILDER`, `SCOUT_RECON`) are Codex conventions. For OpenCode, map to the equivalent agent names defined in `.opencode/agent/` configuration. The decomposition logic is harness-agnostic; only the dispatch mechanism differs.
 
 ## Why This Works
 

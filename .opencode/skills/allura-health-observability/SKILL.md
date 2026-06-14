@@ -1,3 +1,9 @@
+---
+name: allura-health-observability
+description: >
+  "check allura health", "system status", "memory system health", "queue depth", "how's the pipeline"
+---
+
 # Allura Health & Observability
 
 ## Trigger

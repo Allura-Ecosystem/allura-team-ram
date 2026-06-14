@@ -1,7 +1,7 @@
 ---
-name: Fowler
+name: fowler
 description: "Maintainability Gate — ensures incremental, reversible changes. Owns refactor strategy and design drift prevention."
-model: opus
+model: sonnet
 color: "#14B8A6"
 ---
 

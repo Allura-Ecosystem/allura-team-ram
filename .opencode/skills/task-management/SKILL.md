@@ -1,7 +1,7 @@
 ---
 name: task-management
-description: Task management CLI for tracking and managing feature subtasks with status, dependencies, and validation
-version: 1.0.0
+description: Task management CLI for tracking and managing feature subtasks with status, dependencies, validation, and Allura Brain integration. Use when creating tasks, tracking progress, finding blocked work, or linking tasks to memory insights.
+version: 1.1.0
 author: opencode
 type: skill
 category: development
@@ -11,6 +11,8 @@ tags:
   - tracking
   - dependencies
   - cli
+  - memory
+allowed-tools: ["Read", "Write", "Grep", "Bash", "mcp__MCP_DOCKER__*", "allura-brain_*"]
 ---
 
 # Task Management Skill
@@ -335,6 +337,111 @@ bash .opencode/skills/task-management/router.sh validate
 # Validate specific feature
 bash .opencode/skills/task-management/router.sh validate my-feature
 ```
+
+---
+
+## Allura Brain Integration
+
+Task management is more effective when connected to persistent memory. Use `allura-brain_*` tools at three key points in the task lifecycle.
+
+### 1. Before Creating Tasks — Search for Prior Work
+
+Before breaking down a new feature, check if related work exists in Brain:
+
+```javascript
+// Has this been attempted before?
+allura-brain_memory_search({
+  query: "<feature topic>",
+  group_id: "allura-system",
+  limit: 5
+})
+
+// Are there relevant architecture decisions?
+allura-brain_memory_search({
+  query: "ARCHITECTURE_DECISION <feature topic>",
+  group_id: "allura-system",
+  limit: 5
+})
+
+// Any known blockers?
+allura-brain_memory_search({
+  query: "BLOCKER <feature topic>",
+  group_id: "allura-system",
+  limit: 3
+})
+```
+
+Use findings to:
+- Avoid duplicating prior work
+- Respect existing architecture decisions
+- Surface known blockers before they surprise you
+- Add `context_files` and `reference_files` from Brain results
+
+### 2. After Creating Tasks — Log the Plan
+
+After TaskManager creates the task structure, log the plan to Brain:
+
+```javascript
+allura-brain_memory_add({
+  group_id: "allura-system",
+  user_id: "brooks",
+  content: "Task plan: <feature name>. <N> subtasks. Key deps: <critical path>. Risk: <top risk>. Related decisions: <ADR IDs if any>."
+})
+```
+
+This creates a breadcrumb for future sessions to find the plan.
+
+### 3. After Completing Tasks — Log Decisions and Outcomes
+
+When marking a task complete, also log the key decision or outcome:
+
+```javascript
+allura-brain_memory_add({
+  group_id: "allura-system",
+  user_id: "<agent_id>",
+  content: "Completed <feature>/<subtask>: <summary>. Decision: <what was decided and why>. Outcome: <what happened>."
+})
+```
+
+For significant completions (architecture decisions, schema changes, new patterns), also request promotion:
+
+```javascript
+allura-brain_memory_promote({
+  group_id: "allura-system",
+  memory_id: "<id from add>",
+  reason: "Reusable pattern: <why this matters across projects>"
+})
+```
+
+### 4. When Blocked — Search for Solutions
+
+If a task is blocked, search Brain before escalating:
+
+```javascript
+// Has anyone hit this before?
+allura-brain_memory_search({
+  query: "<blocker description>",
+  group_id: "allura-system",
+  limit: 5
+})
+```
+
+If a solution exists, unblock and continue. If not, log the blocker:
+
+```javascript
+allura-brain_memory_add({
+  group_id: "allura-system",
+  user_id: "<agent_id>",
+  content: "BLOCKER: <feature>/<subtask> — <description>. Impact: <what's blocked>. Attempted: <what was tried>."
+})
+```
+
+### Brain Hygiene Rules
+
+- **Search before write** — never add to Brain without checking for duplicates first
+- **One log per significant event** — don't log every subtask status change; log decisions, completions, and blockers
+- **group_id always** — every Brain call must include `group_id: "allura-system"`
+- **Promotion requires HITL** — never promote without human approval (see `hitl-governance` skill)
 
 ---
 

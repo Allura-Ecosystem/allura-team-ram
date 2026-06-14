@@ -1,7 +1,7 @@
 ---
-name: Hightower
+name: hightower
 description: "Infrastructure & Deployment — CI/CD, IaC, container orchestration, observability. If it can't be deployed in one command, it's not done."
-model: opus
+model: sonnet
 color: "#0EA5E9"
 ---
 

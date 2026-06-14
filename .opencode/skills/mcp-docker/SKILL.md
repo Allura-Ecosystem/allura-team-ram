@@ -9,6 +9,8 @@ description: Discover, configure, and manage MCP servers from Docker Hub's MCP C
 
 This skill enables dynamic discovery and management of MCP (Model Context Protocol) servers from Docker Hub's MCP Catalog using the MCP_DOCKER toolset. Rather than pre-installing all possible MCP tools, you can discover, configure, and add MCP servers on-demand during your session.
 
+Prefer tools already present in the session first. Use MCP_DOCKER when you need a missing capability, not as a replacement for repo-native tools.
+
 ## When to Use This Skill
 
 - **Adding new capabilities**: Need web search, database access, file system operations, or browser automation?
@@ -60,14 +62,11 @@ MCP_DOCKER_mcp-add --name perplexica --activate
 MCP_DOCKER_mcp-add --name filesystem --activate
 ```
 
-### Step 4: Execute Tools
+### Step 4: Use the Activated Tools
 
-Once added, use `MCP_DOCKER_mcp-exec` to call tools from the server:
+Once added, the server's tools usually surface directly in the session. Call the surfaced tool directly.
 
-```
-MCP_DOCKER_mcp-exec --name neo4j --tool read_neo4j_cypher --arguments '{"query":"MATCH (n) RETURN count(n)"}'
-MCP_DOCKER_mcp-exec --name perplexica --tool search --arguments '{"query":"latest TypeScript features"}'
-```
+Use `MCP_DOCKER_mcp-exec` only when a server tool exists in the session but is not exposed in the normal tool list.
 
 ## Complete Examples
 
@@ -121,21 +120,20 @@ MCP_DOCKER_mcp-exec --name filesystem --tool read_file --arguments '{
 }'
 ```
 
-### Example 4: Custom MCP Server (Allura's Memory)
+### Example 4: Allura Brain — The Canonical Memory Surface
 
-```
-# Build your custom MCP server image
-docker build -f Dockerfile.mcp -t allura-memory-mcp:latest .
+Allura Brain IS the memory system for this repo. It runs as an HTTP MCP server at `localhost:5888/mcp` and is also available via Docker MCP toolkit.
 
-# Add to MCP_DOCKER
-MCP_DOCKER_mcp-add --name allura-memory-mcp --activate
+**Two access paths, same backend (PG + Neo4j):**
 
-# Execute tools
-MCP_DOCKER_mcp-exec --name allura-memory-mcp --tool search_memories --arguments '{
-  "query": "authentication patterns",
-  "group_id": "myproject"
-}'
-```
+| Harness | Tool Prefix | How |
+|---------|------------|-----|
+| OpenClaw | `allura-brain__memory_*` | Pre-registered in gateway config |
+| OpenCode/Durham | `MCP_DOCKER__*` (SQL, Neo4j, search) | Via Docker MCP gateway |
+
+**Use `allura-brain__memory_*` tools first** when available — they enforce governance (SOC2 mode, promotion thresholds, trace logging). Fall back to `MCP_DOCKER__*` tools for raw queries that bypass the governance layer.
+
+**Never** create a separate `allura-memory` MCP server entry — the governed surface is Allura Brain.
 
 ## Essential MCP Servers
 
@@ -229,6 +227,7 @@ Remove an MCP server from the session.
 4. **One-time setup**: Configure once per session, reuse multiple times
 5. **Clean up**: Remove servers when done if experiencing context bloat: `MCP_DOCKER_mcp-remove --name unused-server`
 6. **Check documentation**: Some servers have specific configuration requirements
+7. **Respect governed surfaces**: Use `allura-brain__memory_*` tools for governed writes (add, promote, update, delete). Use `MCP_DOCKER__*` for raw reads and diagnostics. Never bypass the governance layer with direct DB writes for memory operations.
 
 ## Troubleshooting
 

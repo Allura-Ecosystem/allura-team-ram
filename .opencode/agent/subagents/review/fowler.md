@@ -9,7 +9,7 @@ path: subagents/review
 scope: harness
 platform: Both
 status: active
-model: ollama/glm-5.1:cloud
+model: ollama/deepseek-v4-flash:cloud
 fallback_model: ollama/deepseek-v4-pro:cloud
 permission:
   edit: allow

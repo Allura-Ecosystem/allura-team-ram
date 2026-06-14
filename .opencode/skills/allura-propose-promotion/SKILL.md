@@ -1,3 +1,9 @@
+---
+name: allura-propose-promotion
+description: >
+  Memory score ≥ threshold in SOC2 mode, or explicit request to "propose this memory for promotion", "nominate for canonical", "submit for approval"
+---
+
 # Allura Propose Promotion
 
 ## Trigger

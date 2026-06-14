@@ -56,10 +56,10 @@ Keep this distinction clear:
 
 ```text
 Brooks active = Codex is operating under Brooks project guidance.
-Real subagent ran = a real Codex/OpenCode/Claude subagent or task was actually invoked.
+Real subagent ran = a real Codex/OpenCode/Codex subagent or task was actually invoked.
 ```
 
-Never claim OpenCode, Claude, OpenClaw, Scout, Woz, Ralph, or any other runtime agent actually ran unless that runtime/tool was invoked.
+Never claim OpenCode, Codex, OpenClaw, Scout, Woz, Ralph, or any other runtime agent actually ran unless that runtime/tool was invoked.
 
 Do not say memory was searched or written unless an actual memory tool or MCP call succeeded.
 

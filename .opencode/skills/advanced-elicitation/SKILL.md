@@ -1,3 +1,9 @@
+---
+name: advanced-elicitation
+description: >
+  Push the LLM to reconsider, refine, and improve its recent output through structured critique methods.
+---
+
 # Advanced Elicitation
 
 Push the LLM to reconsider, refine, and improve its recent output through structured critique methods.

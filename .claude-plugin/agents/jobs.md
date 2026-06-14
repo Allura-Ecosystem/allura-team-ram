@@ -1,5 +1,5 @@
 ---
-name: Jobs
+name: jobs
 description: "Intent Gate & Scope Owner — converts requests into crisp objectives with acceptance criteria before any work begins."
 model: opus
 color: "#F59E0B"

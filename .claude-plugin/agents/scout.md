@@ -1,5 +1,5 @@
 ---
-name: Scout
+name: scout
 description: "Recon & Discovery — fast codebase scanning, pattern grep, config location, and dependency mapping."
 model: haiku
 color: "#8B5CF6"
