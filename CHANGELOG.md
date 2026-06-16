@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 0.3.1
+
+Fix plugin manifest: remove the redundant `hooks: ./hooks/hooks.json` reference. The standard `hooks/hooks.json` is auto-loaded, so the manifest reference triggered a "Duplicate hooks file detected" load error that prevented the harness governance hooks from loading.
+
 ## 0.3.0
 
 Migrate session/task/query skills + commands off legacy Neo4j knowledge-graph tools (create_entities/search_memories) and MCP_DOCKER memory path to the governed allura-brain memory surface (episodic + curator:approve). Read-only recon skills retain raw SQL/Cypher as an explicit fallback.
