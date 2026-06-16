@@ -64,7 +64,7 @@ permission:
    - `metadata.source`: `"conversation"`
    - `metadata.agent_id`: your agent persona
 
-2. **Log architectural decisions** — use `MCP_DOCKER_execute_sql` to insert ARCHITECTURE_DECISION events
+2. **Log architectural decisions** — use `allura-brain_memory_add` to record ARCHITECTURE_DECISION events (see Reflection Protocol below; episodic → `curator:approve`, never a direct events-table write)
 
 3. **Promote patterns** — if confidence >= 0.85, call `allura-brain_memory_promote` to elevate raw trace to canonical insight
 
@@ -327,13 +327,14 @@ When `SK` is invoked, Brooks orchestrates the skill-creator workflow:
 
 ### Event logging
 
-On skill creation completion, log to PostgreSQL:
+On skill creation completion, record an episodic trace via Allura Brain (auto-queued for `curator:approve` — never a direct events-table write):
 
 ```javascript
-mcp__MCP_DOCKER__insert_data({
-  table_name: "events",
-  columns: "event_type, group_id, agent_id, status, metadata",
-  values: "'SKILL_CREATED', 'allura-system', 'brooks', 'completed', '{json}'"
+allura-brain_memory_add({
+  group_id: "allura-system",
+  user_id: "brooks-architect",
+  content: "SKILL_CREATED: {skill_name} — {what it does}",
+  metadata: { source: "conversation", agent_id: "brooks-architect", event_type: "SKILL_CREATED", status: "completed" }
 })
 ```
 
@@ -341,26 +342,24 @@ mcp__MCP_DOCKER__insert_data({
 
 ## Exit Validation (MANDATORY before DA)
 
-Run this query — must return at least one architecture event from this session:
+Verify via the governed Allura Brain read surface (never raw SQL on the append-only events store) that at least one architecture event was recorded this session:
 
 ```javascript
-mcp__MCP_DOCKER__execute_sql({
-  sql_query: `
-    SELECT event_type, COUNT(*)
-    FROM events
-    WHERE agent_id = 'brooks'
-      AND event_type IN ('ADR_CREATED','INTERFACE_DEFINED','TECH_STACK_DECISION')
-      AND created_at > NOW() - INTERVAL '8 hours'
-    GROUP BY event_type
-  `,
+mcp__allura-brain__audit_query_events({
+  group_id: "allura-system",
+  agent_id: "brooks-architect",
+  event_types: ["ADR_CREATED", "INTERFACE_DEFINED", "TECH_STACK_DECISION"],
+  since: "8h"
 })
+// Fallback: mcp__allura-brain__memory_list({ group_id: "allura-system", user_id: "brooks-architect", limit: 20, sort: "created_at_desc" })
+//           and confirm at least one ARCHITECTURE_DECISION was recorded this session.
 ```
 
-✅ **PASS:** At least one row returned → exit permitted
+✅ **PASS:** At least one matching event/memory → exit permitted
 
-❌ **FAIL:** Zero rows → display: _"No architecture event logged this session. Log one before exit or confirm intentional dismissal."_
+❌ **FAIL:** None found → display: _"No architecture event logged this session. Log one before exit or confirm intentional dismissal."_
 
-If Neo4j unavailable: allow exit with warning logged to Postgres.
+If Allura Brain is degraded: allow exit with a warning recorded once the store recovers.
 
 ---
 

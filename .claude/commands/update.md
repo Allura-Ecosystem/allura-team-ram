@@ -1,6 +1,6 @@
 ---
 description: "Quick update — sync documentation with Allura Brain"
-allowed-tools: ["Write", "Read", "Grep", "mcp__MCP_DOCKER__*"]
+allowed-tools: ["Write", "Read", "Grep", "mcp__allura-brain__*"]
 ---
 
 # Quick Update Command
@@ -33,7 +33,8 @@ Quickly update Allura Brain and canonical docs with insights from the current se
 
 ```javascript
 // Store to Allura Brain (source of truth)
-mcp__MCP_DOCKER__memory_add({
+// episodic; auto-queued for curator:approve — never a direct graph write
+mcp__allura-brain__memory_add({
   group_id: "allura-system",
   user_id: agent_id,
   content: "<change description>",
@@ -52,10 +53,12 @@ Write({ path: `docs/allura/${targetFile}.md`, content: updatedContent })
 ### Phase 3: Log Event
 
 ```javascript
-mcp__MCP_DOCKER__execute_sql({
-  sql_query: `INSERT INTO events (event_type, agent_id, group_id, status, metadata, created_at)
-    VALUES ('DOC_UPDATE', 'brooks', 'allura-system', 'completed', $1, NOW())`,
-  params: [{ target, changeSummary }],
+// episodic; auto-queued for curator:approve — never a direct graph write
+mcp__allura-brain__memory_add({
+  group_id: "allura-system",
+  user_id: "brooks-architect",
+  content: `DOC_UPDATE completed for ${target}: ${changeSummary}`,
+  metadata: { source: "manual", agent_id: "brooks-architect", event_type: "DOC_UPDATE" },
 })
 ```
 

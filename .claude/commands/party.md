@@ -1,6 +1,6 @@
 ---
 description: "Party mode — launch Team RAM specialists in parallel with Brooks orchestration"
-allowed-tools: ["Task", "Read", "Bash", "Grep", "Glob", "Edit", "Write", "mcp__MCP_DOCKER__*"]
+allowed-tools: ["Task", "Read", "Bash", "Grep", "Glob", "Edit", "Write", "mcp__allura-brain__*"]
 ---
 
 # Party Mode — Team RAM Parallel Dispatch

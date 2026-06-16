@@ -25,19 +25,22 @@ Search Allura Brain for relevant insights.
 
 ```javascript
 // Search Allura Brain
-mcp__MCP_DOCKER__search_memories({ 
+mcp__allura-brain__memory_search({ 
   query: "<search term>",
+  group_id: "allura-system",
   limit: 10,
-  min_confidence: 0.7
+  min_score: 0.7
 })
 ```
 
 ### Phase 2: Find Related Entities
 
 ```javascript
-// Find related entities
-mcp__MCP_DOCKER__find_memories_by_name({ 
-  names: ["<entity names from search>"]
+// List related memories for this persona/tenant
+mcp__allura-brain__memory_list({ 
+  group_id: "allura-system",
+  user_id: "scout-recon",
+  limit: 10
 })
 ```
 

@@ -33,10 +33,10 @@ Search for memories relevant to the current task or recent sessions:
 
 ```javascript
 // Search by current topic
-mcp__MCP_DOCKER__search_memories({ query: "<user's topic or last session keywords>" })
+mcp__allura-brain__memory_search({ query: "<user's topic or last session keywords>", group_id: "allura-system" })
 
-// Find specific project entities
-mcp__MCP_DOCKER__find_memories_by_name({ names: ["Memory Master", "allura-system"] })
+// List recent project memories for this persona
+mcp__allura-brain__memory_list({ group_id: "allura-system", user_id: "scout-recon", limit: 10 })
 ```
 
 Report: memories found, key insights, any critical blockers from last session.
@@ -46,15 +46,15 @@ Report: memories found, key insights, any critical blockers from last session.
 Search Allura Brain for current context and recent activity:
 
 ```javascript
-// Search Brain for recent session context
+// Search for architecture insights (governed Brain surface first)
+mcp__allura-brain__memory_search({ query: "recent decisions blockers architecture", group_id: "allura-system" })
+
+// Read-only fallback (never docker exec): raw event query for recent session context
 mcp__MCP_DOCKER__execute_sql({
   sql_query: `SELECT event_type, agent_id, metadata, created_at
     FROM events WHERE group_id = 'allura-system'
     ORDER BY created_at DESC LIMIT 20`,
 })
-
-// Search for architecture insights
-mcp__MCP_DOCKER__search_memories({ query: "recent decisions blockers architecture" })
 ```
 
 Report: memories found, key insights, any critical blockers from last session.
@@ -62,18 +62,12 @@ Report: memories found, key insights, any critical blockers from last session.
 ## Step 4: Log Session Start
 
 ```javascript
-mcp__MCP_DOCKER__create_entities({
-  entities: [
-    {
-      name: "Session Start " + new Date().toISOString(),
-      type: "Event",
-      observations: [
-        "group_id: allura-system",
-        "event_type: session_start",
-        "timestamp: " + new Date().toISOString(),
-      ],
-    },
-  ],
+// episodic; auto-queued for curator:approve — never a direct graph write
+mcp__allura-brain__memory_add({
+  group_id: "allura-system",
+  user_id: "scout-recon",
+  content: "Session start logged at " + new Date().toISOString(),
+  metadata: { source: "manual", agent_id: "scout-recon" },
 })
 ```
 

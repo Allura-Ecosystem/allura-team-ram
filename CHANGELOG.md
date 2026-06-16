@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 0.3.0
+
+Migrate session/task/query skills + commands off legacy Neo4j knowledge-graph tools (create_entities/search_memories) and MCP_DOCKER memory path to the governed allura-brain memory surface (episodic + curator:approve). Read-only recon skills retain raw SQL/Cypher as an explicit fallback.
+
 ## [0.2.0] - 2026-06-07
 
 ### Added

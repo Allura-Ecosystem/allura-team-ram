@@ -12,7 +12,7 @@ tags:
   - dependencies
   - cli
   - memory
-allowed-tools: ["Read", "Write", "Grep", "Bash", "mcp__MCP_DOCKER__*", "allura-brain_*"]
+allowed-tools: ["Read", "Write", "Grep", "Bash", "mcp__allura-brain__*", "allura-brain_*"]
 ---
 
 # Task Management Skill

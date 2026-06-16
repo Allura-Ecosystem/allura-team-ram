@@ -1,7 +1,7 @@
 ---
 name: allura-menu
 description: "Interactive menu for Allura Memory surgical team. Quick prompts for common workflows."
-allowed-tools: ["Read", "Grep", "Bash", "mcp__MCP_DOCKER__*", "allura-brain_*"]
+allowed-tools: ["Read", "Grep", "Bash", "mcp__allura-brain__*", "allura-brain_*"]
 ---
 
 # Allura Menu — Quick Prompts

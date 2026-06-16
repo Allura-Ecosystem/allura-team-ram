@@ -1,6 +1,6 @@
 ---
 description: "Session initialization - prepare context, and use optional memory/infrastructure when configured"
-allowed-tools: ["Bash", "mcp__MCP_DOCKER__mcp-find", "mcp__MCP_DOCKER__mcp-config-set", "mcp__MCP_DOCKER__mcp-add", "mcp__MCP_DOCKER__notion-fetch"]
+allowed-tools: ["Bash", "mcp__allura-brain__*", "mcp__MCP_DOCKER__mcp-find", "mcp__MCP_DOCKER__mcp-config-set", "mcp__MCP_DOCKER__mcp-add", "mcp__MCP_DOCKER__notion-fetch"]
 ---
 
 # Session Start Protocol

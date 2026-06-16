@@ -1,6 +1,6 @@
 ---
 description: "Ultra work-until-done — bounded Team RAM execution until validation passes"
-allowed-tools: ["Read", "Bash", "Glob", "Grep", "Edit", "Write", "mcp__MCP_DOCKER__*"]
+allowed-tools: ["Read", "Bash", "Glob", "Grep", "Edit", "Write", "mcp__allura-brain__*"]
 ---
 
 # Ultra Work-Until-Done (`ultra`)

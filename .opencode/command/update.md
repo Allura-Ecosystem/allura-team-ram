@@ -1,11 +1,11 @@
 ---
 description: "Quick update — sync documentation with memory"
-allowed-tools: ["Write", "Read", "Grep", "mcp__MCP_DOCKER__*"]
+allowed-tools: ["Write", "Read", "Grep", "mcp__allura-brain__*"]
 ---
 
 # Quick Update Command
 
-Quickly update documentation with insights from memory. When Allura Brain is available, uses MCP_DOCKER tools.
+Quickly update documentation with insights from memory. Uses the governed `mcp__allura-brain__*` memory surface.
 
 ## Usage
 

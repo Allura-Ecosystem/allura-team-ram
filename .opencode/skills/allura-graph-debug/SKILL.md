@@ -17,9 +17,9 @@ description: >
 | `depth` | number | no | Relationship depth to traverse (default: 2, max: 4) |
 
 ## MCP Tool Allowlist
-- `MCP_DOCKER__find_memories_by_name` — exact entity lookup
-- `MCP_DOCKER__search_memories` — fulltext search across names, types, observations
-- `MCP_DOCKER__read_graph` — full graph dump (use sparingly, only when query is broad)
+- `mcp__allura-brain__memory_search` — governed Brain search (lead with this)
+- `mcp__allura-brain__memory_list` — governed list by group_id/user_id
+- `MCP_DOCKER__read_graph` — read-only fallback (never docker exec): full graph dump (use sparingly, only when query is broad)
 
 ## Output Contract
 ```json
@@ -35,6 +35,6 @@ description: >
 ## Guardrails
 - **READ-ONLY.** This skill must NEVER create, update, or delete any entity or relationship.
 - **group_id required.** Every call must include group_id. Reject if missing.
-- **No Cypher queries.** Use `find_memories_by_name` and `search_memories` only. Never construct raw Cypher.
+- **No Cypher writes.** Lead with `mcp__allura-brain__memory_search` / `memory_list`; raw `read_graph` is a read-only fallback (never docker exec). Never construct raw Cypher writes.
 - **Depth cap.** Never traverse beyond depth 4 — risk of OOM on large graphs.
 - **No exfiltration.** Never return data from a group_id the caller doesn't belong to.

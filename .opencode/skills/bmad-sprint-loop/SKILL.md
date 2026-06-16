@@ -115,7 +115,7 @@ allura-brain__memory_search(
 )
 ```
 
-If `allura-brain__*` is unreachable, fall back to `MCP_DOCKER__search_memories` / `MCP_DOCKER__query_database`. If Brain is fully down, note the degraded state, proceed with the un-governed `bmad-*` path, and flag it in the story's Debug Log. Summarize any prior blockers/decisions into the recon brief so subagents inherit the institutional memory.
+If `allura-brain__*` is unreachable, fall back to read-only `MCP_DOCKER__query_database` / `MCP_DOCKER__read_neo4j_cypher` (read-only fallback; never docker exec, never a legacy graph write). If Brain is fully down, note the degraded state, proceed with the un-governed `bmad-*` path, and flag it in the story's Debug Log. Summarize any prior blockers/decisions into the recon brief so subagents inherit the institutional memory.
 
 ## PHASE A — RECON (parallel subagents)
 

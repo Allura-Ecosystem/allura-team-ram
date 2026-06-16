@@ -30,34 +30,19 @@ This command persists a durable session reflection and verifies write success us
 ## Canonical Write Template (Using Allura Brain Tools)
 
 ```javascript
-// Step 1: Create Reflection entity
-MCP_DOCKER_create_entities({
-  entities: [{
-    name: "Session Reflection " + new Date().toISOString(),
-    type: "Reflection",
-    observations: [
-      "group_id: allura-system",
-      "agent_id: openagent",
-      "event_type: session_complete",
-      "status: completed",
-      "timestamp: " + new Date().toISOString(),
-      "insights: " + summary
-    ]
-  }]
+// Step 1: Persist the session reflection
+// episodic; auto-queued for curator:approve — never a direct graph write
+mcp__allura-brain__memory_add({
+  group_id: "allura-system",
+  user_id: "openagent",
+  content: "Session reflection (" + new Date().toISOString() + "): " + summary,
+  metadata: { source: "manual", agent_id: "openagent" }
 });
 
-// Step 2: Link to Memory Master (optional)
-MCP_DOCKER_create_relations({
-  relations: [{
-    source: "Session Reflection " + new Date().toISOString(),
-    target: "Memory Master",
-    relationType: "PERFORMED_BY"
-  }]
-});
-
-// Step 3: Verify by searching
-MCP_DOCKER_search_memories({
-  query: "Session Reflection"
+// Step 2: Verify by searching
+mcp__allura-brain__memory_search({
+  query: "Session Reflection",
+  group_id: "allura-system"
 });
 ```
 
@@ -72,19 +57,18 @@ MCP_DOCKER_search_memories({
 Instead of creating new Reflection entities, you can add observations to Memory Master:
 
 ```javascript
-MCP_DOCKER_add_observations({
-  observations: [{
-    entityName: "Memory Master",
-    observations: [
-      "2026-04-03: Completed session - Fixed Neo4j memory integration"
-    ]
-  }]
+// episodic; auto-queued for curator:approve — never a direct graph write
+mcp__allura-brain__memory_add({
+  group_id: "allura-system",
+  user_id: "openagent",
+  content: "2026-04-03: Completed session - hardened governed memory integration",
+  metadata: { source: "manual", agent_id: "openagent" }
 });
 ```
 
 ## Never Do This
 
-❌ `MCP_DOCKER_write_neo4j_cypher` (use `create_entities` instead)
+❌ Direct graph writes or raw Cypher (use the governed `mcp__allura-brain__memory_add` surface instead)
 ❌ Skip verification step
 
 ## Always Do This

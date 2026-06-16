@@ -9,9 +9,9 @@
 | `group_id` | string | **YES** | Tenant namespace (must match `^allura-*`). No calls without it. |
 
 ## MCP Tool Allowlist
-- `allura-brain__memory_search` — verify retrieval path is functional
-- `MCP_DOCKER__execute_sql` — query PostgreSQL for queue depth, latency metrics, event counts
-- `MCP_DOCKER__search_memories` — verify Neo4j graph is responsive
+- `mcp__allura-brain__memory_search` — governed retrieval probe (lead with this; verifies PG+Neo4j path)
+- `MCP_DOCKER__execute_sql` — read-only fallback (never docker exec): query PostgreSQL for queue depth, latency metrics, event counts
+- `MCP_DOCKER__read_neo4j_cypher` — read-only fallback (never docker exec): verify Neo4j graph is responsive
 
 ## Output Contract
 ```json
@@ -41,7 +41,7 @@
 - **Aggregate counts only.** Queue depth is a count, not a list of proposal contents. Do not expose PII from pending proposals.
 
 ## Health Check Procedure
-1. Run `allura-brain__memory_search` with a trivial query to verify PG+Neo4j retrieval
+1. Run `mcp__allura-brain__memory_search` with a trivial query to verify PG+Neo4j retrieval
 2. Query `SELECT count(*) FROM canonical_proposals WHERE status='pending'` for queue depth
 3. Query `SELECT EXTRACT(EPOCH FROM (now() - min(created_at)))/3600 as oldest_hours FROM canonical_proposals WHERE status='pending'` for age
 4. Aggregate into the output contract and return
