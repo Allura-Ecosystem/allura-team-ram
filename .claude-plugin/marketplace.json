@@ -1,0 +1,32 @@
+{
+  "name": "team-ram-marketplace",
+  "owner": {
+    "name": "Allura Ecosystem",
+    "url": "https://github.com/Allura-Ecosystem"
+  },
+  "metadata": {
+    "description": "Team RAM — self-evolving multi-agent orchestration harness for deterministic AI-powered software development.",
+    "version": "0.4.0"
+  },
+  "plugins": [
+    {
+      "name": "team-ram-harness",
+      "source": "./",
+      "description": "Team RAM OpenCode Harness — 10 specialist agents, SONA learning, coherence monitoring, and HITL governance. DAY_BUILD and NIGHT_BUILD modes.",
+      "version": "0.4.0",
+      "author": {
+        "name": "Team RAM Contributors"
+      },
+      "license": "MIT",
+      "keywords": [
+        "harness",
+        "multi-agent",
+        "orchestration",
+        "team-ram",
+        "allura",
+        "governance"
+      ],
+      "category": "Coding"
+    }
+  ]
+}

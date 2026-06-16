@@ -1,5 +1,5 @@
 ---
-description: "Long-horizon autonomous goal. /goal <objective> defines a goal. /goal run [goal-id] executes one bounded Ralph iteration. status | pause | resume | clear manage lifecycle."
+description: "Long-horizon autonomous goal. /goal <objective> defines a goal. /goal run [goal-id] executes one bounded iteration — the Ralph binary when available (OpenCode), otherwise a bounded Claude-native loop (Claude Code / Cowork / Codex). status | pause | resume | clear manage lifecycle."
 argument-hint: "<objective> | run [goal-id] | status | pause | resume | clear [goal-id]"
 allowed-tools: ["Read", "Write", "Bash", "Glob", "Grep", "allura-brain__memory_add", "allura-brain__memory_search", "allura-brain__memory_list"]
 ---
@@ -86,11 +86,38 @@ allura-brain__memory_add({
 1. Resolve the active goal with `memory_list` state folding. If `[goal-id]` is supplied, require that goal.
 2. Refuse if `.ralph/ralph-loop.state.json` has `active: true` and `startedAt` is non-empty. Tell the user to inspect or clear stale Ralph state before launching another loop.
 3. Read `ralph/PROMPT_plan.md` and the goal plan at `ralph/goals/[goal-id].md`.
-4. Launch exactly one bounded iteration:
+4. **Detect the loop runtime.** Check whether the `ralph` binary is on PATH:
    ```bash
-   ralph --prompt-file ralph/goals/[goal-id].md --max-iterations 1 --completion-promise TASK_COMPLETE
+   command -v ralph
    ```
-5. If `ralph` is unavailable, do not fall back to an unbounded loop. Print the command the user should run manually.
+   - **If `ralph` is present (OpenCode native):** launch exactly one bounded iteration:
+     ```bash
+     ralph --prompt-file ralph/goals/[goal-id].md --max-iterations 1 --completion-promise TASK_COMPLETE
+     ```
+   - **If `ralph` is absent (Claude Code / Cowork / Codex):** run ONE bounded Claude-native iteration in-session. Do NOT loop unbounded — one `/goal run` = one task advance, mirroring `--max-iterations 1`. Follow the Claude-Native Loop below.
+
+5. After the iteration (either runtime), re-read the plan, report which task advanced and the validation result, and tell the user to run `/goal run [goal-id]` again for the next task (or that the stopping condition is met).
+
+---
+
+### Claude-Native Loop (fallback when `ralph` is absent)
+
+This is the portable equivalent of one Ralph iteration. It is bounded to a single task per `/goal run`.
+
+1. **Guard:** confirm the goal is `active` (Step 1 folding) and `.ralph/ralph-loop.state.json` is not `active:true`. Refuse if a loop is already in flight.
+2. **Hydrate:** search Allura Brain (`allura-brain__memory_search`, `group_id: "allura-system"`) for prior context on this goal before editing.
+3. **Select one task:** open `ralph/goals/[goal-id].md`, pick the FIRST unchecked `- [ ]` task. If none remain, skip to step 7 (completion).
+4. **Implement the smallest valid slice** for that one task, staying strictly inside the goal's `guardrails`. Stop immediately on any destructive, secret, or irreversible-and-unclear risk and report instead of proceeding.
+5. **Validate** with the lightest meaningful check:
+   ```bash
+   bun run typecheck && bun test
+   ```
+   If validation fails, do NOT mark the task done — report the failure and stop so the user can decide.
+6. **Mark progress:** on success, edit only the checkbox `- [ ]` → `- [x]` for that task (never rewrite task descriptions — Allura Rule 4). Append a one-line outcome under the task if useful.
+7. **Completion check:** run the goal's `Stopping condition` command/description. If it passes (all tasks `[x]` and condition met), add a superseding Brain entry with `event_type: "GOAL_COMPLETED", state: "completed"`; otherwise leave the goal `active`.
+8. **Reflect:** `allura-brain__memory_add({ group_id: "allura-system", user_id: "brooks-architect", content: "GOAL_ITERATION [goal-id] task:<n> result:<pass|fail|blocked>", metadata: { source: "conversation", agent_id: "brooks-architect", event_type: "GOAL_ITERATION", goal_id: "[goal-id]" } })`
+
+**Invariants for the native loop:** exactly one task per run; validation gates the checkbox; guardrail violation or destructive risk halts the loop; Brain entries are append-only (never mutate).
 
 ---
 
