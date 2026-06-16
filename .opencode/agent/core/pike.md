@@ -9,7 +9,7 @@ path: core
 scope: harness
 platform: Both
 status: active
-model: ollama-cloud/minimax-m3
+model: openai/gpt-5.4-mini
 permission:
   edit: allow
   bash: allow

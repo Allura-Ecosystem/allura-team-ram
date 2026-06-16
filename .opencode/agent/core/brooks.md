@@ -9,7 +9,7 @@ path: core
 scope: harness
 platform: Both
 status: active
-model: openai/gpt-5.4
+model: openai/gpt-5.5
 permission:
   edit: allow
   bash: allow

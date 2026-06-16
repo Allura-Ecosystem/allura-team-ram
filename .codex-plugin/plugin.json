@@ -6,7 +6,7 @@
     "name": "Team RAM Contributors"
   },
   "license": "MIT",
-  "repository": "https://github.com/ronin704/OpenAgentsControl",
+  "repository": "https://github.com/Allura-Ecosystem/allura-team-ram.git",
   "mcp": "./.mcp.json",
   "keywords": [
     "opencode",
@@ -23,16 +23,17 @@
   "hooks": "./hooks/hooks.json",
   "skills": "./.opencode/skills/",
   "agents": [
-    "./.opencode/agent/brooks.md",
-    "./.opencode/agent/jobs.md",
-    "./.opencode/agent/woz.md",
-    "./.opencode/agent/scout.md",
-    "./.opencode/agent/pike.md",
-    "./.opencode/agent/fowler.md",
-    "./.opencode/agent/bellard.md",
-    "./.opencode/agent/carmack.md",
-    "./.opencode/agent/knuth.md",
-    "./.opencode/agent/hightower.md"
+    "./.opencode/agent/core/brooks.md",
+    "./.opencode/agent/core/jobs.md",
+    "./.opencode/agent/core/bahari.md",
+    "./.opencode/agent/core/woz.md",
+    "./.opencode/agent/core/scout.md",
+    "./.opencode/agent/core/pike.md",
+    "./.opencode/agent/core/fowler.md",
+    "./.opencode/agent/core/bellard.md",
+    "./.opencode/agent/core/carmack.md",
+    "./.opencode/agent/core/knuth.md",
+    "./.opencode/agent/core/hightower.md"
   ],
   "commands": [
     "./.opencode/command/start-session.md",

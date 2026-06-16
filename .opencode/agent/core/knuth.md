@@ -9,7 +9,7 @@ path: core
 scope: harness
 platform: Both
 status: active
-model: ollama-cloud/minimax-m3
+model: ollama-cloud/qwen3-coder-next
 permission:
   edit: allow
   bash: allow
