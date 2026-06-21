@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bun run \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.ts\"",
+            "command": "command -v bun >/dev/null 2>&1 && bun run \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.ts\" || { echo 'team-ram: bun not found, skipping SessionStart hydration' >&2; exit 0; }",
             "statusMessage": "Activating Brooks — Team RAM"
           }
         ]

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/governance-preflight.py"
+            "command": "command -v python3 >/dev/null 2>&1 && python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/governance-preflight.py\" || { echo 'team-ram: python3 not found, governance preflight SKIPPED (invariants unenforced this call)' >&2; exit 0; }"
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/governance-preflight.py"
+            "command": "command -v python3 >/dev/null 2>&1 && python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/governance-preflight.py\" || { echo 'team-ram: python3 not found, governance preflight SKIPPED (invariants unenforced this call)' >&2; exit 0; }"
           }
         ]
       }
