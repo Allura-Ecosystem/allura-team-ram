@@ -66,6 +66,7 @@
     "typecheck": "bunx tsc --noEmit"
   },
   "dependencies": {
+    "@fal-ai/client": "^1.10.1",
     "@ruvector/sona": "^0.1.6"
   },
   "devDependencies": {
