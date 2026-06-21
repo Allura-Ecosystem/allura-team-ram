@@ -6,8 +6,8 @@ Update this file whenever a model is changed in either runtime
 
 This is the authoritative contract between OpenCode and Claude Code agent equivalents
 
-version: "3.0.0"
-last_updated: "2026-04-18"
+version: "3.1.0"
+last_updated: "2026-06-21"
 
 ## Routing Philosophy
 
@@ -23,7 +23,7 @@ Do not make nano the universal default. The repository is organized around named
 
 | Agent        | Role           | Primary Model                 | Specialist Override               | Fallback Model          |
 | ------------ | -------------- | ----------------------------- | --------------------------------- | ----------------------- |
-| brooks       | Orchestrator   | ollama-cloud/gpt-5.4          | —                                 | ollama-cloud/glm-5.1    |
+| brooks       | Lead/Architect | ollama-cloud/gpt-5.4          | —                                 | ollama-cloud/glm-5.1    |
 | hightower    | Infra          | ollama-cloud/gpt-5.4          | —                                 | ollama-cloud/glm-5.1    |
 | jobs         | Strategy       | ollama-cloud/gpt-5.4          | —                                 | ollama-cloud/glm-5.1    |
 | scout        | Search/Triage  | ollama-cloud/nemotron-3-super | gpt-5.4-nano for tiny checks      | ollama-cloud/glm-5.1    |
@@ -33,6 +33,32 @@ Do not make nano the universal default. The repository is organized around named
 | knuth        | Code/Data      | ollama-cloud/gpt-5.4-mini     | —                                 | ollama-cloud/glm-5.1    |
 | fowler       | Code/Refactor  | ollama-cloud/gpt-5.4-mini     | —                                 | ollama-cloud/glm-5.1    |
 | pike         | Code/Interface | ollama-cloud/gpt-5.4-mini     | —                                 | ollama-cloud/glm-5.1    |
+
+## Claude-Native Equivalents (Claude / Cowork runtime)
+
+The opencode strings above (ollama-cloud/*) **cannot** be resolved by the Claude/Cowork
+runtime. That runtime dispatches through `src/agent-executor.ts` → `AGENT_MODEL_MAP`,
+which MUST use current Claude model IDs. This table is the contract for that map — keep
+the two in sync (edit both, or neither).
+
+| Agent     | Tier (claude-native) | Claude Model ID              |
+| --------- | -------------------- | ---------------------------- |
+| brooks    | architecture lead    | claude-opus-4-8              |
+| jobs      | reasoning/build      | claude-sonnet-4-6            |
+| woz       | reasoning/build      | claude-sonnet-4-6            |
+| fowler    | reasoning/build      | claude-sonnet-4-6            |
+| bellard   | reasoning/build      | claude-sonnet-4-6            |
+| carmack   | reasoning/build      | claude-sonnet-4-6            |
+| knuth     | reasoning/build      | claude-sonnet-4-6            |
+| hightower | reasoning/build      | claude-sonnet-4-6            |
+| bahari    | reasoning/build      | claude-sonnet-4-6            |
+| scout     | fast recon/lint      | claude-haiku-4-5-20251001    |
+| pike      | fast recon/lint      | claude-haiku-4-5-20251001    |
+
+> Default fallback for unmapped agents: `claude-sonnet-4-6`.
+> Tier mapping (not the dated IDs) is the durable contract — when the Claude family
+> rolls forward, update the three IDs in one place: `agent-executor.ts` constants
+> `CLAUDE_OPUS` / `CLAUDE_SONNET` / `CLAUDE_HAIKU`, then mirror here.
 
 ## Routing Logic
 

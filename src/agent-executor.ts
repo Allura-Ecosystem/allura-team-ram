@@ -55,6 +55,8 @@ export function mapProcessToAgent(processName: string): string {
 // Claude-native runtime model pins. These are the ONLY models the Claude/Cowork
 // runtime can resolve — opencode uses per-agent frontmatter instead and is
 // unaffected by this map. Keep IDs in sync with the current Claude model family.
+// CONTRACT: this map mirrors the "Claude-Native Equivalents" table in
+// .opencode/MODEL_REGISTRY.md — edit both together, or neither.
 //   - opus-4-8     : architecture-critical lead (Brooks)
 //   - sonnet-4-6   : reasoning/build tier
 //   - haiku-4-5    : fast recon/lint tier
