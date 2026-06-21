@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap');
+
+body {
+  width: 1440px; height: 600px;
+  background: #FAF3E0;
+  font-family: 'DM Sans', sans-serif;
+  position: relative; overflow: hidden;
+}
+
+.blob { position: absolute; border-radius: 50%; }
+.blob-1 { width: 200px; height: 200px; background: #1B4332; bottom: -80px; left: -40px; opacity: 0.12; }
+.blob-2 { width: 160px; height: 160px; background: #EA580C; top: -60px; right: 300px; opacity: 0.1; }
+.blob-3 { width: 120px; height: 120px; background: #2563EB; top: -40px; left: 200px; opacity: 0.1; }
+
+.content { position: relative; z-index: 10; padding: 32px 48px; height: 100%; display: flex; flex-direction: column; }
+
+.header { text-align: center; margin-bottom: 24px; }
+.header h2 { font-family: 'DM Serif Display', serif; font-size: 28px; color: #1B4332; }
+.header .sub { font-size: 13px; color: #6B7280; margin-top: 4px; }
+
+/* Pipeline */
+.pipeline {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; flex: 1;
+}
+
+.stage {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  position: relative;
+}
+
+.stage-box {
+  width: 180px; padding: 20px 16px;
+  border-radius: 16px; text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.stage-icon {
+  font-size: 28px; margin-bottom: 8px;
+}
+.stage-title {
+  font-size: 14px; font-weight: 700; margin-bottom: 4px;
+}
+.stage-desc {
+  font-size: 11px; line-height: 1.4; opacity: 0.8;
+}
+
+.bg-cream { background: white; }
+.bg-cream .stage-title { color: #1B4332; }
+.bg-cream .stage-desc { color: #6B7280; }
+
+.bg-green-card { background: #1B4332; }
+.bg-green-card .stage-title, .bg-green-card .stage-desc, .bg-green-card .stage-icon { color: white; }
+
+.bg-blue-card { background: #2563EB; }
+.bg-blue-card .stage-title, .bg-blue-card .stage-desc, .bg-blue-card .stage-icon { color: white; }
+
+.bg-orange-card { background: #EA580C; }
+.bg-orange-card .stage-title, .bg-orange-card .stage-desc, .bg-orange-card .stage-icon { color: white; }
+
+.bg-gold-card { background: #C8963E; }
+.bg-gold-card .stage-title, .bg-gold-card .stage-desc, .bg-gold-card .stage-icon { color: white; }
+
+/* Arrows between stages */
+.arrow-connector {
+  display: flex; align-items: center; justify-content: center;
+  width: 48px; color: #C8963E; font-size: 24px;
+  font-weight: 700;
+}
+
+/* Brain layer */
+.brain-layer {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; margin-top: 16px; padding: 16px 32px;
+  background: rgba(27, 67, 50, 0.06);
+  border-radius: 16px; border: 2px dashed rgba(27, 67, 50, 0.2);
+}
+
+.brain-label {
+  font-size: 12px; font-weight: 700; color: #1B4332;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+.brain-stores {
+  display: flex; gap: 24px;
+}
+
+.store {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: #6B7280;
+}
+.store-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+}
+.dot-pg { background: #2563EB; }
+.dot-neo { background: #EA580C; }
+.dot-vec { background: #C8963E; }
+
+.store-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 500;
+}
+
+/* Vertical connectors to brain */
+.brain-connectors {
+  display: flex; justify-content: center; gap: 180px;
+  margin-top: 4px; margin-bottom: 4px;
+}
+.v-line {
+  width: 2px; height: 16px; background: rgba(27, 67, 50, 0.2);
+}
+
+.governance-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 10px;
+  background: rgba(200, 150, 62, 0.15); color: #C8963E;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="content">
+    <div class="header">
+      <h2>How It Works</h2>
+      <div class="sub">You invoke. Brooks decomposes. Specialists execute. Gates validate. Brain records.</div>
+    </div>
+
+    <div class="pipeline">
+      <div class="stage">
+        <div class="stage-box bg-cream">
+          <div class="stage-icon">👤</div>
+          <div class="stage-title">You Invoke</div>
+          <div class="stage-desc">/ultra, /party, or<br/>describe the task</div>
+        </div>
+      </div>
+
+      <div class="arrow-connector">→</div>
+
+      <div class="stage">
+        <div class="stage-box bg-green-card">
+          <div class="stage-icon">🏗</div>
+          <div class="stage-title">Brooks Decomposes</div>
+          <div class="stage-desc">Breaks task into<br/>specialist subtasks</div>
+        </div>
+      </div>
+
+      <div class="arrow-connector">→</div>
+
+      <div class="stage">
+        <div class="stage-box bg-blue-card">
+          <div class="stage-icon">⚡</div>
+          <div class="stage-title">Specialists Execute</div>
+          <div class="stage-desc">Woz builds · Scout recons<br/>Knuth schemas · Hightower ships</div>
+        </div>
+      </div>
+
+      <div class="arrow-connector">→</div>
+
+      <div class="stage">
+        <div class="stage-box bg-orange-card">
+          <div class="stage-icon">🛡</div>
+          <div class="stage-title">Gates Validate</div>
+          <div class="stage-desc">Fowler: typecheck + lint<br/>Pike: interface review<br/>Bellard: performance</div>
+        </div>
+      </div>
+
+      <div class="arrow-connector">→</div>
+
+      <div class="stage">
+        <div class="stage-box bg-gold-card">
+          <div class="stage-icon">✓</div>
+          <div class="stage-title">Brain Records</div>
+          <div class="stage-desc">Traces logged · Decisions<br/>versioned · Knowledge promoted</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brain-connectors">
+      <div class="v-line"></div>
+      <div class="v-line"></div>
+      <div class="v-line"></div>
+      <div class="v-line"></div>
+      <div class="v-line"></div>
+    </div>
+
+    <div class="brain-layer">
+      <div class="brain-label">Allura Brain</div>
+      <div class="brain-stores">
+        <div class="store">
+          <div class="store-dot dot-pg"></div>
+          <div class="store-name">PostgreSQL</div>
+          <div>· append-only traces</div>
+        </div>
+        <div class="store">
+          <div class="store-dot dot-neo"></div>
+          <div class="store-name">Neo4j</div>
+          <div>· versioned knowledge</div>
+        </div>
+        <div class="store">
+          <div class="store-dot dot-vec"></div>
+          <div class="store-name">RuVector</div>
+          <div>· hybrid search</div>
+        </div>
+      </div>
+      <div class="governance-badge">group_id: allura-system</div>
+    </div>
+  </div>
+</body>
+</html>

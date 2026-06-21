@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+
+body {
+  width: 1440px; height: 720px;
+  background: #FAF3E0;
+  font-family: 'DM Sans', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Geometric blobs */
+.blob { position: absolute; border-radius: 50%; }
+.blob-1 { width: 280px; height: 280px; background: #1B4332; top: -80px; left: -60px; }
+.blob-2 { width: 200px; height: 200px; background: #2563EB; top: -40px; right: 80px; }
+.blob-3 { width: 240px; height: 240px; background: #EA580C; bottom: -90px; right: -40px; opacity: 0.9; }
+.blob-4 { width: 160px; height: 160px; background: #C8963E; bottom: -50px; left: 120px; opacity: 0.85; }
+.blob-5 { width: 120px; height: 120px; background: #2563EB; bottom: 60px; left: -40px; opacity: 0.7; }
+
+.content { position: relative; z-index: 10; padding: 48px 64px; height: 100%; display: flex; flex-direction: column; }
+
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 42px; color: #1B4332; letter-spacing: -0.5px;
+}
+.header .subtitle {
+  font-size: 16px; color: #6B7280; margin-top: 6px; letter-spacing: 0.5px;
+}
+
+.team-grid {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px;
+}
+
+.row { display: flex; gap: 24px; align-items: flex-start; justify-content: center; }
+
+.agent {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; width: 110px;
+}
+.agent-icon {
+  width: 64px; height: 64px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 700; color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.agent-name {
+  font-size: 13px; font-weight: 700; color: #1B4332; text-align: center;
+}
+.agent-role {
+  font-size: 10px; color: #6B7280; text-align: center; line-height: 1.3;
+  letter-spacing: 0.3px; text-transform: uppercase;
+}
+
+/* Agent colors */
+.bg-green { background: #1B4332; }
+.bg-blue { background: #2563EB; }
+.bg-orange { background: #EA580C; }
+.bg-gold { background: #C8963E; }
+.bg-dark { background: #374151; }
+.bg-teal { background: #0D9488; }
+.bg-red { background: #DC2626; }
+.bg-indigo { background: #4F46E5; }
+.bg-emerald { background: #059669; }
+.bg-amber { background: #D97706; }
+
+/* Brooks special */
+.brooks .agent-icon {
+  width: 80px; height: 80px; border-radius: 20px;
+  font-size: 28px; border: 3px solid #C8963E;
+}
+.brooks .agent-name { font-size: 15px; }
+
+.tagline {
+  text-align: center; margin-top: 8px;
+  font-size: 14px; color: #9CA3AF; letter-spacing: 2px;
+  text-transform: uppercase; font-weight: 500;
+}
+
+/* Connector lines */
+.connector-area {
+  position: absolute; top: 200px; left: 0; right: 0; bottom: 100px;
+  z-index: 5; pointer-events: none;
+}
+</style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+  <div class="blob blob-5"></div>
+
+  <div class="content">
+    <div class="header">
+      <h1>Team RAM — The Surgical Team</h1>
+      <div class="subtitle">Real Actual Masters — not interchangeable drones</div>
+    </div>
+
+    <div class="team-grid">
+      <!-- Row 1: Scout + Jobs -->
+      <div class="row">
+        <div class="agent">
+          <div class="agent-icon bg-emerald">Sc</div>
+          <div class="agent-name">Scout</div>
+          <div class="agent-role">Recon &amp; Discovery</div>
+        </div>
+        <div class="agent">
+          <div class="agent-icon bg-amber">Jb</div>
+          <div class="agent-name">Jobs</div>
+          <div class="agent-role">Intent Gate</div>
+        </div>
+      </div>
+
+      <!-- Row 2: Pike + Fowler + BROOKS + Bellard + Carmack -->
+      <div class="row">
+        <div class="agent">
+          <div class="agent-icon bg-blue">Pk</div>
+          <div class="agent-name">Pike</div>
+          <div class="agent-role">Interface Review</div>
+        </div>
+        <div class="agent">
+          <div class="agent-icon bg-indigo">Fw</div>
+          <div class="agent-name">Fowler</div>
+          <div class="agent-role">Refactor Gate</div>
+        </div>
+        <div class="agent brooks">
+          <div class="agent-icon bg-green">B</div>
+          <div class="agent-name">Brooks</div>
+          <div class="agent-role">Chief Architect</div>
+        </div>
+        <div class="agent">
+          <div class="agent-icon bg-dark">Bl</div>
+          <div class="agent-name">Bellard</div>
+          <div class="agent-role">Diagnostics</div>
+        </div>
+        <div class="agent">
+          <div class="agent-icon bg-red">Cm</div>
+          <div class="agent-name">Carmack</div>
+          <div class="agent-role">Performance</div>
+        </div>
+      </div>
+
+      <!-- Row 3: Woz + Knuth + Hightower -->
+      <div class="row">
+        <div class="agent">
+          <div class="agent-icon bg-orange">Wz</div>
+          <div class="agent-name">Woz</div>
+          <div class="agent-role">Primary Builder</div>
+        </div>
+        <div class="agent">
+          <div class="agent-icon bg-gold">Kn</div>
+          <div class="agent-name">Knuth</div>
+          <div class="agent-role">Data Architect</div>
+        </div>
+        <div class="agent">
+          <div class="agent-icon bg-teal">Ht</div>
+          <div class="agent-name">Hightower</div>
+          <div class="agent-role">DevOps</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tagline">10 specialists · One architect · Conceptual integrity</div>
+  </div>
+</body>
+</html>

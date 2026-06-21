@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap');
+
+body {
+  width: 1440px; height: 540px;
+  background: #FAF3E0;
+  font-family: 'DM Sans', sans-serif;
+  position: relative; overflow: hidden;
+}
+
+.blob { position: absolute; border-radius: 50%; }
+.blob-1 { width: 200px; height: 200px; background: #1B4332; top: -80px; right: 200px; opacity: 0.15; }
+.blob-2 { width: 160px; height: 160px; background: #2563EB; bottom: -60px; left: 100px; opacity: 0.12; }
+.blob-3 { width: 140px; height: 140px; background: #EA580C; top: 40px; left: -40px; opacity: 0.15; }
+.blob-4 { width: 180px; height: 180px; background: #C8963E; bottom: -60px; right: -40px; opacity: 0.12; }
+
+.content { position: relative; z-index: 10; padding: 36px 64px; height: 100%; }
+
+.header {
+  text-align: center; margin-bottom: 28px;
+}
+.header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 32px; color: #1B4332;
+}
+.header .sub { font-size: 14px; color: #6B7280; margin-top: 4px; }
+
+.modes {
+  display: flex; gap: 40px; justify-content: center; align-items: flex-start;
+  height: calc(100% - 100px);
+}
+
+.mode {
+  flex: 1; max-width: 380px;
+  background: white; border-radius: 20px;
+  padding: 28px 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  display: flex; flex-direction: column; align-items: center;
+  height: 100%;
+}
+
+.mode-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 14px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 12px;
+}
+.badge-orange { background: #FFF7ED; color: #EA580C; }
+.badge-blue { background: #EFF6FF; color: #2563EB; }
+.badge-green { background: #F0FDF4; color: #1B4332; }
+
+.mode h3 {
+  font-size: 20px; color: #1B4332; font-weight: 700; margin-bottom: 4px;
+}
+.mode .scope {
+  font-size: 12px; color: #9CA3AF; margin-bottom: 16px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* Circular flow diagram */
+.loop-diagram {
+  width: 200px; height: 200px; position: relative; margin: 0 auto;
+}
+
+.loop-ring {
+  width: 100%; height: 100%;
+  border: 3px dashed; border-radius: 50%;
+  position: absolute; top: 0; left: 0;
+}
+.ring-orange { border-color: #EA580C; }
+.ring-blue { border-color: #2563EB; }
+.ring-green { border-color: #1B4332; }
+
+.loop-step {
+  position: absolute;
+  width: 72px; height: 38px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; color: white;
+  text-align: center; line-height: 1.2;
+}
+
+.step-orange { background: #EA580C; }
+.step-blue { background: #2563EB; }
+.step-green { background: #1B4332; }
+
+/* Arrows */
+.arrow {
+  position: absolute; font-size: 16px; color: #9CA3AF;
+}
+
+.mode-desc {
+  margin-top: auto; padding-top: 12px;
+  font-size: 12px; color: #6B7280; text-align: center; line-height: 1.5;
+}
+
+/* Nesting indicator */
+.nesting {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 4px; justify-content: center;
+}
+.nest-dot { width: 8px; height: 8px; border-radius: 50%; }
+.nest-arrow { font-size: 12px; color: #9CA3AF; }
+</style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+
+  <div class="content">
+    <div class="header">
+      <h2>Three Loop Modes</h2>
+      <div class="sub">Different granularities, same governance. Ultra nests inside dev-loop nests inside sprint-loop.</div>
+    </div>
+
+    <div class="modes">
+      <!-- Ultra -->
+      <div class="mode">
+        <div class="mode-badge badge-orange">Task-Level</div>
+        <h3>ultra</h3>
+        <div class="scope">Single concrete task</div>
+        <div class="loop-diagram">
+          <div class="loop-ring ring-orange"></div>
+          <div class="loop-step step-orange" style="top: -6px; left: 50%; transform: translateX(-50%);">Plan</div>
+          <div class="loop-step step-orange" style="top: 50%; right: -12px; transform: translateY(-50%);">Implement</div>
+          <div class="loop-step step-orange" style="bottom: -6px; left: 50%; transform: translateX(-50%);">Validate</div>
+          <div class="loop-step step-orange" style="top: 50%; left: -12px; transform: translateY(-50%);">Decide</div>
+          <div class="arrow" style="top: 24px; right: 16px;">↘</div>
+          <div class="arrow" style="bottom: 24px; right: 16px;">↙</div>
+          <div class="arrow" style="bottom: 24px; left: 16px;">↖</div>
+          <div class="arrow" style="top: 24px; left: 16px;">↗</div>
+        </div>
+        <div class="mode-desc">
+          Bug fix, feature slice, migration.<br/>
+          Bounded by maxIterations.<br/>
+          Struggle detection after 3 no-change cycles.
+        </div>
+      </div>
+
+      <!-- Dev Loop -->
+      <div class="mode">
+        <div class="mode-badge badge-blue">Epic-Level · Sequential</div>
+        <h3>dev-loop</h3>
+        <div class="scope">Full epic, one agent</div>
+        <div class="loop-diagram">
+          <div class="loop-ring ring-blue"></div>
+          <div class="loop-step step-blue" style="top: -6px; left: 50%; transform: translateX(-50%);">Hydrate</div>
+          <div class="loop-step step-blue" style="top: 50%; right: -12px; transform: translateY(-50%);">Implement</div>
+          <div class="loop-step step-blue" style="bottom: -6px; left: 50%; transform: translateX(-50%);">Review</div>
+          <div class="loop-step step-blue" style="top: 50%; left: -12px; transform: translateY(-50%);">Advance</div>
+          <div class="arrow" style="top: 24px; right: 16px;">↘</div>
+          <div class="arrow" style="bottom: 24px; right: 16px;">↙</div>
+          <div class="arrow" style="bottom: 24px; left: 16px;">↖</div>
+          <div class="arrow" style="top: 24px; left: 16px;">↗</div>
+          <!-- Inner ultra ring hint -->
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; border: 2px dotted #EA580C; border-radius: 50%; opacity: 0.4;"></div>
+        </div>
+        <div class="mode-desc">
+          Same thread, sequential stories.<br/>
+          Brain search + Context7 at every phase.<br/>
+          Ultra runs inside each story.
+        </div>
+      </div>
+
+      <!-- Sprint Loop -->
+      <div class="mode">
+        <div class="mode-badge badge-green">Epic-Level · Parallel</div>
+        <h3>sprint-loop</h3>
+        <div class="scope">Full epic, multi-agent</div>
+        <div class="loop-diagram">
+          <div class="loop-ring ring-green"></div>
+          <div class="loop-step step-green" style="top: -6px; left: 50%; transform: translateX(-50%);">Scout</div>
+          <div class="loop-step step-green" style="top: 50%; right: -12px; transform: translateY(-50%);">Woz</div>
+          <div class="loop-step step-green" style="bottom: -6px; left: 50%; transform: translateX(-50%);">Review</div>
+          <div class="loop-step step-green" style="top: 50%; left: -12px; transform: translateY(-50%);">Gate</div>
+          <div class="arrow" style="top: 24px; right: 16px;">↘</div>
+          <div class="arrow" style="bottom: 24px; right: 16px;">↙</div>
+          <div class="arrow" style="bottom: 24px; left: 16px;">↖</div>
+          <div class="arrow" style="top: 24px; left: 16px;">↗</div>
+          <!-- Inner dev-loop ring hint -->
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; border: 2px dotted #2563EB; border-radius: 50%; opacity: 0.3;"></div>
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border: 2px dotted #EA580C; border-radius: 50%; opacity: 0.25;"></div>
+        </div>
+        <div class="mode-desc">
+          Dispatches Scout, Woz, Pike, Fowler<br/>
+          via Task tool in parallel.<br/>
+          Dev-loop and ultra nest inside.
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
