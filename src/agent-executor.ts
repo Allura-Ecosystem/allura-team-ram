@@ -52,21 +52,32 @@ export function mapProcessToAgent(processName: string): string {
 // Agent model mapping (from agent definition frontmatter)
 // ---------------------------------------------------------------------------
 
+// Claude-native runtime model pins. These are the ONLY models the Claude/Cowork
+// runtime can resolve — opencode uses per-agent frontmatter instead and is
+// unaffected by this map. Keep IDs in sync with the current Claude model family.
+//   - opus-4-8     : architecture-critical lead (Brooks)
+//   - sonnet-4-6   : reasoning/build tier
+//   - haiku-4-5    : fast recon/lint tier
+const CLAUDE_OPUS = "claude-opus-4-8";
+const CLAUDE_SONNET = "claude-sonnet-4-6";
+const CLAUDE_HAIKU = "claude-haiku-4-5-20251001";
+
 const AGENT_MODEL_MAP: Record<string, string> = {
-  brooks: "claude-sonnet-4-20250514",
-  jobs: "claude-sonnet-4-20250514",
-  woz: "claude-sonnet-4-20250514",
-  scout: "claude-haiku-4-20250414",
-  pike: "claude-haiku-4-20250414",
-  fowler: "claude-sonnet-4-20250514",
-  bellard: "claude-sonnet-4-20250514",
-  carmack: "claude-sonnet-4-20250514",
-  knuth: "claude-sonnet-4-20250514",
-  hightower: "claude-sonnet-4-20250514",
+  brooks: CLAUDE_OPUS,
+  jobs: CLAUDE_SONNET,
+  woz: CLAUDE_SONNET,
+  scout: CLAUDE_HAIKU,
+  pike: CLAUDE_HAIKU,
+  fowler: CLAUDE_SONNET,
+  bellard: CLAUDE_SONNET,
+  carmack: CLAUDE_SONNET,
+  knuth: CLAUDE_SONNET,
+  hightower: CLAUDE_SONNET,
+  bahari: CLAUDE_SONNET,
 };
 
 function getModelForAgent(agentId: string): string {
-  return AGENT_MODEL_MAP[agentId] || "claude-sonnet-4-20250514";
+  return AGENT_MODEL_MAP[agentId] || CLAUDE_SONNET;
 }
 
 // ---------------------------------------------------------------------------
