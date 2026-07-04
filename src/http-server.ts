@@ -226,6 +226,12 @@ async function executeInvocation(
         result: result.output,
         group_id: invocation.group_id,
         confidence: result.confidence,
+        model: result.model,
+        outcome: result.outcome,
+        task_class: result.task_class,
+        latency_ms: result.duration_ms,
+        tokens_in: result.tokens_in,
+        tokens_out: result.tokens_out,
       });
     } catch {
       // Non-fatal

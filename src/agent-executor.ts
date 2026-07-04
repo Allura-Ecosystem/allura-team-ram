@@ -23,6 +23,12 @@ export interface AgentExecutionResult {
   tokens_out?: number;
   errors: string[];
   trajectory?: TrajectoryRecord;
+  /** The model that actually served this task (MODEL_EVAL v1 telemetry). */
+  model: string;
+  /** Objective outcome — never conflate a fallback rescue with primary success. */
+  outcome: "success" | "failure" | "timeout";
+  /** Task classification for stratified per-model reporting. */
+  task_class: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -52,21 +58,54 @@ export function mapProcessToAgent(processName: string): string {
 // Agent model mapping (from agent definition frontmatter)
 // ---------------------------------------------------------------------------
 
-const AGENT_MODEL_MAP: Record<string, string> = {
-  brooks: "claude-sonnet-4-20250514",
-  jobs: "claude-sonnet-4-20250514",
-  woz: "claude-sonnet-4-20250514",
-  scout: "claude-haiku-4-20250414",
-  pike: "claude-haiku-4-20250414",
-  fowler: "claude-sonnet-4-20250514",
-  bellard: "claude-sonnet-4-20250514",
-  carmack: "claude-sonnet-4-20250514",
-  knuth: "claude-sonnet-4-20250514",
-  hightower: "claude-sonnet-4-20250514",
+// Tier assignments come from the machine authority (tooling/agent-sync/models.map.json);
+// this executor only translates the claude tier alias to a concrete Anthropic model ID.
+// Do NOT hand-maintain per-agent model IDs here — that recreates a fifth model authority.
+const CLAUDE_TIER_IDS: Record<string, string> = {
+  opus: "claude-opus-4-8",
+  sonnet: "claude-sonnet-5",
+  haiku: "claude-haiku-4-5",
 };
 
-function getModelForAgent(agentId: string): string {
-  return AGENT_MODEL_MAP[agentId] || "claude-sonnet-4-20250514";
+interface ModelsMap {
+  tiers: Record<string, { claude: string }>;
+  agents: Record<string, { tier: string }>;
+}
+
+let _modelsMap: ModelsMap | null = null;
+async function loadModelsMap(): Promise<ModelsMap | null> {
+  if (_modelsMap) return _modelsMap;
+  try {
+    const path = resolve(import.meta.dir, "../tooling/agent-sync/models.map.json");
+    _modelsMap = JSON.parse(await Bun.file(path).text()) as ModelsMap;
+    return _modelsMap;
+  } catch (err) {
+    console.warn(`[Executor] Could not load models.map.json: ${err}`);
+    return null;
+  }
+}
+
+async function getModelForAgent(agentId: string): Promise<string> {
+  const map = await loadModelsMap();
+  const tierName = map?.agents[agentId]?.tier;
+  const alias = tierName ? map?.tiers[tierName]?.claude : undefined;
+  return CLAUDE_TIER_IDS[alias ?? "sonnet"] ?? CLAUDE_TIER_IDS.sonnet;
+}
+
+// Task classification for stratified per-model reporting. Bellard's rule:
+// never compare success rates across classes — that measures routing, not models.
+const PROCESS_TASK_CLASS: Record<string, string> = {
+  "harness.speckit.implement": "codegen",
+  "harness.speckit.validate": "review",
+  "harness.discovery.recon": "recon",
+  "harness.refactor.safe": "refactor",
+  "harness.perf.diagnose": "diagnostics",
+  "harness.interface.review": "review",
+  "harness.intent.scope": "scoping",
+};
+
+export function classifyTask(processName: string): string {
+  return PROCESS_TASK_CLASS[processName] || "general";
 }
 
 // ---------------------------------------------------------------------------
@@ -173,11 +212,13 @@ export async function spawnAgentProcess(
   agentId: string,
   payload: Record<string, unknown>,
   group_id: string,
+  modelOverride?: string,
 ): Promise<AgentExecutionResult> {
   const startTime = performance.now();
 
   // SONA trajectory wrapping (AD-06)
   const taskType = (payload.process_name as string) || "unknown";
+  const task_class = classifyTask(taskType);
   const trajectory = beginTrajectory({
     agentId,
     taskType,
@@ -214,7 +255,7 @@ ${JSON.stringify(payload, null, 2)}
 Group ID for this invocation: ${group_id}`;
 
     // 4. Invoke agent — API mode or local mode
-    const model = getModelForAgent(agentId);
+    const model = modelOverride ?? (await getModelForAgent(agentId));
 
     if (ANTHROPIC_API_KEY) {
       // ---- API mode: call Anthropic Messages API directly ----
@@ -238,6 +279,9 @@ Group ID for this invocation: ${group_id}`;
         tokens_in: apiResult.tokens_in,
         tokens_out: apiResult.tokens_out,
         errors: parsed.errors || [],
+        model,
+        outcome: (parsed.success ?? true) ? "success" : "failure",
+        task_class,
       };
 
       // Record SONA trajectory
@@ -277,6 +321,9 @@ Group ID for this invocation: ${group_id}`;
         tokens_in: 0,
         tokens_out: 0,
         errors: [],
+        model,
+        outcome: "success",
+        task_class,
       };
 
       // Record SONA trajectory (local mode)
@@ -317,6 +364,9 @@ Group ID for this invocation: ${group_id}`;
       tokens_out: 0,
       errors: [message],
       trajectory: trajectoryRecord,
+      model: modelOverride ?? (await getModelForAgent(agentId).catch(() => "unknown")),
+      outcome: error?.name === "AbortError" ? "timeout" : "failure",
+      task_class,
     };
   }
 }
