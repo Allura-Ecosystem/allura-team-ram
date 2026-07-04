@@ -1,7 +1,7 @@
 {
-  "name": "open-agents-control",
-  "version": "0.2.0",
-  "description": "Team RAM OpenCode Harness — self-evolving multi-agent orchestration framework with deterministic routing, SONA learning, and HITL governance",
+  "name": "@allura/team-ram-harness",
+  "version": "0.4.0",
+  "description": "Team RAM OpenCode Harness — surgical-team multi-agent orchestration: 10 specialists, deterministic tier routing over Ollama Cloud, governed memory, HITL governance, SONA learning.",
   "author": "Team RAM Contributors",
   "license": "MIT",
   "type": "module",
@@ -15,9 +15,10 @@
     "./lifecycle": "./src/agent-lifecycle.ts"
   },
   "bin": {
-    "team-ram": "./scripts/apply-preset.sh"
+    "team-ram": "./bin/team-ram.mjs"
   },
   "files": [
+    "bin/",
     "src/",
     ".opencode/agent/",
     ".opencode/command/",
@@ -26,6 +27,12 @@
     ".opencode/hooks/",
     ".opencode/contracts/",
     ".opencode/config/",
+    ".claude/agents/",
+    ".claude/commands/",
+    ".claude/skills/",
+    ".claude/rules/",
+    ".codex/agents/",
+    "tooling/agent-sync/",
     "scripts/",
     "migrations/",
     "install.sh",
@@ -40,18 +47,23 @@
     "ai-agents",
     "multi-agent",
     "orchestration",
+    "ollama",
     "sona",
     "self-evolving"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ronin704/OpenAgentsControl.git"
+    "url": "https://github.com/Allura-Ecosystem/allura-team-ram.git"
   },
-  "homepage": "https://github.com/ronin704/OpenAgentsControl#readme",
+  "homepage": "https://github.com/Allura-Ecosystem/allura-team-ram#readme",
   "bugs": {
-    "url": "https://github.com/ronin704/OpenAgentsControl/issues"
+    "url": "https://github.com/Allura-Ecosystem/allura-team-ram/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
+    "node": ">=18",
     "bun": ">=1.1.0"
   },
   "scripts": {
