@@ -9,7 +9,7 @@ path: core
 scope: harness
 platform: Both
 status: active
-model: openai/gpt-5.4-mini
+model: ollama/nemotron-3-super:cloud
 permission:
   edit: allow
   bash: allow

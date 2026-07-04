@@ -9,7 +9,7 @@ path: core
 scope: harness
 platform: Both
 status: active
-model: openai/gpt-5.5
+model: ollama/qwen3-coder-next:cloud
 permission:
   edit: allow
   bash: allow

@@ -3,9 +3,9 @@
   "runtimes": ["codex", "opencode", "claude"],
   "formats": { "codex": ".codex/agents/<name>.toml", "opencode": ".opencode/agent/core/<name>.md", "claude": ".claude/agents/<name>.md" },
   "tiers": {
-    "ultrabrain": { "codex": "gpt-5.4", "opencode": "openai/gpt-5.4", "claude": "opus" },
-    "standard":   { "codex": "gpt-5.4-mini", "opencode": "ollama-cloud/minimax-m3", "claude": "sonnet" },
-    "cheap":      { "codex": "gpt-5.4-mini", "opencode": "ollama-cloud/minimax-m3", "claude": "haiku" }
+    "ultrabrain": { "codex": "gpt-5.4", "opencode": "ollama/glm-5.2:cloud", "claude": "opus" },
+    "standard":   { "codex": "gpt-5.4-mini", "opencode": "ollama/qwen3-coder-next:cloud", "claude": "sonnet" },
+    "cheap":      { "codex": "gpt-5.4-mini", "opencode": "ollama/nemotron-3-super:cloud", "claude": "haiku" }
   },
   "agents": {
     "brooks":    { "tier": "ultrabrain", "role": "Chief Architect / orchestrator" },
@@ -23,9 +23,9 @@
   },
   "$verified": "Codex CLI v0.130.0 reports model 'gpt-5.4-mini medium' — so the Codex family is gpt-5.4 (confirmed: gpt-5.4-mini). Confirm 'gpt-5.4' (the larger ultrabrain sibling) exists via `codex` /model before relying on it.",
   "$todo_verify": [
-    "opencode: confirm 'openai/gpt-5.4' resolves (or set to the provider/model you actually use); confirm an 'ollama-cloud' provider block is defined",
     "claude aliases opus/sonnet/haiku resolve in the .claude runtime",
     "Codex model is set in .codex/config.toml profiles / per-thread, NOT in the agent .toml"
   ],
-  "$changes_2026-06-13": "Added 8 agents from Notion (woz, scout, pike, bellard, fowler, carmack, hightower, knuth). Added bahari (existing source, missing from map). Removed norvig and torvalds (not in Notion — aspirational ghosts). Kept reality-checker-tram (standalone auditor with full mirror)."
+  "$changes_2026-06-13": "Added 8 agents from Notion (woz, scout, pike, bellard, fowler, carmack, hightower, knuth). Added bahari (existing source, missing from map). Removed norvig and torvalds (not in Notion — aspirational ghosts). Kept reality-checker-tram (standalone auditor with full mirror).",
+  "$changes_2026-07-04": "ADR: opencode runtime moved fully to Ollama Cloud models (no openai/* in opencode). Tags verified against ollama.com/search?c=cloud on 2026-07-04: ultrabrain=glm-5.2 (1M ctx, long-horizon flagship), standard=qwen3-coder-next (80B MoE agentic coder, 256K ctx), cheap=nemotron-3-super (120B MoE, multi-agent). NAMESPACE: the only provider defined in opencode.json is 'ollama' (openai-compatible, 127.0.0.1:11434/v1) with '<model>:cloud' tags — so the resolvable form is 'ollama/glm-5.2:cloud', NOT 'ollama-cloud/glm-5.2' (ghost namespace, retired). Global fallback remains ollama/glm-5.1:cloud in opencode.json — distinct from every primary, still in catalog."
 }

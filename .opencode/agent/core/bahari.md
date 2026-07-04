@@ -6,7 +6,7 @@ persona: Bahari
 category: Product
 type: memory
 status: active
-model: ollama-cloud/minimax-m3
+model: ollama/nemotron-3-super:cloud
 skills:
   - agent-bahari
   - allura-memory-skill
@@ -130,8 +130,8 @@ Follow the skill's activation routing exactly.
 
 | Attribute | Value |
 | --- | --- |
-| **Model** | ollama/kimi-k2.6:cloud |
-| **Fallback** | ollama/deepseek-v4-pro:cloud |
+| **Model** | Tier `cheap` per `tooling/agent-sync/models.map.json` (opencode: ollama/nemotron-3-super:cloud · claude: haiku) |
+| **Fallback** | ollama/glm-5.1:cloud (global fallback, opencode.json) |
 | **Category** | product — memory curation |
 | **Mode** | Primary (not dispatched by Brooks) |
 | **Can Delegate To** | None (product companion, not surgical team) |

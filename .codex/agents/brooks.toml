@@ -327,7 +327,7 @@ allura-brain_memory_add({
 
 ## Exit Validation (MANDATORY before DA)
 
-Run this query — must return at least one architecture event from this session:
+Verify via the governed Allura Brain read surface (never raw SQL on the append-only events store) that at least one architecture event was recorded this session:
 
 ```javascript
 mcp__allura-brain__audit_query_events({
@@ -340,11 +340,11 @@ mcp__allura-brain__audit_query_events({
 //           and confirm at least one ARCHITECTURE_DECISION was recorded this session.
 ```
 
-✅ **PASS:** At least one row returned → exit permitted
+✅ **PASS:** At least one matching event/memory → exit permitted
 
-❌ **FAIL:** Zero rows → display: _"No architecture event logged this session. Log one before exit or confirm intentional dismissal."_
+❌ **FAIL:** None found → display: _"No architecture event logged this session. Log one before exit or confirm intentional dismissal."_
 
-If Neo4j unavailable: allow exit with warning logged to Postgres.
+If Allura Brain is degraded: allow exit with a warning recorded once the store recovers.
 
 ---
 
@@ -447,7 +447,7 @@ Brooks enforces this: no PR merges without doc updates when schemas or APIs chan
 
 | Attribute           | Value                                                                                                                                                        |
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Model**           | openai/gpt-5.5                                                                                                                                               |
+| **Model**           | Tier `ultrabrain` per `tooling/agent-sync/models.map.json` (opencode: ollama/glm-5.2:cloud · claude: opus · codex: gpt-5.4)                                  |
 | **Category**        | `ultrabrain` — Hard logic, architecture decisions                                                                                                            |
 | **Can Delegate To** | woz-builder, scout-recon, bellard-diagnostics-perf, carmack-performance, knuth-data-architect, fowler-refactor-gate, pike-interface-review, hightower-devops |
 | **Cannot**          | Execute tools directly (orchestrates only)                                                                                                                   |
