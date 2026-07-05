@@ -39,6 +39,10 @@ Run `report.sql` monthly through the Brain's governed read surface
    preferred metric), v2 will split `load_duration` / `eval_duration` when the
    opencode runtime's ollama telemetry is wired in.
 
+## Design decisions
+
+- [ADR-001 — Kernel-Witnessed Outcomes](ADR-001-kernel-witnessed-outcomes.md) (Proposed): make MODEL_EVAL outcomes objective via kernel-witnessed traces instead of executor self-report.
+
 ## Promotion path
 
 Data petitions; it never decides. A model change is an ARCHITECTURE_DECISION:
