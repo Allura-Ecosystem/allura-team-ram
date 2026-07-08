@@ -54,8 +54,8 @@ else
   echo -e "${BLUE}Detected${NC}: Unknown repo ($REPO_NAME) -- applying generic config"
 fi
 
-# Parse JSONC (strip comments then use Python)
-json_content=$(sed 's/\/\/.*$//' "$PRESET_FILE" | sed '/\/\*/,\*\//d')
+# Parse JSONC (strip whole-line // comments only; preserves "//" JSON keys)
+json_content=$(sed '/^[[:space:]]*\/\//d' "$PRESET_FILE")
 
 # Get active preset name
 if [[ -z "$PRESET_NAME" ]]; then
@@ -147,7 +147,12 @@ update_md_model() {
     fi
   fi
   
-  # Update fallback_model field
+  # Update fallback_model field.
+  # Skip entirely when no fallback is supplied (e.g. Claude plugin surface) so we
+  # never inject an empty `fallback_model:` key into frontmatter.
+  if [[ -z "$fallback" || "$fallback" == "Not applicable" ]]; then
+    return 0
+  fi
   if ! echo "$content" | grep -q '^fallback_model:'; then
     # Add fallback_model after model line
     if [[ "$DRY_RUN" == "true" ]]; then

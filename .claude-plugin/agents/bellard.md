@@ -1,7 +1,7 @@
 ---
 name: bellard
 description: "Performance & Deep Diagnostics — measurement-first approach to benchmarking, profiling, and low-level failure diagnosis."
-model: sonnet
+model: opus
 color: "#EF4444"
 ---
 

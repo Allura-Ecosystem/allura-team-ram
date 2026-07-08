@@ -2,7 +2,7 @@
   "$schema": "https://opencode.ai/config.json",
   "agent": {
     "bahari": {
-      "fallback_model": "ollama/deepseek-v4-pro:cloud",
+      "fallback_model": "ollama/kimi-k2.6:cloud",
       "mode": "primary",
       "model": "ollama/kimi-k2.6:cloud",
       "path": ".opencode/agent/core/bahari.md",
@@ -14,7 +14,7 @@
       }
     },
     "bellard": {
-      "fallback_model": "ollama/nemotron-3-super:cloud",
+      "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "subagent",
       "model": "ollama/glm-5.1:cloud",
       "path": ".opencode/agent/subagents/code/bellard.md",
@@ -25,9 +25,9 @@
       }
     },
     "brooks": {
-      "fallback_model": "ollama/qwen3-coder-next:cloud",
+      "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "primary",
-      "model": "ollama/deepseek-v4-pro:cloud",
+      "model": "ollama/glm-5.1:cloud",
       "path": ".opencode/agent/core/brooks.md",
       "permission": {
         "skill": {
@@ -37,7 +37,7 @@
       }
     },
     "carmack": {
-      "fallback_model": "ollama/nemotron-3-super:cloud",
+      "fallback_model": "ollama/qwen3-coder-next:cloud",
       "mode": "subagent",
       "model": "ollama/qwen3-coder-next:cloud",
       "path": ".opencode/agent/subagents/code/carmack.md",
@@ -48,7 +48,7 @@
       }
     },
     "fowler": {
-      "fallback_model": "ollama/deepseek-v4-pro:cloud",
+      "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "subagent",
       "model": "ollama/glm-5.1:cloud",
       "path": ".opencode/agent/subagents/review/fowler.md",
@@ -59,7 +59,7 @@
       }
     },
     "hightower": {
-      "fallback_model": "ollama/glm-5.1:cloud",
+      "fallback_model": "ollama/deepseek-v4-pro:cloud",
       "mode": "subagent",
       "model": "ollama/deepseek-v4-pro:cloud",
       "path": ".opencode/agent/subagents/infrastructure/hightower.md",
@@ -70,7 +70,7 @@
       }
     },
     "jobs": {
-      "fallback_model": "ollama/kimi-k2.6:cloud",
+      "fallback_model": "ollama/deepseek-v4-pro:cloud",
       "mode": "primary",
       "model": "ollama/deepseek-v4-pro:cloud",
       "path": ".opencode/agent/core/jobs.md",
@@ -81,7 +81,7 @@
       }
     },
     "knuth": {
-      "fallback_model": "ollama/deepseek-v4-pro:cloud",
+      "fallback_model": "ollama/qwen3-coder-next:cloud",
       "mode": "subagent",
       "model": "ollama/qwen3-coder-next:cloud",
       "path": ".opencode/agent/subagents/infrastructure/knuth.md",
@@ -92,7 +92,7 @@
       }
     },
     "pike": {
-      "fallback_model": "ollama/nemotron-3-super:cloud",
+      "fallback_model": "ollama/deepseek-v4-pro:cloud",
       "mode": "subagent",
       "model": "ollama/deepseek-v4-pro:cloud",
       "path": ".opencode/agent/subagents/review/pike.md",
@@ -103,7 +103,7 @@
       }
     },
     "scout": {
-      "fallback_model": "ollama/qwen3:0.6b",
+      "fallback_model": "ollama/nemotron-3-super:cloud",
       "mode": "subagent",
       "model": "ollama/nemotron-3-super:cloud",
       "path": ".opencode/agent/subagents/core/scout.md",
@@ -117,7 +117,7 @@
       }
     },
     "woz": {
-      "fallback_model": "ollama/deepseek-v4-pro:cloud",
+      "fallback_model": "ollama/qwen3-coder-next:cloud",
       "mode": "subagent",
       "model": "ollama/qwen3-coder-next:cloud",
       "path": ".opencode/agent/subagents/code/woz.md",

@@ -1,7 +1,7 @@
 ---
 name: pike
 description: "Interface & Simplicity Gate — reviews surface area, concurrency hazards, and API ergonomics. Read-only consultation."
-model: haiku
+model: sonnet
 color: "#3B82F6"
 ---
 
