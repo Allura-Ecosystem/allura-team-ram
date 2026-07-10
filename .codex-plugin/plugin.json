@@ -1,6 +1,6 @@
 {
   "name": "team-ram-harness",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Team RAM OpenCode Harness — self-evolving multi-agent orchestration with 10 specialists, SONA learning, coherence monitoring, and HITL governance. Portable harness for deterministic AI-powered software development.",
   "author": {
     "name": "Team RAM Contributors"
@@ -65,12 +65,13 @@
     "./.opencode/command/skill-propose.md",
     "./.opencode/command/ultra.md",
     "./.opencode/command/update.md",
-    "./.opencode/command/validate-repo.md"
+    "./.opencode/command/validate-repo.md",
+    "./.opencode/command/loopy.md"
   ],
   "interface": {
     "displayName": "Team RAM Harness",
     "shortDescription": "Self-evolving multi-agent orchestration for software development",
-    "longDescription": "A portable harness with 10 specialist AI agents (Brooks, Woz, Scout, and 7 more), 35+ workflow commands, 26+ skills, SONA-powered learning that improves agents from execution history, coherence monitoring for conceptual integrity, HITL governance for all self-modifications, and optional Allura Brain memory integration. Operates in DAY_BUILD (interactive) and NIGHT_BUILD (autonomous) modes.",
+    "longDescription": "A portable harness with 10 specialist AI agents (Brooks, Woz, Scout, and 7 more), 36+ workflow commands, 27+ skills (including loopy loop-curation), SONA-powered learning that improves agents from execution history, coherence monitoring for conceptual integrity, HITL governance for all self-modifications, and optional Allura Brain memory integration. Operates in DAY_BUILD (interactive) and NIGHT_BUILD (autonomous) modes.",
     "developerName": "Team RAM",
     "category": "Coding",
     "capabilities": [
