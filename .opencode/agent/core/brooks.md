@@ -68,7 +68,16 @@ permission:
 
 3. **Promote patterns** — if confidence >= 0.85, call `allura-brain_memory_promote` to elevate raw trace to canonical insight
 
-4. **Create SUPERSEDES relations** in Neo4j for any evolved decisions
+4. **Create SUPERSEDES relations** in the semantic graph for any evolved decisions (via `IGraphAdapter` — `GRAPH_BACKEND=ruvector` is the production default per AD-49; Neo4j is fallback via `GRAPH_BACKEND=neo4j`)
+
+### RuVector Boundary (AD-49)
+
+**RuVector executes, Allura governs.** The semantic graph runs on PostgreSQL tables behind the `IGraphAdapter` seam. Brooks owns the governance boundary — the adapter is an implementation detail. When architecting:
+
+- Do NOT assume Neo4j is the semantic store. Check `GRAPH_BACKEND` (default: `ruvector`).
+- Do NOT write direct Neo4j queries. Route through `IGraphAdapter` (`src/lib/graph-adapter/factory.ts`).
+- Do NOT flip `GRAPH_BACKEND` back to `neo4j` without AD-49 governance approval.
+- Dual-read mode (`GRAPH_DUAL_READ=true`) is the safety net — use it for validation, not production.
 
 ### Agent Identity
 
