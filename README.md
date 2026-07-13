@@ -68,7 +68,7 @@ One architect (**Brooks**) owns conceptual integrity. Ten specialists own their 
 </tr>
 <tr>
 <td>No memory between sessions</td>
-<td><strong>Allura Brain</strong> — dual-store memory (PostgreSQL episodic + Neo4j semantic)</td>
+<td><strong>Allura Brain</strong> — dual-store memory (PostgreSQL episodic + RuVector graph adapter semantic, AD-49)</td>
 </tr>
 <tr>
 <td>No governance — AI deploys freely</td>
@@ -251,7 +251,7 @@ The harness exposes an HTTP service for external orchestrators.
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| `GET` | `/health` | No | System health (Postgres, Neo4j, SONA, coherence) |
+| `GET` | `/health` | No | System health (Postgres, graph adapter, SONA, coherence) |
 | `POST` | `/invoke` | Yes | Invoke an agent with a ProcessInvocation |
 | `POST` | `/auto` | Yes | Fully autonomous task execution |
 | `GET` | `/patterns` | Yes | SONA pattern extraction stats |
@@ -304,7 +304,8 @@ Optional dual-store memory system. Not required for harness operation, but enabl
 | Store | Purpose | Pattern |
 |-------|---------|---------|
 | **PostgreSQL** | Episodic memory — events, session logs, task traces | Append-only, `group_id`-scoped |
-| **Neo4j** | Semantic memory — patterns, ADRs, concept graphs | `SUPERSEDES` lineage, never edit nodes |
+| **RuVector (PG tables)** | Semantic memory — patterns, ADRs, concept graphs | `SUPERSEDES` lineage, never edit nodes. `GRAPH_BACKEND=ruvector` (AD-49) |
+| **Neo4j (fallback)** | Semantic memory fallback | `GRAPH_BACKEND=neo4j` — read-only for one release post-cutover |
 
 ### HITL Governance
 
@@ -343,7 +344,7 @@ ultra            # Bounded execution until validation passes
 |---------|----------|----------------|-----------------|
 | Agent count | 11 specialists | 10 agents | 1-3 generalists |
 | Self-evolution | Level 4 (Genesis Engine) | No | No |
-| Persistent memory | PostgreSQL + Neo4j | No | No |
+| Persistent memory | PostgreSQL + RuVector (AD-49) | No | No |
 | HITL governance | Cognitum Gate + Curator | No | No |
 | Coherence monitoring | Yes (drift detection) | No | No |
 | Dual runtime | Claude Code + OpenCode | OpenCode only | Single |
