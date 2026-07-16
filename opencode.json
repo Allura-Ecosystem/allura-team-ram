@@ -143,6 +143,17 @@
       "type": "remote",
       "url": "http://localhost:5888/mcp"
     },
+    "mcp-docker": {
+      "command": [
+        "docker",
+        "mcp",
+        "gateway",
+        "run"
+      ],
+      "enabled": true,
+      "timeout": 60000,
+      "type": "local"
+    },
     "chrome-devtools": {
       "command": [
         "npx",
