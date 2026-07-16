@@ -67,7 +67,8 @@
     "./.opencode/command/update.md",
     "./.opencode/command/validate-repo.md",
     "./.opencode/command/loopy.md",
-    "./.opencode/command/auto.md"
+    "./.opencode/command/auto.md",
+    "./.opencode/command/suggest.md"
   ],
   "interface": {
     "displayName": "Team RAM Harness",
