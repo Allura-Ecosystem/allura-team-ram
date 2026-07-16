@@ -1,6 +1,6 @@
 {
   "name": "team-ram-harness",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "Team RAM OpenCode Harness — self-evolving multi-agent orchestration with 10 specialists, SONA learning, coherence monitoring, and HITL governance. Portable harness for deterministic AI-powered software development.",
   "author": {
     "name": "Team RAM Contributors"
@@ -22,17 +22,17 @@
   ],
   "skills": "./.opencode/skills/",
   "agents": [
-    "./.opencode/agent/core/brooks.md",
-    "./.opencode/agent/core/jobs.md",
-    "./.opencode/agent/core/bahari.md",
-    "./.opencode/agent/core/woz.md",
-    "./.opencode/agent/core/scout.md",
-    "./.opencode/agent/core/pike.md",
-    "./.opencode/agent/core/fowler.md",
-    "./.opencode/agent/core/bellard.md",
-    "./.opencode/agent/core/carmack.md",
-    "./.opencode/agent/core/knuth.md",
-    "./.opencode/agent/core/hightower.md"
+    "./agents/brooks.md",
+    "./agents/jobs.md",
+    "./agents/bahari.md",
+    "./agents/woz.md",
+    "./agents/scout.md",
+    "./agents/pike.md",
+    "./agents/fowler.md",
+    "./agents/bellard.md",
+    "./agents/carmack.md",
+    "./agents/knuth.md",
+    "./agents/hightower.md"
   ],
   "commands": [
     "./.opencode/command/start-session.md",
@@ -65,7 +65,9 @@
     "./.opencode/command/skill-propose.md",
     "./.opencode/command/ultra.md",
     "./.opencode/command/update.md",
-    "./.opencode/command/validate-repo.md"
+    "./.opencode/command/validate-repo.md",
+    "./.opencode/command/loopy.md",
+    "./.opencode/command/auto.md"
   ],
   "interface": {
     "displayName": "Team RAM Harness",

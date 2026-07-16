@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Team RAM — self-evolving multi-agent orchestration harness for deterministic AI-powered software development.",
-    "version": "0.4.0"
+    "version": "0.4.2"
   },
   "plugins": [
     {
       "name": "team-ram-harness",
       "source": "./",
       "description": "Team RAM OpenCode Harness — 10 specialist agents, SONA learning, coherence monitoring, and HITL governance. DAY_BUILD and NIGHT_BUILD modes.",
-      "version": "0.4.0",
+      "version": "0.4.2",
       "author": {
         "name": "Team RAM Contributors"
       },

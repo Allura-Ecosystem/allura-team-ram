@@ -1,6 +1,6 @@
 ---
-description: "Fully autonomous execution mode. Detects task complexity, selects execution strategy (single pass, iterative loop, or epic dispatch), and runs without approval gates. Destructive changes are the only pause point. SONA trajectories wrap every step."
-argument-hint: "<task description>"
+description: "Auto-mode — bounded autonomous execution. Loopy finds/crafts the loop, ultra executes, debrief writes to Brain. Use --epic for full sprint. Destructive changes are the only pause point."
+argument-hint: "[--epic] <task description>"
 allowed-tools:
   - Read
   - Write
@@ -15,9 +15,12 @@ allowed-tools:
   - mcp__allura-brain__memory_add
 ---
 
-# Auto Mode — Fully Autonomous Execution
+# Auto Mode — Bounded Autonomous Execution
 
-Run a task from start to finish without manual approval gates. The harness detects complexity, selects the right execution strategy, and drives to completion.
+Run a task from start to finish without manual approval gates. Loopy finds or
+crafts the right loop, ultra/ralph executes it, and the debrief writes the
+outcome to Allura Brain. The harness detects complexity, selects the right
+execution strategy, and drives to a named terminal state.
 
 ## When to Use
 
@@ -25,6 +28,19 @@ Run a task from start to finish without manual approval gates. The harness detec
 - The task is well-defined with clear success criteria
 - You trust the harness to make non-destructive decisions autonomously
 - You want SONA to learn from the execution
+
+## Layering
+
+```
+loopy (META)         → finds or crafts the right loop
+  ↓ hands off a bounded loop
+ultra / ralph        → executes the loop, returns evidence
+  ↓ writes outcome
+Allura Brain         → canonical memory (group_id="allura-system")
+```
+
+Auto-mode is the orchestrator, not a second execution engine. Load the
+`auto-mode` skill (`.opencode/skills/auto-mode/SKILL.md`) for the full contract.
 
 ## Execution Protocol
 
@@ -56,6 +72,21 @@ Agent(subagent_type: "Explore", prompt: "Scout recon for: <task>. Find relevant 
 ```
 
 Scout report informs complexity assessment. This step is non-negotiable — never skip recon.
+
+### Phase 1.5: Loopy Find-or-Craft (NEW — Loop Curation)
+
+Before executing, ask loopy whether a saved or published loop already fits:
+
+```
+/loopy find <task>
+```
+
+- If loopy finds a match → use that loop's prompt, validation, and stop rules
+- If no match → `/loopy craft` to interview the user and produce a bounded loop
+- The loop defines: scope, acceptance check, stop behavior, finite run boundary
+
+This step prevents auto-mode from improvising a loop structure. Loopy is the
+librarian; auto-mode is the orchestrator; ultra/ralph is the executor.
 
 ### Phase 2: Complexity Assessment
 
@@ -142,12 +173,37 @@ Surface the change, explain the risk, and wait for explicit approval. This is th
 allura-brain_memory_add({
   group_id: "allura-system",
   user_id: "auto-mode",
-  content: "AUTO_MODE completed: <task>. Strategy: <simple|multi|epic>. Steps: <N>. Success: <bool>.",
-  metadata: { source: "auto-mode", event_type: "AUTO_MODE_COMPLETE", strategy: "<strategy>" }
+  content: "AUTO_MODE_OUTCOME: <task>. Terminal state: <success|clean no-op|blocked|approval-required|exhausted|stagnated>. Strategy: <simple|multi|epic>. Evidence: <validation result>",
+  metadata: { source: "auto-mode", event_type: "AUTO_MODE_COMPLETE", strategy: "<strategy>", terminal_state: "<state>" }
 })
 ```
 
-3. Report summary: what was done, what was changed, what tests pass
+3. **Loopy debrief** — analyze the run and recommend the smallest improvement:
+
+```
+/loopy debrief <receipt>
+```
+
+4. **Loopy save** (optional, if the loop is reusable) — append to `LOOPS.md` + Brain:
+
+```
+/loopy save <loop>
+```
+
+5. Report summary: what was done, what was changed, what tests pass, terminal state reached
+
+## Terminal States
+
+Every run ends in exactly one. **Never report an error or exhausted budget as success.**
+
+| State | Meaning |
+|-------|---------|
+| **success** | Goal achieved, validation passed |
+| **clean no-op** | Inspected state, nothing needed, no change made |
+| **blocked** | Hard blocker — no agent, no fallback, missing dependency |
+| **approval-required** | Next action is destructive/production and needs HITL |
+| **exhausted** | Iteration budget consumed without convergence |
+| **stagnated** | No measurable progress across N iterations |
 
 ## Rules
 
