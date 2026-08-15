@@ -24,7 +24,7 @@
 Add the Allura marketplace in Cowork:
 
 ```
-GitHub → Charitablebusinessronin/Allura_Memory
+GitHub → Allura-Ecosystem/Allura_Memory
 ```
 
 Then install the **Team RAM** plugin.
