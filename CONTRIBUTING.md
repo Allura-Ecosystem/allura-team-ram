@@ -6,7 +6,7 @@ Thank you for your interest in contributing to the Team RAM OpenCode Harness. Th
 
 - [Bun](https://bun.sh) >= 1.1.0 (this is a Bun-only project — no npm/yarn)
 - Git
-- Docker (optional, for Allura Brain PostgreSQL + Neo4j)
+- Docker (optional, for Allura Brain PostgreSQL with governed graph tables)
 
 ## Getting Started
 
@@ -109,7 +109,7 @@ These are non-negotiable. PRs violating them will be rejected:
 
 - `group_id = 'allura-system'` on every DB operation
 - PostgreSQL events are append-only (no UPDATE/DELETE)
-- Neo4j uses SUPERSEDES for versioning (never edit nodes)
+- PostgreSQL graph versioning via SUPERSEDES (never edit existing graph nodes)
 - No skill/agent deployment without HITL curator approval
 - All tools route through MCP (no `docker exec`)
 

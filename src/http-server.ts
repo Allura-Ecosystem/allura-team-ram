@@ -55,7 +55,7 @@ interface AgentResult {
 interface HealthStatus {
   status: "healthy" | "degraded" | "unhealthy";
   postgres: "healthy" | "degraded" | "unhealthy";
-  neo4j: "healthy" | "degraded" | "unhealthy";
+  graph: "healthy" | "degraded" | "unhealthy";
   sona: { active: boolean; trajectories?: number; agents?: number; taskTypes?: number };
   coherence: { score: number; level: string };
   uptime_ms: number;
@@ -301,12 +301,12 @@ async function getHealth(): Promise<HealthStatus> {
   }
 
   const pgStatus = await checkPostgres();
-  const neoStatus = await checkNeo4j();
+  const graphStatus = await checkGraph();
 
   // Overall status reflects harness ability to serve requests.
   // The harness can always operate via static routing fallback even when DBs
   // are down, so overall status is "healthy" as long as the server is running.
-  // Subsystem status (postgres, neo4j) is reported separately for diagnostics.
+  // Subsystem status (postgres, graph) is reported separately for diagnostics.
   const status: HealthStatus["status"] = "healthy";
 
   const coherence = getCoherenceStatus();
@@ -314,7 +314,7 @@ async function getHealth(): Promise<HealthStatus> {
   const health: HealthStatus = {
     status,
     postgres: pgStatus,
-    neo4j: neoStatus,
+    graph: graphStatus,
     sona: getTrajectoryStats(),
     coherence: { score: coherence.score, level: coherence.level },
     uptime_ms: now - startTime,
@@ -375,21 +375,17 @@ async function checkPostgres(): Promise<"healthy" | "unhealthy"> {
 }
 
 /**
- * Probe Neo4j by TCP-connecting to its bolt port.
+ * Probe the canonical graph (PostgreSQL graph tables) by checking the
+ * same PostgreSQL instance — graph_memories and graph_supersedes tables
+ * live alongside episodic data in the single PostgreSQL engine.
+ * Returns "graph_unavailable" as "unhealthy" when the PG probe fails.
  */
-async function checkNeo4j(): Promise<"healthy" | "unhealthy"> {
-  const uri = process.env.NEO4J_URI || "bolt://localhost:7687";
-  let host = "localhost";
-  let port = 7687;
-
-  try {
-    const parsed = new URL(uri.replace(/^bolt:/, "http:"));
-    host = parsed.hostname;
-    port = Number(parsed.port) || 7687;
-  } catch {
-    // Use defaults
-  }
-
+async function checkGraph(): Promise<"healthy" | "unhealthy"> {
+  // Graph tables reside in the same PostgreSQL instance as episodic data.
+  // Reuse the PostgreSQL TCP probe — if PG is reachable, graph tables are
+  // available. A dedicated probe is unnecessary after the Neo4j sunset (AD-50).
+  const host = process.env.POSTGRES_HOST || "localhost";
+  const port = Number(process.env.POSTGRES_PORT) || 5432;
   return (await probeTcp(host, port)) ? "healthy" : "unhealthy";
 }
 

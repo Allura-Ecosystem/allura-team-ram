@@ -48,7 +48,7 @@ PROJECT B (group_id: allura-project-b)
                 ▼
 ┌─────────────────────────────────────┐
 │         ALLURA BRAIN                │
-│  (shared PostgreSQL + Neo4j)        │
+│  (shared PostgreSQL with governed graph tables)        │
 │                                     │
 │  Receipts accumulate silently.      │
 │  Each project's group_id isolates   │
@@ -363,7 +363,7 @@ bun run test-phone-home.ts --aggregate
 | Field | Detail |
 |-------|--------|
 | **Status** | Proposed |
-| **Decision** | Use Allura Brain (shared PostgreSQL + Neo4j via MCP) as the cross-project communication channel. No new message bus, no GitHub Actions, no webhook service. |
+| **Decision** | Use Allura Brain (shared PostgreSQL with governed graph tables via MCP) as the cross-project communication channel. No new message bus, no GitHub Actions, no webhook service. |
 | **Rationale** | Brain already exists, supports `group_id` isolation, is append-only, and has HITL governance built in. Adding a separate channel (webhooks, GitHub Actions, message queue) introduces infrastructure that needs maintaining. Brain is already maintained. |
 | **Alternatives** | **GitHub Actions:** Adds CI complexity, requires repo access from each project, creates PR noise. **Webhook service:** New infrastructure to maintain, availability concerns. **Manual copy-paste:** No automation, learnings die. |
 | **Consequences** | All projects must connect to the same Brain instance. Projects without Brain access cannot phone home (graceful degradation — they work fine, just don't contribute learnings). |

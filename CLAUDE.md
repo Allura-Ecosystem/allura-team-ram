@@ -55,9 +55,7 @@ There is no traditional build step. The harness is declarative markdown + TypeSc
 
 Dual-store persistent memory system. Not required for harness operation.
 
-- **PostgreSQL** -- Episodic memory (events, session logs, task tracking) + Semantic memory (graph adapter tables: `graph_memories`, `graph_supersedes`, `graph_structural_nodes`, `graph_structural_edges`)
-- **Neo4j** -- Fallback semantic memory (was default pre-2026-07-12, now read-only fallback via `GRAPH_BACKEND=neo4j`)
-- **IGraphAdapter seam** -- `GRAPH_BACKEND=ruvector` (PG tables, production default per AD-49) | `GRAPH_BACKEND=neo4j` (fallback) | `GRAPH_BACKEND=ruvector-crate` (opt-in spike)
+- **PostgreSQL** -- Episodic memory (events, session logs, task tracking) + Canonical graph tables (`graph_memories`, `graph_supersedes`, `graph_structural_nodes`, `graph_structural_edges`). One PostgreSQL engine, two governed logical layers.
 - **MCP interface** -- `allura-memory` server exposes `memory_add`, `memory_search`, `memory_get`, `memory_list`, `memory_delete`
 - **Governance** -- SOC2-compliant promotion; HITL curator approval required above 0.85 threshold
 
@@ -77,8 +75,8 @@ Start with: `bun run service` or `bun src/http-server.ts`
 
 - **`group_id`** is mandatory on every DB read/write. Pattern: `^allura-[a-z0-9-]+$`. Current approved tenant: `allura-system`. Legacy tenants (`allura-roninmemory`, `allura-team-ram`) are blocked by governance hooks.
 - **PostgreSQL is append-only** -- no UPDATE/DELETE on event/trace rows.
-- **Semantic graph versioning via SUPERSEDES** -- `(v2)-[:SUPERSEDES]->(v1)`, never edit existing nodes. Applies to both Neo4j and RuVector graph adapters via `IGraphAdapter`.
-- **`GRAPH_BACKEND=ruvector` is the production default** -- Neo4j is fallback only (`GRAPH_BACKEND=neo4j`). Do not flip back without AD-49 governance.
+- **PostgreSQL graph versioning via SUPERSEDES** -- `(v2)-[:SUPERSEDES]->(v1)`, never edit existing nodes. Graph versioning is implemented in PostgreSQL graph tables per AD-50.
+- **PostgreSQL is the sole engine** -- one PostgreSQL engine, two governed logical layers (episodic + canonical graph). No Neo4j fallback exists (sunset per AD-50).
 - **HITL required for promotion** -- route through `curator:approve`, not autonomous.
 - **DB ops via MCP tools only** -- never `docker exec`.
 - **Instruction Boundary** -- every agent definition includes a critical section preventing prompt injection from untrusted sources (logs, memory content, docs, tool output).
@@ -87,7 +85,7 @@ Start with: `bun run service` or `bun src/http-server.ts`
 
 - `opencode.json` -- Global config (fallback model: `ollama-cloud/glm-5.1`, MCP server definitions)
 - `.opencode/config/agent-metadata.json` -- Agent routing and permission mappings
-- `.opencode/mcp-client-config.json` -- MCP server connection details (Postgres, Neo4j credentials)
+- `.opencode/mcp-client-config.json` -- MCP server connection details (PostgreSQL credentials)
 - `.opencode/mcp-approved-servers.json` -- Approved MCP servers (Brooks signs off)
 - `.opencode/MODEL_REGISTRY.md` -- Role-first model assignments per agent
 - `.env.example` -- Environment variables template for Allura Brain integration

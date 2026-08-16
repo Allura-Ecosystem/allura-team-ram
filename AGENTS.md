@@ -243,7 +243,7 @@ All agents operate within the Allura Memory ecosystem:
 
 - **group_id**: `allura-system` (mandatory on every DB operation)
 - **Episodic store**: PostgreSQL (append-only events, trajectories, task logs)
-- **Semantic store**: Neo4j (patterns, ADRs, SUPERSEDES lineage)
+- **Canonical graph**: PostgreSQL graph tables (patterns, ADRs, SUPERSEDES lineage)
 - **Vector search**: RuVector (hybrid vector + BM25, SONA-informed)
 - **Governance**: MCP-only DB access, HITL promotion, curator approval queue
 

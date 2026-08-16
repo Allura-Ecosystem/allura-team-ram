@@ -93,8 +93,8 @@ async function testMCPClientConfig(): Promise<void> {
 async function testEnvExample(): Promise<void> {
   const path = requireFile('.env.example');
   const content = readFileSync(path, 'utf8');
-  if (!content.includes('POSTGRES_HOST') || !content.includes('NEO4J_URI')) {
-    throw new Error('.env.example missing POSTGRES_HOST / NEO4J_URI');
+  if (!content.includes('POSTGRES_HOST')) {
+    throw new Error('.env.example missing POSTGRES_HOST');
   }
 }
 

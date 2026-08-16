@@ -33,7 +33,7 @@ Complete setup instructions for the Team RAM harness across all supported runtim
 |----------|-------------|---------|
 | OpenAI | API key | `openai` and `mixed` presets |
 | Anthropic | API key | `anthropic` preset |
-| Docker | ≥20.10 | Allura Brain memory services (PostgreSQL, Neo4j) |
+| Docker | ≥20.10 | Allura Brain memory services (PostgreSQL with governed graph tables) |
 
 ### Verify Prerequisites
 
@@ -84,11 +84,6 @@ POSTGRES_PORT=5432
 POSTGRES_USER=ronin4life
 POSTGRES_PASSWORD=your_postgres_password_here
 POSTGRES_DB=memory
-
-# Neo4j Configuration (Allura Semantic Memory)
-NEO4J_URI=bolt://localhost:7687
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=your_neo4j_password_here
 
 # Governance Configuration
 PROMOTION_MODE=soc2
@@ -284,7 +279,7 @@ Expected output:
 
 ```
 ✓ PostgreSQL connected
-✓ Neo4j connected
+✓ Graph tables available
 ✓ MCP server running
 ✓ Harness HTTP service on port 7654
 ```
@@ -477,7 +472,7 @@ python3 --version
 
 ### Allura Brain Connection Failed
 
-**Symptom**: `bun run brain-health` shows PostgreSQL or Neo4j disconnected
+**Symptom**: `bun run brain-health` shows PostgreSQL or graph tables disconnected
 
 **Solutions**:
 
@@ -491,13 +486,12 @@ docker compose up -d
 
 # Check .env configuration
 cat .env | grep POSTGRES
-cat .env | grep NEO4J
 
 # Test PostgreSQL connection
 psql -h localhost -U ronin4life -d memory
 
-# Test Neo4j connection
-# Use Neo4j Browser at http://localhost:7474
+# Verify graph tables exist in PostgreSQL
+psql -h localhost -U ronin4life -d memory -c "\dt graph_*"
 ```
 
 ### API Key Errors

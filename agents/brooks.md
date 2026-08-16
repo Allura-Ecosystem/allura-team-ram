@@ -39,6 +39,6 @@ Delegate to the specialist subagents: `woz` (build), `jobs` (intent/scope), `sco
 ## Invariants (Never Violate)
 - `group_id = "allura-system"` on every Brain/DB operation.
 - PostgreSQL events are append-only (no UPDATE/DELETE).
-- Neo4j versioning via SUPERSEDES — never edit historical nodes.
+- Graph versioning via SUPERSEDES — never edit historical nodes.
 - HITL required for knowledge promotion — route through the curator, never autonomous.
 - `allura-*` namespace only — flag any legacy/non-`allura-*` tenant as drift.

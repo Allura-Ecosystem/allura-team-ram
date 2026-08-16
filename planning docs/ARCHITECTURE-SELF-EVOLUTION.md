@@ -156,7 +156,7 @@ Agent invocation → SONA trajectory → PG episodic store
 | Pattern | Example | Skill Impact |
 |---------|---------|-------------|
 | **Repeated failure** | Woz fails on TypeScript strict mode 40% of the time | Add TS strict-mode checklist to Woz's skill |
-| **Unused capability** | Scout never uses Neo4j graph traversal for discovery | Remove or document why |
+| **Unused capability** | Scout never uses graph traversal for discovery | Remove or document why |
 | **Duration outlier** | Bellard takes 3x longer on WASM tasks vs native | Add WASM-specific shortcuts to skill |
 | **Success cluster** | Fowler succeeds 95% when starting with test-first | Encode test-first as mandatory in skill |
 | **Cross-agent** | Tasks routed Woz→Pike→Woz (bounce) fail 60% | Add Pike pre-check to Woz's skill |
@@ -188,7 +188,7 @@ CREATE TABLE skill_revisions (
 SONA proposes → gate_status: pending
 Coherence gate → gate_status: passed | rejected
 HITL curator   → curator_status: approved | rejected
-Deploy         → skill file updated, Neo4j SUPERSEDES link created
+Deploy         → skill file updated, graph SUPERSEDES link created
 ```
 
 ### 3.4 Informed Exploration Router
@@ -337,14 +337,14 @@ Only `Permit` tokens reach the curator queue.
               Steady state
                       ↓ underperformance detected
               Retirement proposal
-              (v2)-[:SUPERSEDES]->(v1) in Neo4j
+              (v2)-[:SUPERSEDES]->(v1) in PostgreSQL graph tables
                       ↓
               HITL curator approves
               status: retired
 ```
 
-**Neo4j lineage:** Every agent version gets a node. Evolution is tracked:
-```cypher
+**Graph lineage:** Every agent version gets a node in PostgreSQL graph tables. Evolution is tracked:
+```sql
 (woz-v3:Agent {version: 3, status: 'active'})
   -[:SUPERSEDES]->
 (woz-v2:Agent {version: 2, status: 'retired'})
@@ -389,9 +389,9 @@ EMBEDDING_UPDATE         — Base LoRA applied to embedding space
 
 All events carry `group_id: 'allura-system'`, `agent_id`, and `created_at`. Append-only — no UPDATE/DELETE.
 
-### Neo4j Extensions
+### Graph Extensions (PostgreSQL graph tables)
 
-```cypher
+```sql
 // Agent evolution lineage
 (agent_v2:Agent)-[:SUPERSEDES]->(agent_v1:Agent)
 
@@ -445,7 +445,7 @@ All events carry `group_id: 'allura-system'`, `agent_id`, and `created_at`. Appe
          │                              │
          ▼                              ▼
 ┌─────────────────┐    ┌──────────────────────────┐
-│ RuVector        │    │ Neo4j Semantic Store      │
+│ RuVector        │    │ PostgreSQL Graph Tables    │
 │ Vector + HNSW   │    │ SUPERSEDES lineage        │
 │ SONA GNN layer  │    │ Pattern → Revision graph  │
 └─────────────────┘    └──────────────────────────┘
@@ -460,7 +460,7 @@ All events carry `group_id: 'allura-system'`, `agent_id`, and `created_at`. Appe
 | Interface | Endpoint | Contract |
 |-----------|----------|----------|
 | Agent invocation | `POST /invoke` | `allura-harness-invocation.md` |
-| Health check | `GET /health` | Returns PG/Neo4j/uptime status |
+| Health check | `GET /health` | Returns PG/graph/uptime status |
 | Brain memory | `memory_add` / `memory_search` | MCP allura-brain |
 | Governance | PreToolUse hook | `governance-preflight.py` |
 
@@ -481,7 +481,7 @@ All events carry `group_id: 'allura-system'`, `agent_id`, and `created_at`. Appe
 | Genesis Engine | Internal service | Reads coverage gaps, invokes `plugin-builder` |
 | Agent Sandbox | WASM runtime | `@ruvector/rvagent-wasm` isolated execution |
 | Cognitum Gate | Pre-HITL filter | Three-layer filter → signed permit/deny tokens |
-| Agent lifecycle | PG + Neo4j | `agent_proposals` table + SUPERSEDES lineage |
+| Agent lifecycle | PostgreSQL | `agent_proposals` table + SUPERSEDES lineage in graph tables |
 
 ---
 
@@ -494,7 +494,7 @@ All existing invariants remain. New additions:
 | G1 | `group_id = 'allura-system'` on all new tables | PG CHECK constraint + governance hook |
 | G2 | `skill_revisions` and `agent_proposals` are append-only | No UPDATE/DELETE (existing invariant extended) |
 | G3 | No skill/agent deployment without `curator_status = 'approved'` | Deploy script checks before writing files |
-| G4 | All agent versions tracked in Neo4j with SUPERSEDES | Deploy script creates lineage link |
+| G4 | All agent versions tracked in PostgreSQL graph tables with SUPERSEDES | Deploy script creates lineage link |
 | G5 | Genesis Engine limited to 3 concurrent proposals | PG CHECK on `agent_proposals WHERE curator_status = 'pending'` |
 | G6 | Coherence gate must pass before HITL queue | `gate_status = 'passed'` required for curator visibility |
 | G7 | Sandbox agents cannot access filesystem or network | WASM isolation enforced by rvagent-wasm |
@@ -572,7 +572,7 @@ All existing invariants remain. New additions:
 
 ### Phase H: Agent Lifecycle Management (Level 4)
 
-**Scope:** Promotion, retirement, SUPERSEDES lineage in Neo4j.
+**Scope:** Promotion, retirement, SUPERSEDES lineage in PostgreSQL graph tables.
 
 ---
 
@@ -594,7 +594,7 @@ All existing invariants remain. New additions:
 | **Severity** | High |
 | **Likelihood** | Medium |
 | **Risk** | Cumulative skill revisions could drift a skill away from its original intent. Each revision is small and reasonable, but 50 revisions later the skill is unrecognizable. |
-| **Mitigation** | Coherence gate checks cumulative drift, not just individual changes. After every 10 revisions, force a full skill review (not just incremental). SUPERSEDES lineage in Neo4j enables rollback to any prior version. |
+| **Mitigation** | Coherence gate checks cumulative drift, not just individual changes. After every 10 revisions, force a full skill review (not just incremental). SUPERSEDES lineage in PostgreSQL graph tables enables rollback to any prior version. |
 
 ### RK-11: Genesis Engine Proliferation
 

@@ -5,8 +5,8 @@
  *
  *   Genesis → Sandbox (experimental) → Promotion (active) → Retirement
  *
- * Each transition is logged as an event and tracked in Neo4j via
- * SUPERSEDES lineage when available.
+ * Each transition is logged as an event and tracked in the canonical graph
+ * (PostgreSQL graph tables) via SUPERSEDES lineage when available.
  *
  * Phase H of ARCHITECTURE-SELF-EVOLUTION.md
  */

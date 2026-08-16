@@ -269,13 +269,13 @@
 | **Color** | `#6366F1` |
 | **Skills** | allura-memory-skill, postgres-best-practices |
 
-**What he does:** PostgreSQL, Neo4j, query optimization, data migration. Correctness is non-negotiable.
+**What he does:** PostgreSQL, graph table modeling, query optimization, data migration. Correctness is non-negotiable.
 
 **When to invoke:**
 - Schema changes (destructive gate)
 - Query performance issues
 - Data migration planning
-- Neo4j graph modeling
+- PostgreSQL graph table modeling
 
 **Knuth's First Law:** Data outlives code. Get the schema right.
 

@@ -31,6 +31,29 @@
   <a href="docs/quick-reference.md">Quick Reference</a>
 </p>
 
+## Documentation alignment
+
+Team RAM README statements are aligned to:
+
+- Team RAM manifest definitions,
+- Team RAM skills and scripts,
+- shared Allura governance terms used across repositories.
+
+Canonical team names:
+
+- Allura Memory / Allura Brain
+- Allura Cowork
+- Team Durham
+- Team RAM Coding
+
+Operational rule:
+
+- Evidence-first workflow
+- Human approval gates on autonomous changes
+- Tenant-scoped memory where memory MCP is used
+
+---
+
 ---
 
 ## Part of the Allura Ecosystem
@@ -355,8 +378,7 @@ Optional dual-store memory system. Not required for harness operation, but enabl
 | Store | Purpose | Pattern |
 |-------|---------|---------|
 | **PostgreSQL** | Episodic memory — events, session logs, task traces | Append-only, `group_id`-scoped |
-| **RuVector (PG tables)** | Semantic memory — patterns, ADRs, concept graphs | `SUPERSEDES` lineage, never edit nodes. `GRAPH_BACKEND=ruvector` (AD-49) |
-| **Neo4j (fallback)** | Semantic memory fallback | `GRAPH_BACKEND=neo4j` — read-only for one release post-cutover |
+| **PostgreSQL graph tables** | Canonical graph — patterns, ADRs, concept graphs | `SUPERSEDES` lineage, never edit nodes. PostgreSQL graph versioning via SUPERSEDES (AD-50) |
 
 ### HITL Governance
 
@@ -488,7 +510,7 @@ These are non-negotiable. The system enforces them:
 
 - **`group_id`** is mandatory on every DB operation. Pattern: `^allura-[a-z0-9-]+$`
 - **PostgreSQL is append-only** — no UPDATE/DELETE on event rows
-- **Neo4j uses SUPERSEDES** — create new versions, never edit nodes
+- **PostgreSQL graph versioning via SUPERSEDES** — create new versions, never edit existing graph nodes
 - **HITL required for promotion** — no autonomous deployment of skill revisions or new agents
 - **DB operations via MCP only** — never `docker exec`
 - **Instruction boundary** — every agent definition prevents prompt injection from untrusted sources

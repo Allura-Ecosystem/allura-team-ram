@@ -1,5 +1,5 @@
 {
-  "nextRevisionId": 13,
+  "nextRevisionId": 17,
   "nextAgentProposalId": 4,
   "revisions": [
     {
@@ -247,6 +247,88 @@
       "created_at": "2026-06-11T07:06:25.621Z",
       "curator_notes": "not needed",
       "reviewed_at": "2026-06-11T07:06:25.621Z"
+    },
+    {
+      "id": 13,
+      "proposal": {
+        "skill_name": "rev-submit-1786896839460-skill",
+        "agent_id": "rev-submit-1786896839460",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-submit-1786896839460",
+        "proposed_change": "Update guidance for rev-submit-1786896839460",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-08-16T16:13:59.460Z"
+    },
+    {
+      "id": 14,
+      "proposal": {
+        "skill_name": "rev-pending-1786896839463-skill",
+        "agent_id": "rev-pending-1786896839463",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-pending-1786896839463",
+        "proposed_change": "Update guidance for rev-pending-1786896839463",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-08-16T16:13:59.463Z"
+    },
+    {
+      "id": 15,
+      "proposal": {
+        "skill_name": "rev-approve-1786896839463-skill",
+        "agent_id": "rev-approve-1786896839463",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-approve-1786896839463",
+        "proposed_change": "Update guidance for rev-approve-1786896839463",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "pending",
+      "created_at": "2026-08-16T16:13:59.463Z"
+    },
+    {
+      "id": 16,
+      "proposal": {
+        "skill_name": "rev-reject-1786896839463-skill",
+        "agent_id": "rev-reject-1786896839463",
+        "revision_type": "content_update",
+        "pattern_type": "success_cluster",
+        "pattern_description": "Test pattern for rev-reject-1786896839463",
+        "proposed_change": "Update guidance for rev-reject-1786896839463",
+        "evidence": {
+          "trajectoryCount": 15,
+          "metric": 0.9
+        },
+        "sona_confidence": 0.85,
+        "group_id": "allura-system"
+      },
+      "gate_status": "rejected",
+      "curator_status": "rejected",
+      "created_at": "2026-08-16T16:13:59.463Z",
+      "curator_notes": "not needed",
+      "reviewed_at": "2026-08-16T16:13:59.463Z"
     }
   ],
   "agentProposals": [

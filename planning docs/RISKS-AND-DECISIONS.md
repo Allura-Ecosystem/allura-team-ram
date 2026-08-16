@@ -26,7 +26,7 @@ This document captures key architectural and design decisions made in the OpenAg
   - [RK-04: Documentation Incompleteness](#rk-04-documentation-incompleteness)
   - [RK-05: Multi-Agent Coordination Overhead](#rk-05-multi-agent-coordination-overhead)
   - [RK-06: Allura Memory Integration Complete](#rk-06-memory-system-not-production-ready)
-  - [RK-07: Neo4j Connection Configured](#rk-07-neo4j-schema-missing)
+  - [RK-07: Graph Tables Configured](#rk-07-graph-schema-missing)
   - [RK-08: Allura Integration Tested](#rk-08-tenant-isolation-not-enforced)
 
 ---
@@ -113,7 +113,7 @@ This document captures key architectural and design decisions made in the OpenAg
 | [RK-04](#rk-04-documentation-incompleteness) | Documentation Incompleteness | Low | ✅ Mitigated |
 | [RK-05](#rk-05-multi-agent-coordination-overhead) | Multi-Agent Coordination Overhead | Medium | 🔴 Open |
 | [RK-06](#rk-06-memory-system-not-production-ready) | Memory System Not Production Ready | Critical | 🔴 Open |
-| [RK-07](#rk-07-neo4j-schema-missing) | Neo4j Schema Missing | Critical | 🔴 Open |
+| [RK-07](#rk-07-graph-schema-missing) | Graph Tables Configured | Critical | 🔴 Open |
 | [RK-08](#rk-08-tenant-isolation-not-enforced) | Tenant Isolation Not Enforced | High | 🔴 Open |
 | [RK-09](#rk-09-trajectory-data-volume) | Trajectory Data Volume | Medium | 🟡 Acknowledged |
 | [RK-10](#rk-10-curator-queue-stagnation) | Curator Queue Stagnation | High | 🟡 Partially Mitigated |
@@ -208,15 +208,15 @@ This document captures key architectural and design decisions made in the OpenAg
 
 ---
 
-### RK-07: Neo4j Connection Configured
+### RK-07: Graph Tables Configured
 
 | Field | Detail |
 |-------|--------|
 | **Severity** | Critical |
 | **Likelihood** | Certain |
 | **Status** | 🔴 Open |
-| **Description** | Allura's Neo4j database is operational and OpenAgentsControl Harness is configured to connect to it. NEO4J_URI set in .env.example and agent definitions updated. |
-| **Mitigation** | **Required:** Configure NEO4J_URI in .env to point to Allura's Neo4j instance. Update agent definitions to call Allura tools via MCP_DOCKER. |
+| **Description** | Allura's PostgreSQL graph tables are operational and OpenAgentsControl Harness is configured to connect to the canonical graph. POSTGRES_HOST set in .env.example and agent definitions updated. |
+| **Mitigation** | **Required:** Configure POSTGRES_HOST in .env to point to Allura's PostgreSQL instance. Update agent definitions to call Allura tools via MCP_DOCKER. |
 | **Owner** | Brooks Architect |
 | **Related decision** | [AD-02: Structured Event Schema](#ad-02-structured-event-schema) |
 

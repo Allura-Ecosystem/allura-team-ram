@@ -16,7 +16,7 @@
     "bellard": {
       "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "subagent",
-      "model": "ollama/qwen3-coder-next:cloud",
+      "model": "ollama/kimi-k2.7-code:cloud",
       "path": ".opencode/agent/subagents/code/bellard.md",
       "permission": {
         "skill": {
@@ -27,7 +27,7 @@
     "brooks": {
       "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "primary",
-      "model": "ollama/glm-5.2:cloud",
+      "model": "ollama/glm-5.2.2:cloud",
       "path": ".opencode/agent/core/brooks.md",
       "permission": {
         "skill": {
@@ -39,7 +39,7 @@
     "carmack": {
       "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "subagent",
-      "model": "ollama/qwen3-coder-next:cloud",
+      "model": "ollama/kimi-k2.7-code:cloud",
       "path": ".opencode/agent/subagents/code/carmack.md",
       "permission": {
         "skill": {
@@ -50,7 +50,7 @@
     "fowler": {
       "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "subagent",
-      "model": "ollama/qwen3-coder-next:cloud",
+      "model": "ollama/kimi-k2.7-code:cloud",
       "path": ".opencode/agent/subagents/review/fowler.md",
       "permission": {
         "skill": {
@@ -61,7 +61,7 @@
     "hightower": {
       "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "subagent",
-      "model": "ollama/qwen3-coder-next:cloud",
+      "model": "ollama/kimi-k2.7-code:cloud",
       "path": ".opencode/agent/subagents/infrastructure/hightower.md",
       "permission": {
         "skill": {
@@ -72,7 +72,7 @@
     "jobs": {
       "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "primary",
-      "model": "ollama/glm-5.2:cloud",
+      "model": "ollama/glm-5.2.2:cloud",
       "path": ".opencode/agent/core/jobs.md",
       "permission": {
         "skill": {
@@ -83,7 +83,7 @@
     "knuth": {
       "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "subagent",
-      "model": "ollama/qwen3-coder-next:cloud",
+      "model": "ollama/kimi-k2.7-code:cloud",
       "path": ".opencode/agent/subagents/infrastructure/knuth.md",
       "permission": {
         "skill": {
@@ -94,7 +94,7 @@
     "pike": {
       "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "subagent",
-      "model": "ollama/qwen3-coder-next:cloud",
+      "model": "ollama/kimi-k2.7-code:cloud",
       "path": ".opencode/agent/subagents/review/pike.md",
       "permission": {
         "skill": {
@@ -119,7 +119,7 @@
     "woz": {
       "fallback_model": "ollama/glm-5.1:cloud",
       "mode": "subagent",
-      "model": "ollama/qwen3-coder-next:cloud",
+      "model": "ollama/kimi-k2.7-code:cloud",
       "path": ".opencode/agent/subagents/code/woz.md",
       "permission": {
         "skill": {
@@ -163,7 +163,7 @@
       "type": "local"
     }
   },
-  "model": "ollama/glm-5.1:cloud",
+  "model": "ollama/glm-5.2.1:cloud",
   "permission": {
     "bash": "allow",
     "edit": "allow",
@@ -192,8 +192,8 @@
   "provider": {
     "ollama": {
       "models": {
-        "deepseek-v3.2:cloud": {
-          "name": "deepseek-v3.2:cloud"
+        "deepseek-v4-flash:0731:cloud": {
+          "name": "deepseek-v4-flash:0731:cloud"
         },
         "deepseek-v4-flash:cloud": {
           "name": "deepseek-v4-flash:cloud"
@@ -207,26 +207,20 @@
         "glm-5.1:cloud": {
           "name": "glm-5.1:cloud"
         },
-        "glm-5:cloud": {
-          "name": "glm-5:cloud"
+        "glm-5.2:cloud": {
+          "name": "glm-5.2:cloud"
         },
         "gpt-oss:120b-cloud": {
           "name": "gpt-oss:120b-cloud"
         },
-        "kimi-k2.5:cloud": {
-          "name": "kimi-k2.5:cloud"
-        },
         "kimi-k2.6:cloud": {
           "name": "kimi-k2.6:cloud"
-        },
-        "minimax-m2.5:cloud": {
-          "name": "minimax-m2.5:cloud"
         },
         "minimax-m2.7:cloud": {
           "name": "minimax-m2.7:cloud"
         },
-        "ministral-3:8b-cloud": {
-          "name": "ministral-3:8b-cloud"
+        "gpt-oss:20b-cloud": {
+          "name": "gpt-oss:20b-cloud"
         },
         "nemotron-3-super:cloud": {
           "name": "nemotron-3-super:cloud"
@@ -234,26 +228,20 @@
         "nomic-embed-text:latest": {
           "name": "nomic-embed-text:latest"
         },
-        "qwen3-coder-next:cloud": {
-          "name": "qwen3-coder-next:cloud"
+        "kimi-k2.7-code:cloud": {
+          "name": "kimi-k2.7-code:cloud"
         },
-        "qwen3-coder:480b-cloud": {
-          "name": "qwen3-coder:480b-cloud"
+        "deepseek-v4-pro:0813:cloud": {
+          "name": "deepseek-v4-pro:0813:cloud"
         },
         "qwen3-embedding:8b": {
           "name": "qwen3-embedding:8b"
-        },
-        "qwen3-vl:235b-cloud": {
-          "name": "qwen3-vl:235b-cloud"
         },
         "qwen3.5:397b-cloud": {
           "name": "qwen3.5:397b-cloud"
         },
         "qwen3:0.6b": {
           "name": "qwen3:0.6b"
-        },
-        "glm-5.2:cloud": {
-          "name": "glm-5.2:cloud"
         }
       },
       "name": "Ollama",
@@ -264,10 +252,126 @@
         "timeout": 600000
       }
     },
-    "openai": {
+    "ollama-cloud": {
+      "name": "Ollama Cloud",
+      "npm": "@ai-sdk/openai-compatible",
       "options": {
-        "chunkTimeout": 60000,
-        "timeout": 600000
+        "baseURL": "https://ollama.com/v1",
+        "apiKey": "{env:OLLAMA_API_KEY}"
+      },
+      "models": {
+        "deepseek-v4-pro:0813": {
+          "name": "deepseek-v4-pro:0813"
+        },
+        "deepseek-v4-flash:0731": {
+          "name": "deepseek-v4-flash:0731"
+        },
+        "kimi-k3": {
+          "name": "kimi-k3"
+        },
+        "kimi-k2.7-code": {
+          "name": "kimi-k2.7-code"
+        },
+        "kimi-k2.6": {
+          "name": "kimi-k2.6"
+        },
+        "qwen3.5:397b": {
+          "name": "qwen3.5:397b"
+        },
+        "glm-5.2": {
+          "name": "glm-5.2"
+        },
+        "glm-5.1": {
+          "name": "glm-5.1"
+        },
+        "nemotron-3-ultra": {
+          "name": "nemotron-3-ultra"
+        },
+        "nemotron-3-super": {
+          "name": "nemotron-3-super"
+        },
+        "gpt-oss:120b": {
+          "name": "gpt-oss:120b"
+        },
+        "gpt-oss:20b": {
+          "name": "gpt-oss:20b"
+        },
+        "mistral-large-3:675b": {
+          "name": "mistral-large-3:675b"
+        },
+        "minimax-m3": {
+          "name": "minimax-m3"
+        },
+        "minimax-m2.7": {
+          "name": "minimax-m2.7"
+        },
+        "gemma4:31b": {
+          "name": "gemma4:31b"
+        },
+        "nemotron-3-nano:30b": {
+          "name": "nemotron-3-nano:30b"
+        }
+      }
+    },
+    "ollama-cloud-dan": {
+      "name": "Ollama Cloud (Dan - Fallback)",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://ollama.com/v1",
+        "apiKey": "{env:OLLAMA_DAN_API_KEY}"
+      },
+      "models": {
+        "deepseek-v4-pro:0813": {
+          "name": "deepseek-v4-pro:0813"
+        },
+        "deepseek-v4-flash:0731": {
+          "name": "deepseek-v4-flash:0731"
+        },
+        "kimi-k3": {
+          "name": "kimi-k3"
+        },
+        "kimi-k2.7-code": {
+          "name": "kimi-k2.7-code"
+        },
+        "kimi-k2.6": {
+          "name": "kimi-k2.6"
+        },
+        "qwen3.5:397b": {
+          "name": "qwen3.5:397b"
+        },
+        "glm-5.2": {
+          "name": "glm-5.2"
+        },
+        "glm-5.1": {
+          "name": "glm-5.1"
+        },
+        "nemotron-3-ultra": {
+          "name": "nemotron-3-ultra"
+        },
+        "nemotron-3-super": {
+          "name": "nemotron-3-super"
+        },
+        "gpt-oss:120b": {
+          "name": "gpt-oss:120b"
+        },
+        "gpt-oss:20b": {
+          "name": "gpt-oss:20b"
+        },
+        "mistral-large-3:675b": {
+          "name": "mistral-large-3:675b"
+        },
+        "minimax-m3": {
+          "name": "minimax-m3"
+        },
+        "minimax-m2.7": {
+          "name": "minimax-m2.7"
+        },
+        "gemma4:31b": {
+          "name": "gemma4:31b"
+        },
+        "nemotron-3-nano:30b": {
+          "name": "nemotron-3-nano:30b"
+        }
       }
     }
   },

@@ -122,8 +122,8 @@ This matrix traces every Business Requirement, Functional Requirement, and Use C
 |----|-------------|--------------|
 | <a name="f17"></a>F17 | The system MUST implement 5 memory tools: `memory_add`, `memory_search`, `memory_get`, `memory_list`, `memory_delete` | Memory Tool Suite · [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-2-memory-read--write-api-critical) |
 | <a name="f18"></a>F18 | The system MUST expose all memory tools via MCP stdio transport | MCP Server · [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-2-memory-read--write-api-critical) |
-| <a name="f19"></a>F19 | The system MUST create Neo4j Memory schema with nodes, SUPERSEDES relationships, and deprecated flags | Neo4j Schema · [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-1-persistent-storage-critical) |
-| <a name="f20"></a>F20 | The system MUST implement federated search across PostgreSQL and Neo4j | Retrieval Pipeline · [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-3-retrieval-pipeline-critical) |
+| <a name="f19"></a>F19 | The system MUST create PostgreSQL graph schema with nodes, SUPERSEDES relationships, and deprecated flags | Graph Schema · [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-1-persistent-storage-critical) |
+| <a name="f20"></a>F20 | The system MUST implement federated search across PostgreSQL episodic and graph tables | Retrieval Pipeline · [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-3-retrieval-pipeline-critical) |
 | <a name="f21"></a>F21 | The system MUST enforce `group_id` CHECK constraint with `^allura-` prefix | Tenant Isolation · [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-6-namespace--tenant-isolation-critical) |
 | <a name="f22"></a>F22 | The system MUST create `proposals` table for SOC2 curator queue | Governance Layer · [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-5-promotion--governance-critical) |
 | <a name="f23"></a>F23 | The system MUST implement agent hooks for session-start read and session-end write | Agent Integration · [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-4-agent-access--orchestration-hooks-critical) |
@@ -139,6 +139,6 @@ This matrix traces every Business Requirement, Functional Requirement, and Use C
 |----|------|------------|--------------|
 | MEMORY-UC1 | Agent Reads Memory Before Task | [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-4-agent-access--orchestration-hooks-critical) | F17, F20, F23 |
 | MEMORY-UC2 | Agent Writes Memory After Decision | [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-4-agent-access--orchestration-hooks-critical) | F17, F23 |
-| MEMORY-UC3 | Federated Search Across PostgreSQL and Neo4j | [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-3-retrieval-pipeline-critical) | F18, F20 |
+| MEMORY-UC3 | Federated Search Across PostgreSQL Episodic and Graph Tables | [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-3-retrieval-pipeline-critical) | F18, F20 |
 | MEMORY-UC4 | Insight Promotion to Knowledge Graph | [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-5-promotion--governance-critical) | F19, F22 |
 | MEMORY-UC5 | Tenant Isolation Enforcement | [MEMORY-READINESS-ASSESSMENT.md](../MEMORY-READINESS-ASSESSMENT.md#layer-6-namespace--tenant-isolation-critical) | F21 |

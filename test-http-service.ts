@@ -7,7 +7,7 @@
  *
  * Prerequisites:
  *   - HTTP server running: `bun src/http-server.ts`
- *   - Allura databases accessible (Postgres + Neo4j)
+ *   - Allura databases accessible (PostgreSQL with governed graph tables)
  *
  * Run:
  *   bun test test-http-service.ts
@@ -91,7 +91,7 @@ describe("Harness HTTP Service", () => {
       const body = await res.json();
       expect(body.status).toBe("healthy");
       expect(body).toHaveProperty("postgres");
-      expect(body).toHaveProperty("neo4j");
+      expect(body).toHaveProperty("graph");
       expect(body).toHaveProperty("uptime_ms");
       expect(typeof body.uptime_ms).toBe("number");
     });
@@ -101,9 +101,9 @@ describe("Harness HTTP Service", () => {
       expect(["healthy", "degraded", "unhealthy"]).toContain(body.postgres);
     });
 
-    it("reports neo4j health", async () => {
+    it("reports graph health", async () => {
       const body = await (await req("/health")).json();
-      expect(["healthy", "degraded", "unhealthy"]).toContain(body.neo4j);
+      expect(["healthy", "degraded", "unhealthy"]).toContain(body.graph);
     });
   });
 
