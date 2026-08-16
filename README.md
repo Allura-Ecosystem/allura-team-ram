@@ -7,6 +7,10 @@
 </p>
 
 <p align="center">
+  <img src="docs/images/allura-team-ram-governed-workflow-v1.png" alt="Abstract Allura Team RAM workflow diagram: a central operating hub connects specialist roles, governance checks, shared memory, and a controlled delivery destination." width="1200" />
+</p>
+
+<p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License" /></a>
   <a href="https://github.com/Allura-Ecosystem/allura-team-ram/actions"><img src="https://img.shields.io/github/actions/workflow/status/Allura-Ecosystem/allura-team-ram/ci.yml?branch=main&label=CI" alt="CI" /></a>
   <a href="https://bun.sh"><img src="https://img.shields.io/badge/runtime-Bun%20%E2%89%A51.1-f9f1e1?logo=bun" alt="Bun" /></a>
@@ -26,6 +30,14 @@
   <a href="docs/presets.md">Presets</a> &middot;
   <a href="docs/quick-reference.md">Quick Reference</a>
 </p>
+
+---
+
+## Part of the Allura Ecosystem
+
+Team RAM is the software-delivery team within the Allura ecosystem. It keeps work routed through defined roles and review boundaries, while [Allura Memory](https://github.com/Allura-Ecosystem/Allura_Memory) provides governed memory and [Allura Plugins](https://github.com/Allura-Ecosystem/allura-plugins) distribute workflow packages. The team remains accountable for the work it performs.
+
+**One team. Clear roles. Governed delivery.**
 
 ---
 
