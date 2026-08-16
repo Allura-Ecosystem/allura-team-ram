@@ -1,8 +1,6 @@
 # ARCHITECTURE.md — Agent Orchestration Framework
 
 **Repository:** allura-team-ram
-**Role framing:** Principal Engineer — Agentic AI Framework
-**Last verified against source:** 2025-08-16
 
 This document describes the architecture of the Team RAM agent orchestration
 framework — a self-evolving, HITL-gated harness that routes work to
