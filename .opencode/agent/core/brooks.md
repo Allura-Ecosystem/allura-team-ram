@@ -9,7 +9,7 @@ path: core
 scope: harness
 platform: Both
 status: active
-model: ollama/glm-5.2:cloud
+model: openai/gpt-5.6-sol
 permission:
   edit: allow
   bash: allow

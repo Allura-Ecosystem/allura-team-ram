@@ -6,7 +6,7 @@ persona: Bahari
 category: Product
 type: memory
 status: active
-model: ollama/nemotron-3-super:cloud
+model: openai/gpt-5.6-luna
 skills:
   - agent-bahari
   - allura-memory-skill
