@@ -1,4 +1,4 @@
-import { describe, test, expect } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import { proposeNewAgent, scanForCoverageGaps } from "./genesis-engine";
 import type { SonaPattern } from "./sona-trajectory";
 
@@ -63,10 +63,7 @@ describe("proposeNewAgent", () => {
 
   test("spec tools include Edit, Write, Bash when task type contains 'build'", () => {
     const taskType = "harness.builder.build-service";
-    const patterns: SonaPattern[] = [
-      makeCoverageGapPattern(taskType),
-      makeFailurePattern("woz"),
-    ];
+    const patterns: SonaPattern[] = [makeCoverageGapPattern(taskType), makeFailurePattern("woz")];
 
     const result = proposeNewAgent(taskType, patterns);
 

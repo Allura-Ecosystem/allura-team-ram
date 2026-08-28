@@ -62,9 +62,13 @@ export async function runSandboxTests(
     agentDef = await Bun.file(agentPath).text();
   } catch {
     return {
-      agentName, taskType: testTasks[0]?.type || "unknown",
-      passRate: 0, avgConfidence: 0, avgDuration: 0,
-      results: [], promotionEligible: false,
+      agentName,
+      taskType: testTasks[0]?.type || "unknown",
+      passRate: 0,
+      avgConfidence: 0,
+      avgDuration: 0,
+      results: [],
+      promotionEligible: false,
       reason: `Agent definition not found: ${agentPath}`,
     };
   }
@@ -72,9 +76,13 @@ export async function runSandboxTests(
   // Verify agent is experimental
   if (!agentDef.includes("status: experimental")) {
     return {
-      agentName, taskType: testTasks[0]?.type || "unknown",
-      passRate: 0, avgConfidence: 0, avgDuration: 0,
-      results: [], promotionEligible: false,
+      agentName,
+      taskType: testTasks[0]?.type || "unknown",
+      passRate: 0,
+      avgConfidence: 0,
+      avgDuration: 0,
+      results: [],
+      promotionEligible: false,
       reason: "Agent is not in experimental status — only experimental agents can be sandboxed",
     };
   }
@@ -104,15 +112,12 @@ export async function runSandboxTests(
     }
   }
 
-  const passRate = results.length > 0
-    ? results.filter((r) => r.success).length / results.length
-    : 0;
-  const avgConfidence = results.length > 0
-    ? results.reduce((s, r) => s + r.confidence, 0) / results.length
-    : 0;
-  const avgDuration = results.length > 0
-    ? results.reduce((s, r) => s + r.duration_ms, 0) / results.length
-    : 0;
+  const passRate =
+    results.length > 0 ? results.filter((r) => r.success).length / results.length : 0;
+  const avgConfidence =
+    results.length > 0 ? results.reduce((s, r) => s + r.confidence, 0) / results.length : 0;
+  const avgDuration =
+    results.length > 0 ? results.reduce((s, r) => s + r.duration_ms, 0) / results.length : 0;
 
   const promotionEligible = passRate >= PROMOTION_THRESHOLD;
 
@@ -169,7 +174,9 @@ export function cognitumGate(
   const allPassed = structural.passed && shift.passed && evidenceCheck.passed;
   const token: GateDecision["token"] = allPassed
     ? "permit"
-    : evidenceCheck.passed ? "deny" : "defer"; // defer if just needs more data
+    : evidenceCheck.passed
+      ? "deny"
+      : "defer"; // defer if just needs more data
 
   return { token, structural, shift, evidence: evidenceCheck };
 }
@@ -213,22 +220,35 @@ function checkShift(
 
   // Max agents check (Brooks's Law — communication overhead)
   if (changeType === "new_agent" && existingAgents.length >= 15) {
-    return { passed: false, reason: "Maximum 15 agents — adding more increases communication overhead (Brooks's Law)" };
+    return {
+      passed: false,
+      reason: "Maximum 15 agents — adding more increases communication overhead (Brooks's Law)",
+    };
   }
 
   return { passed: true, reason: "No conceptual shift detected" };
 }
 
-function checkEvidence(
-  evidence: { trajectoryCount: number; confidence: number; metric: number },
-): { passed: boolean; reason: string } {
+function checkEvidence(evidence: { trajectoryCount: number; confidence: number; metric: number }): {
+  passed: boolean;
+  reason: string;
+} {
   if (evidence.trajectoryCount < 10) {
-    return { passed: false, reason: `Only ${evidence.trajectoryCount} trajectories — need at least 10` };
+    return {
+      passed: false,
+      reason: `Only ${evidence.trajectoryCount} trajectories — need at least 10`,
+    };
   }
   if (evidence.confidence < 0.7) {
-    return { passed: false, reason: `Confidence ${evidence.confidence.toFixed(2)} below threshold (0.7)` };
+    return {
+      passed: false,
+      reason: `Confidence ${evidence.confidence.toFixed(2)} below threshold (0.7)`,
+    };
   }
-  return { passed: true, reason: `${evidence.trajectoryCount} trajectories, confidence ${evidence.confidence.toFixed(2)}` };
+  return {
+    passed: true,
+    reason: `${evidence.trajectoryCount} trajectories, confidence ${evidence.confidence.toFixed(2)}`,
+  };
 }
 
 function commonPrefix(a: string, b: string): string {

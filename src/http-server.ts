@@ -7,21 +7,36 @@
  * Transport & auth live here. Agent execution logic delegated to agent-executor.ts.
  */
 
-import { spawnAgentProcess, mapProcessToAgent } from "./agent-executor";
-import { getTrajectoryStats } from "./sona-trajectory";
-import { onInvocationComplete, getPatternStats, runExtraction } from "./sona-patterns";
-import { recordInvocation, recordDelegation, getCoherenceStatus, isDeploymentAllowed } from "./coherence-monitor";
+import { mapProcessToAgent, spawnAgentProcess } from "./agent-executor";
 import {
-  submitRevision, getPendingRevisions, approveRevision, rejectRevision,
-  submitAgentProposal, getPendingAgentProposals, approveAgentProposal, rejectAgentProposal,
-  getCuratorDashboard,
-} from "./curator";
-import { proposeNewAgent } from "./genesis-engine";
+  getAllAgents,
+  getLifecycleDashboard,
+  initializeRegistry,
+  promoteAgent,
+  recordAgentInvocation,
+  retireAgent,
+} from "./agent-lifecycle";
 import { executeAutoMode } from "./auto-mode";
 import {
-  initializeRegistry, recordAgentInvocation, getLifecycleDashboard,
-  promoteAgent, retireAgent, getAllAgents,
-} from "./agent-lifecycle";
+  getCoherenceStatus,
+  isDeploymentAllowed,
+  recordDelegation,
+  recordInvocation,
+} from "./coherence-monitor";
+import {
+  approveAgentProposal,
+  approveRevision,
+  getCuratorDashboard,
+  getPendingAgentProposals,
+  getPendingRevisions,
+  rejectAgentProposal,
+  rejectRevision,
+  submitAgentProposal,
+  submitRevision,
+} from "./curator";
+import { proposeNewAgent } from "./genesis-engine";
+import { getPatternStats, onInvocationComplete, runExtraction } from "./sona-patterns";
+import { getTrajectoryStats } from "./sona-trajectory";
 
 // ---------------------------------------------------------------------------
 // Types (mirroring Knuth's contract: docs/allura-harness-contract.md)
@@ -66,13 +81,15 @@ interface HealthStatus {
 // ---------------------------------------------------------------------------
 
 const PORT = Number(process.env.HARNESS_PORT) || 7654;
-const API_KEY = process.env.HARNESS_API_KEY || (() => {
-  console.warn(
-    "⚠️  HARNESS_API_KEY not set — using insecure dev key. " +
-    "Set a strong key for production (openssl rand -hex 32)."
-  );
-  return "dev-key-insecure";
-})();
+const API_KEY =
+  process.env.HARNESS_API_KEY ||
+  (() => {
+    console.warn(
+      "⚠️  HARNESS_API_KEY not set — using insecure dev key. " +
+        "Set a strong key for production (openssl rand -hex 32).",
+    );
+    return "dev-key-insecure";
+  })();
 
 const GROUP_ID_PATTERN = /^allura-[a-z0-9-]+$/;
 const startTime = Date.now();
@@ -116,9 +133,7 @@ function validateInvocation(body: unknown): string[] {
   if (!inv.group_id || typeof inv.group_id !== "string") {
     errors.push("group_id is required and must be a string");
   } else if (!GROUP_ID_PATTERN.test(inv.group_id)) {
-    errors.push(
-      `group_id must match pattern ${GROUP_ID_PATTERN} — got "${inv.group_id}"`
-    );
+    errors.push(`group_id must match pattern ${GROUP_ID_PATTERN} — got "${inv.group_id}"`);
   }
 
   return errors;
@@ -167,11 +182,8 @@ loadHarnessModules();
 // Initialize agent lifecycle registry from .opencode/agent/ definitions
 initializeRegistry().catch(() => {});
 
-async function executeInvocation(
-  invocation: ProcessInvocation
-): Promise<AgentResult> {
-  const correlationId =
-    invocation.metadata?.correlation_id ?? crypto.randomUUID();
+async function executeInvocation(invocation: ProcessInvocation): Promise<AgentResult> {
+  const correlationId = invocation.metadata?.correlation_id ?? crypto.randomUUID();
 
   // 1. Static mapping: processName -> agent ID
   const staticAgent = mapProcessToAgent(invocation.processName);
@@ -184,10 +196,7 @@ async function executeInvocation(
         agent_preference: invocation.metadata?.agent_preference,
       });
     } catch (err) {
-      console.warn(
-        `[Executor] Performance router failed, using static agent: ${staticAgent}`,
-        err,
-      );
+      console.warn(`[Executor] Performance router failed, using static agent: ${staticAgent}`, err);
       selectedAgent = staticAgent;
     }
   }
@@ -256,19 +265,21 @@ async function executeInvocation(
 
   // 7. SONA pattern extraction trigger — auto-submit proposals to curator
   //    and trigger genesis engine for coverage gaps
-  onInvocationComplete().then((extraction) => {
-    if (extraction) {
-      for (const proposal of extraction.proposals) {
-        submitRevision(proposal);
-      }
-      // Genesis: propose new agents for coverage gaps
-      for (const pattern of extraction.patterns) {
-        if (pattern.type === "coverage_gap" && pattern.taskType) {
-          proposeNewAgent(pattern.taskType, extraction.patterns);
+  onInvocationComplete()
+    .then((extraction) => {
+      if (extraction) {
+        for (const proposal of extraction.proposals) {
+          submitRevision(proposal);
+        }
+        // Genesis: propose new agents for coverage gaps
+        for (const pattern of extraction.patterns) {
+          if (pattern.type === "coverage_gap" && pattern.taskType) {
+            proposeNewAgent(pattern.taskType, extraction.patterns);
+          }
         }
       }
-    }
-  }).catch(() => {});
+    })
+    .catch(() => {});
 
   // 7. Return typed AgentResult
   return {
@@ -439,14 +450,14 @@ async function handleRequest(req: Request): Promise<Response> {
     }
 
     if (req.method === "POST" && url.pathname === "/lifecycle/promote") {
-      const body = await req.json().catch(() => null) as any;
+      const body = (await req.json().catch(() => null)) as any;
       if (!body?.agentId) return errorResponse(["agentId is required"], 400);
       const result = promoteAgent(body.agentId);
       return jsonResponse(result, result.success ? 200 : 400);
     }
 
     if (req.method === "POST" && url.pathname === "/lifecycle/retire") {
-      const body = await req.json().catch(() => null) as any;
+      const body = (await req.json().catch(() => null)) as any;
       if (!body?.agentId) return errorResponse(["agentId is required"], 400);
       const result = retireAgent(body.agentId, body.reason);
       return jsonResponse(result, result.success ? 200 : 400);
@@ -469,14 +480,16 @@ async function handleRequest(req: Request): Promise<Response> {
     }
 
     if (req.method === "POST" && url.pathname === "/curator/revisions/approve") {
-      const body = await req.json().catch(() => null) as any;
+      const body = (await req.json().catch(() => null)) as any;
       if (!body?.id) return errorResponse(["id is required"], 400);
       const result = approveRevision(body.id, body.notes);
-      return result ? jsonResponse(result) : errorResponse(["Revision not found or not eligible"], 404);
+      return result
+        ? jsonResponse(result)
+        : errorResponse(["Revision not found or not eligible"], 404);
     }
 
     if (req.method === "POST" && url.pathname === "/curator/revisions/reject") {
-      const body = await req.json().catch(() => null) as any;
+      const body = (await req.json().catch(() => null)) as any;
       if (!body?.id) return errorResponse(["id is required"], 400);
       const result = rejectRevision(body.id, body.notes);
       return result ? jsonResponse(result) : errorResponse(["Revision not found"], 404);
@@ -487,14 +500,16 @@ async function handleRequest(req: Request): Promise<Response> {
     }
 
     if (req.method === "POST" && url.pathname === "/curator/agents/approve") {
-      const body = await req.json().catch(() => null) as any;
+      const body = (await req.json().catch(() => null)) as any;
       if (!body?.id) return errorResponse(["id is required"], 400);
       const result = approveAgentProposal(body.id, body.notes);
-      return result ? jsonResponse(result) : errorResponse(["Proposal not found or not eligible"], 404);
+      return result
+        ? jsonResponse(result)
+        : errorResponse(["Proposal not found or not eligible"], 404);
     }
 
     if (req.method === "POST" && url.pathname === "/curator/agents/reject") {
-      const body = await req.json().catch(() => null) as any;
+      const body = (await req.json().catch(() => null)) as any;
       if (!body?.id) return errorResponse(["id is required"], 400);
       const result = rejectAgentProposal(body.id, body.notes);
       return result ? jsonResponse(result) : errorResponse(["Proposal not found"], 404);
@@ -509,7 +524,11 @@ async function handleRequest(req: Request): Promise<Response> {
     if (authError) return errorResponse([authError], 401);
 
     let body: any;
-    try { body = await req.json(); } catch { return errorResponse(["Invalid JSON"], 400); }
+    try {
+      body = await req.json();
+    } catch {
+      return errorResponse(["Invalid JSON"], 400);
+    }
 
     if (!body?.task) return errorResponse(["task is required"], 400);
     if (!body?.group_id || !GROUP_ID_PATTERN.test(body.group_id)) {

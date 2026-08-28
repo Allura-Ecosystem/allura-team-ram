@@ -1,10 +1,10 @@
-import { describe, test, expect } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import {
   beginTrajectory,
-  extractPatterns,
   extractAllPatterns,
-  getTrajectoryStats,
+  extractPatterns,
   forceLearn,
+  getTrajectoryStats,
 } from "./sona-trajectory";
 
 describe("beginTrajectory", () => {
@@ -129,8 +129,18 @@ describe("extractAllPatterns", () => {
 describe("getTrajectoryStats", () => {
   test("returns active=true after trajectories have been recorded", () => {
     // At this point in the test suite we've recorded several trajectories
-    beginTrajectory({ agentId: "stats-check", taskType: "status", group_id: "allura-system" })
-      .complete({ success: true, confidence: 0.8, duration_ms: 10, tokens_in: 0, tokens_out: 0, errors: [] });
+    beginTrajectory({
+      agentId: "stats-check",
+      taskType: "status",
+      group_id: "allura-system",
+    }).complete({
+      success: true,
+      confidence: 0.8,
+      duration_ms: 10,
+      tokens_in: 0,
+      tokens_out: 0,
+      errors: [],
+    });
 
     const stats = getTrajectoryStats();
     expect(stats.active).toBe(true);

@@ -13,8 +13,8 @@
  * Phase F of ARCHITECTURE-SELF-EVOLUTION.md
  */
 
-import { extractPatterns, type SonaPattern } from "./sona-trajectory";
 import { submitAgentProposal } from "./curator";
+import { extractPatterns, type SonaPattern } from "./sona-trajectory";
 
 // ---------------------------------------------------------------------------
 // Agent Definition Template
@@ -149,7 +149,11 @@ Always use \`group_id: "allura-system"\` and \`user_id: "${spec.name}"\`.
  *
  * Returns proposed agent specs (submitted to curator queue).
  */
-export function scanForCoverageGaps(): Array<{ spec: AgentSpec; definition: string; proposalId: number | null }> {
+export function scanForCoverageGaps(): Array<{
+  spec: AgentSpec;
+  definition: string;
+  proposalId: number | null;
+}> {
   const results: Array<{ spec: AgentSpec; definition: string; proposalId: number | null }> = [];
 
   // Get all patterns from SONA
@@ -186,7 +190,11 @@ export function proposeNewAgent(
     taskType,
     `Coverage gap: no agent handles ${taskType} well`,
     {
-      patterns: patterns.map((p) => ({ type: p.type, description: p.description, confidence: p.confidence })),
+      patterns: patterns.map((p) => ({
+        type: p.type,
+        description: p.description,
+        confidence: p.confidence,
+      })),
       inferredSpec: spec,
     },
     gapPattern?.confidence || 0.7,
@@ -196,7 +204,7 @@ export function proposeNewAgent(
 
   console.log(
     `[Genesis] Proposed agent "${spec.name}" for ${taskType}` +
-    (proposalId ? ` — curator proposal #${proposalId}` : " — rejected (max proposals reached)"),
+      (proposalId ? ` — curator proposal #${proposalId}` : " — rejected (max proposals reached)"),
   );
 
   return { spec, definition, proposalId };

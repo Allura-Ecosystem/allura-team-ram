@@ -13,17 +13,14 @@
  */
 
 import { spawnAgentProcess } from "./agent-executor";
-import { beginTrajectory } from "./sona-trajectory";
 import { calculateCoherence } from "./coherence-monitor";
 import {
-  parseContextPacketWithReceipt,
-  type CompactionReceipt,
-} from "./context-packet";
-import {
+  type ContextCheckpoint,
   createContextCheckpoint,
   shouldCompactContext,
-  type ContextCheckpoint,
 } from "./context-checkpoint";
+import { type CompactionReceipt, parseContextPacketWithReceipt } from "./context-packet";
+import { beginTrajectory } from "./sona-trajectory";
 import { planToolLoading } from "./tool-loading";
 
 // ---------------------------------------------------------------------------
@@ -107,7 +104,11 @@ export function normalizeIterationLimit(
   return Math.max(1, Math.min(10, Math.floor(requested ?? defaultLimit)));
 }
 
-export function isTokenBudgetExceeded(tokensIn: number, tokensOut: number, budget: number): boolean {
+export function isTokenBudgetExceeded(
+  tokensIn: number,
+  tokensOut: number,
+  budget: number,
+): boolean {
   return tokensIn + tokensOut >= budget;
 }
 
@@ -148,24 +149,28 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
 
   let scoutReport = "";
   try {
-    const scoutResult = await spawnAgentProcess("scout", {
-      task: `Recon for auto-mode: ${request.task}`,
-      process_name: "auto.recon",
-      output_contract: {
-        version: "1.0",
-        fields: [
-          "goal",
-          "summary",
-          "files",
-          "memories",
-          "risks",
-          "recommended_route",
-          "validation_commands",
-          "token_usage",
-        ],
-        max_output_tokens: 700,
+    const scoutResult = await spawnAgentProcess(
+      "scout",
+      {
+        task: `Recon for auto-mode: ${request.task}`,
+        process_name: "auto.recon",
+        output_contract: {
+          version: "1.0",
+          fields: [
+            "goal",
+            "summary",
+            "files",
+            "memories",
+            "risks",
+            "recommended_route",
+            "validation_commands",
+            "token_usage",
+          ],
+          max_output_tokens: 700,
+        },
       },
-    }, request.group_id);
+      request.group_id,
+    );
 
     const contextResult = parseContextPacketWithReceipt(scoutResult.output);
     if (contextResult?.status === "impossible") {
@@ -237,12 +242,16 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
     // Single pass — route to appropriate agent and execute
     const agentId = mapAutoTaskToAgent(request.task);
     try {
-      const result = await spawnAgentProcess(agentId, {
-        task: request.task,
-        scout_report: scoutReport,
-        tool_load_plan: planToolLoading(request.task, agentId),
-        process_name: "auto.execute",
-      }, request.group_id);
+      const result = await spawnAgentProcess(
+        agentId,
+        {
+          task: request.task,
+          scout_report: scoutReport,
+          tool_load_plan: planToolLoading(request.task, agentId),
+          process_name: "auto.execute",
+        },
+        request.group_id,
+      );
       tokensIn += result.tokens_in ?? 0;
       tokensOut += result.tokens_out ?? 0;
 
@@ -271,15 +280,19 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
       const agentId = i === 0 ? "woz" : mapAutoTaskToAgent(request.task);
 
       try {
-        const result = await spawnAgentProcess(agentId, {
-          task: request.task,
-          scout_report: scoutReport,
-          iteration: i + 1,
-          max_iterations: maxIterations,
-          token_budget_remaining: Math.max(0, tokenBudget - tokensIn - tokensOut),
-          tool_load_plan: planToolLoading(request.task, agentId),
-          process_name: `auto.iterate.${i + 1}`,
-        }, request.group_id);
+        const result = await spawnAgentProcess(
+          agentId,
+          {
+            task: request.task,
+            scout_report: scoutReport,
+            iteration: i + 1,
+            max_iterations: maxIterations,
+            token_budget_remaining: Math.max(0, tokenBudget - tokensIn - tokensOut),
+            tool_load_plan: planToolLoading(request.task, agentId),
+            process_name: `auto.iterate.${i + 1}`,
+          },
+          request.group_id,
+        );
         tokensIn += result.tokens_in ?? 0;
         tokensOut += result.tokens_out ?? 0;
 
@@ -306,7 +319,9 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
         // If task is complete, stop iterating
         if (result.success && result.confidence >= 0.8) {
           terminalState = "success";
-          console.log(`[AUTO] Task complete at iteration ${i + 1} (confidence=${result.confidence})`);
+          console.log(
+            `[AUTO] Task complete at iteration ${i + 1} (confidence=${result.confidence})`,
+          );
           break;
         }
 
@@ -350,7 +365,7 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
 
   console.log(
     `[AUTO] Complete: strategy=${strategy} steps=${stepsExecuted} ` +
-    `success=${success} coherence=${coherence.score.toFixed(2)} duration=${duration_ms}ms`,
+      `success=${success} coherence=${coherence.score.toFixed(2)} duration=${duration_ms}ms`,
   );
 
   return {

@@ -1,11 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import {
-  compactContextPacketWithReceipt,
   CONTEXT_PACKET_MAX_FILES,
   CONTEXT_PACKET_OUTPUT_TOKEN_LIMIT,
+  type ContextPacket,
+  compactContextPacketWithReceipt,
   estimateTokens,
   parseContextPacket,
-  type ContextPacket,
   validateContextPacket,
 } from "./context-packet";
 

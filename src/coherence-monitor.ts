@@ -53,7 +53,8 @@ export interface CoherenceSnapshot {
 
 const nodes: Map<string, NodeStats> = new Map();
 const edges: Map<string, EdgeStats> = new Map(); // key: "from->to"
-const recentDelegations: Array<{ from: string; to: string; taskType: string; timestamp: number }> = [];
+const recentDelegations: Array<{ from: string; to: string; taskType: string; timestamp: number }> =
+  [];
 const MAX_RECENT = 500;
 
 function edgeKey(from: string, to: string): string {
@@ -63,8 +64,12 @@ function edgeKey(from: string, to: string): string {
 function getOrCreateNode(agentId: string): NodeStats {
   if (!nodes.has(agentId)) {
     nodes.set(agentId, {
-      invocations: 0, successes: 0, failures: 0,
-      avgDuration: 0, totalDuration: 0, taskTypes: new Set(),
+      invocations: 0,
+      successes: 0,
+      failures: 0,
+      avgDuration: 0,
+      totalDuration: 0,
+      taskTypes: new Set(),
     });
   }
   return nodes.get(agentId)!;
@@ -74,7 +79,11 @@ function getOrCreateEdge(from: string, to: string): EdgeStats {
   const key = edgeKey(from, to);
   if (!edges.has(key)) {
     edges.set(key, {
-      delegations: 0, successes: 0, failures: 0, bounces: 0, lastSeen: "",
+      delegations: 0,
+      successes: 0,
+      failures: 0,
+      bounces: 0,
+      lastSeen: "",
     });
   }
   return edges.get(key)!;
@@ -98,7 +107,8 @@ export function recordInvocation(
   node.totalDuration += duration_ms;
   node.avgDuration = node.totalDuration / node.invocations;
   node.taskTypes.add(taskType);
-  if (success) node.successes++; else node.failures++;
+  if (success) node.successes++;
+  else node.failures++;
 }
 
 /**
@@ -114,16 +124,23 @@ export function recordDelegation(
   const edge = getOrCreateEdge(fromAgent, toAgent);
   edge.delegations++;
   edge.lastSeen = new Date().toISOString();
-  if (success) edge.successes++; else edge.failures++;
+  if (success) edge.successes++;
+  else edge.failures++;
 
   // Detect bounces: if recent history shows to->from delegation for same task type
   const now = Date.now();
   const recentBounce = recentDelegations.find(
-    (d) => d.from === toAgent && d.to === fromAgent && d.taskType === taskType && now - d.timestamp < 60_000,
+    (d) =>
+      d.from === toAgent &&
+      d.to === fromAgent &&
+      d.taskType === taskType &&
+      now - d.timestamp < 60_000,
   );
   if (recentBounce) {
     edge.bounces++;
-    console.log(`[Coherence] Bounce detected: ${fromAgent} → ${toAgent} → ${fromAgent} on ${taskType}`);
+    console.log(
+      `[Coherence] Bounce detected: ${fromAgent} → ${toAgent} → ${fromAgent} on ${taskType}`,
+    );
   }
 
   // Track recent delegations
@@ -153,9 +170,15 @@ export function calculateCoherence(): CoherenceSnapshot {
 
   if (nodes.size === 0) {
     return {
-      timestamp, score: 1.0, level: "green",
-      nodeCount: 0, edgeCount: 0, bounceRate: 0,
-      isolatedNodes: [], weakEdges: [], recommendations: [],
+      timestamp,
+      score: 1.0,
+      level: "green",
+      nodeCount: 0,
+      edgeCount: 0,
+      bounceRate: 0,
+      isolatedNodes: [],
+      weakEdges: [],
+      recommendations: [],
     };
   }
 
@@ -220,31 +243,44 @@ export function calculateCoherence(): CoherenceSnapshot {
   const overlapScore = totalTaskTypes > 0 ? 1 - overlapCount / totalTaskTypes : 1.0;
 
   // Weighted score
-  const score = Math.max(0, Math.min(1,
-    successRate * 0.4 +
-    connectivity * 0.3 +
-    bounceScore * 0.2 +
-    overlapScore * 0.1,
-  ));
+  const score = Math.max(
+    0,
+    Math.min(1, successRate * 0.4 + connectivity * 0.3 + bounceScore * 0.2 + overlapScore * 0.1),
+  );
 
   const level: CoherenceSnapshot["level"] =
-    score >= GREEN_THRESHOLD ? "green" :
-    score >= YELLOW_THRESHOLD ? "yellow" : "red";
+    score >= GREEN_THRESHOLD ? "green" : score >= YELLOW_THRESHOLD ? "yellow" : "red";
 
   // Recommendations
   const recommendations: string[] = [];
-  if (successRate < 0.7) recommendations.push(`Overall success rate is ${(successRate * 100).toFixed(0)}% — investigate failing agents`);
-  if (isolatedNodes.length > 0) recommendations.push(`Isolated agents (no delegation edges): ${isolatedNodes.join(", ")}`);
-  if (bounceRate > 0.1) recommendations.push(`Bounce rate ${(bounceRate * 100).toFixed(0)}% — routing may be misassigning tasks`);
+  if (successRate < 0.7)
+    recommendations.push(
+      `Overall success rate is ${(successRate * 100).toFixed(0)}% — investigate failing agents`,
+    );
+  if (isolatedNodes.length > 0)
+    recommendations.push(`Isolated agents (no delegation edges): ${isolatedNodes.join(", ")}`);
+  if (bounceRate > 0.1)
+    recommendations.push(
+      `Bounce rate ${(bounceRate * 100).toFixed(0)}% — routing may be misassigning tasks`,
+    );
   for (const weak of weakEdges) {
-    recommendations.push(`Weak edge ${weak.from}→${weak.to}: ${(weak.failureRate * 100).toFixed(0)}% failure rate`);
+    recommendations.push(
+      `Weak edge ${weak.from}→${weak.to}: ${(weak.failureRate * 100).toFixed(0)}% failure rate`,
+    );
   }
-  if (overlapCount > 0) recommendations.push(`${overlapCount} task types have >2 agents — possible role drift`);
+  if (overlapCount > 0)
+    recommendations.push(`${overlapCount} task types have >2 agents — possible role drift`);
 
   return {
-    timestamp, score, level,
-    nodeCount: nodes.size, edgeCount: edges.size, bounceRate,
-    isolatedNodes, weakEdges, recommendations,
+    timestamp,
+    score,
+    level,
+    nodeCount: nodes.size,
+    edgeCount: edges.size,
+    bounceRate,
+    isolatedNodes,
+    weakEdges,
+    recommendations,
   };
 }
 

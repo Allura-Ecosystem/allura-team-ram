@@ -80,7 +80,13 @@ const taskTypeStats: Map<string, Map<string, AgentStats>> = new Map();
 
 function getOrCreateStats(key: string, store: Map<string, AgentStats>): AgentStats {
   if (!store.has(key)) {
-    store.set(key, { totalTasks: 0, successes: 0, failures: 0, totalDuration: 0, errorTypes: new Map() });
+    store.set(key, {
+      totalTasks: 0,
+      successes: 0,
+      failures: 0,
+      totalDuration: 0,
+      errorTypes: new Map(),
+    });
   }
   return store.get(key)!;
 }
@@ -90,9 +96,12 @@ function recordStats(agentId: string, taskType: string, outcome: TrajectoryOutco
   const as = getOrCreateStats(agentId, agentStats);
   as.totalTasks++;
   as.totalDuration += outcome.duration_ms;
-  if (outcome.success) { as.successes++; } else {
+  if (outcome.success) {
+    as.successes++;
+  } else {
     as.failures++;
-    if (outcome.errorType) as.errorTypes.set(outcome.errorType, (as.errorTypes.get(outcome.errorType) || 0) + 1);
+    if (outcome.errorType)
+      as.errorTypes.set(outcome.errorType, (as.errorTypes.get(outcome.errorType) || 0) + 1);
   }
 
   // Per-taskType per-agent
@@ -101,9 +110,12 @@ function recordStats(agentId: string, taskType: string, outcome: TrajectoryOutco
   const ts = getOrCreateStats(agentId, tm);
   ts.totalTasks++;
   ts.totalDuration += outcome.duration_ms;
-  if (outcome.success) { ts.successes++; } else {
+  if (outcome.success) {
+    ts.successes++;
+  } else {
     ts.failures++;
-    if (outcome.errorType) ts.errorTypes.set(outcome.errorType, (ts.errorTypes.get(outcome.errorType) || 0) + 1);
+    if (outcome.errorType)
+      ts.errorTypes.set(outcome.errorType, (ts.errorTypes.get(outcome.errorType) || 0) + 1);
   }
 }
 
@@ -197,9 +209,9 @@ export function beginTrajectory(ctx: TrajectoryContext) {
 
       console.log(
         `[SONA] Trajectory ${trajectoryId}: agent=${ctx.agentId} ` +
-        `task=${ctx.taskType} success=${outcome.success} ` +
-        `confidence=${outcome.confidence} duration=${outcome.duration_ms}ms` +
-        (native ? " [native]" : " [ts]"),
+          `task=${ctx.taskType} success=${outcome.success} ` +
+          `confidence=${outcome.confidence} duration=${outcome.duration_ms}ms` +
+          (native ? " [native]" : " [ts]"),
       );
 
       return record;
@@ -243,7 +255,8 @@ export function extractPatterns(agentIdOrTaskType: string): SonaPattern[] {
       patterns.push({
         type: "repeated_failure",
         agentId: agentIdOrTaskType,
-        description: `Agent ${agentIdOrTaskType} has ${(successRate * 100).toFixed(0)}% success rate over ${as.totalTasks} tasks` +
+        description:
+          `Agent ${agentIdOrTaskType} has ${(successRate * 100).toFixed(0)}% success rate over ${as.totalTasks} tasks` +
           (topError ? `. Top error: ${topError[0]} (${topError[1]}x)` : ""),
         confidence: Math.min(0.9, as.totalTasks / 20),
         evidence: { trajectoryCount: as.totalTasks, metric: successRate },
@@ -340,7 +353,10 @@ export function extractAllPatterns(): SonaPattern[] {
     const patterns = extractPatterns(agentId);
     for (const p of patterns) {
       const key = `${p.type}:${p.agentId}:${p.taskType || ""}`;
-      if (!seen.has(key)) { seen.add(key); allPatterns.push(p); }
+      if (!seen.has(key)) {
+        seen.add(key);
+        allPatterns.push(p);
+      }
     }
   }
 
@@ -348,7 +364,10 @@ export function extractAllPatterns(): SonaPattern[] {
     const patterns = extractPatterns(taskType);
     for (const p of patterns) {
       const key = `${p.type}:${p.agentId}:${p.taskType || ""}`;
-      if (!seen.has(key)) { seen.add(key); allPatterns.push(p); }
+      if (!seen.has(key)) {
+        seen.add(key);
+        allPatterns.push(p);
+      }
     }
   }
 
@@ -381,7 +400,9 @@ export function forceLearn(): boolean {
       _nativeEngine.forceLearn();
       _nativeEngine.flush();
       return true;
-    } catch { return false; }
+    } catch {
+      return false;
+    }
   }
   return false;
 }

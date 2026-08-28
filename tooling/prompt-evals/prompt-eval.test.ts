@@ -1,17 +1,18 @@
 import { describe, expect, test } from "bun:test";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
   collectPromptSnapshot,
   comparePromptSnapshots,
   evaluatePromptResult,
   loadFixtures,
-  runPromptEvalFixtures,
   type PromptEvalAdapter,
   type PromptEvalResult,
+  runPromptEvalFixtures,
 } from "./prompt-eval";
 
 const repoRoot = join(import.meta.dir, "../..");
-const durhamRoot = join(repoRoot, "../allura-plugins/team-durham");
 const fixturePath = join(import.meta.dir, "fixtures.json");
 
 describe("prompt evaluator", () => {
@@ -24,11 +25,24 @@ describe("prompt evaluator", () => {
     expect(snapshot.totals.prompt_tokens).toBeGreaterThan(0);
   });
 
-  test("collects Durham agents and its lazy skill catalog", async () => {
-    const snapshot = await collectPromptSnapshot(durhamRoot);
-    expect(snapshot.prompts.map((prompt) => prompt.id)).toContain("scout-recon");
-    expect(snapshot.catalog.skills).toBeGreaterThan(70);
-    expect(snapshot.totals.catalog_description_tokens).toBeGreaterThan(0);
+  test("collects a plugin-style agent layout without another checkout", async () => {
+    const root = await mkdtemp(join(tmpdir(), "durham-prompt-eval-"));
+    try {
+      await mkdir(join(root, "agents"), { recursive: true });
+      await mkdir(join(root, "skills", "brand-loop"), { recursive: true });
+      await writeFile(join(root, "agents", "scout-recon.md"), "# Scout\n", "utf8");
+      await writeFile(
+        join(root, "skills", "brand-loop", "SKILL.md"),
+        "---\nname: brand-loop\ndescription: Run bounded brand work.\n---\n# Brand\n",
+        "utf8",
+      );
+      const snapshot = await collectPromptSnapshot(root);
+      expect(snapshot.prompts.map((prompt) => prompt.id)).toContain("scout-recon");
+      expect(snapshot.catalog.skills).toBe(1);
+      expect(snapshot.totals.catalog_description_tokens).toBeGreaterThan(0);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 
   test("compares prompt snapshots deterministically", async () => {

@@ -140,7 +140,10 @@ export async function loadAgentDefinition(agentId: string): Promise<string> {
     if (lines[0]?.trim() === "---") {
       const endIdx = lines.findIndex((line, i) => i > 0 && line.trim() === "---");
       if (endIdx > 0) {
-        return lines.slice(endIdx + 1).join("\n").trim();
+        return lines
+          .slice(endIdx + 1)
+          .join("\n")
+          .trim();
       }
     }
 
@@ -201,10 +204,11 @@ async function callAnthropicAPI(
     }
 
     const data = await res.json();
-    const text = data.content
-      ?.filter((block: any) => block.type === "text")
-      .map((block: any) => block.text)
-      .join("\n") || "";
+    const text =
+      data.content
+        ?.filter((block: any) => block.type === "text")
+        .map((block: any) => block.text)
+        .join("\n") || "";
 
     return {
       text,

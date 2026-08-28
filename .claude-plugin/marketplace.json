@@ -18,14 +18,7 @@
         "name": "Team RAM Contributors"
       },
       "license": "MIT",
-      "keywords": [
-        "harness",
-        "multi-agent",
-        "orchestration",
-        "team-ram",
-        "allura",
-        "governance"
-      ],
+      "keywords": ["harness", "multi-agent", "orchestration", "team-ram", "allura", "governance"],
       "category": "Coding"
     }
   ]

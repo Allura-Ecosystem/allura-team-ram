@@ -1,14 +1,14 @@
-import { describe, test, expect } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import {
-  submitRevision,
-  getPendingRevisions,
+  approveAgentProposal,
   approveRevision,
+  getCuratorDashboard,
+  getPendingAgentProposals,
+  getPendingRevisions,
+  rejectAgentProposal,
   rejectRevision,
   submitAgentProposal,
-  getPendingAgentProposals,
-  approveAgentProposal,
-  rejectAgentProposal,
-  getCuratorDashboard,
+  submitRevision,
 } from "./curator";
 import type { SkillRevisionProposal } from "./sona-patterns";
 
