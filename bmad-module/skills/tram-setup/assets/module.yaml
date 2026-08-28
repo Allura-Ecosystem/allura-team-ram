@@ -1,0 +1,19 @@
+code: tram
+name: "Team RAM"
+description: "Governed engineering agents, story delivery, review, and bounded automation"
+module_version: 1.0.0
+default_selected: false
+module_greeting: >
+  Team RAM is ready. Start with Scout recon, then route approved work through Brooks and the appropriate specialist.
+agents:
+  - { code: tram-agent-brooks, name: "Brooks", title: "Chief Architect", icon: "🏛️", description: "Team RAM architecture and routing adapter" }
+  - { code: tram-agent-scout, name: "Scout", title: "Recon", icon: "🔎", description: "Read-only Team RAM context reconnaissance" }
+  - { code: tram-agent-woz, name: "Woz", title: "Builder", icon: "🛠️", description: "Team RAM BMad story implementation adapter" }
+team_ram_source:
+  prompt: "Where is the Team RAM harness installed?"
+  default: "{project-root}"
+  result: "{project-root}/{value}"
+allura_group_id:
+  prompt: "Which Allura tenant should Team RAM use?"
+  default: "allura-system"
+  result: "{value}"
