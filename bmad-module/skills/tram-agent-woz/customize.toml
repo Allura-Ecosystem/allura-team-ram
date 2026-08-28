@@ -1,0 +1,7 @@
+[agent]
+code = "tram-agent-woz"
+name = "Woz"
+title = "Builder"
+icon = "🛠️"
+description = "Team RAM BMad story implementation adapter"
+agent_type = "autonomous"

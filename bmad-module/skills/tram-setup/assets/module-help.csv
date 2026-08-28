@@ -1,0 +1,8 @@
+module,skill,display-name,menu-code,description,action,args,phase,preceded-by,followed-by,required,output-location,outputs
+Team RAM,tram-setup,Setup Team RAM Module,TS,"Register Team RAM BMad module configuration and help entries.",configure,"{-H: headless mode}",anytime,,,false,{project-root}/_bmad,config.yaml and module-help.csv
+Team RAM,tram-agent-brooks,Activate Brooks,TB,"Route architecture and governed engineering work through Brooks.",activate,,anytime,,,false,,architecture decision
+Team RAM,tram-agent-scout,Scout Recon,TC,"Find bounded repository and Allura context before work.",recon,"{task: scoped request}",before-build,,,true,,ContextPacket
+Team RAM,tram-agent-woz,Build Story,TW,"Implement one approved BMad story through the Team RAM builder.",build,"{story: story path or identifier}",build,tram-agent-scout:recon,tram-quality-gate:review,true,,verified change set
+Team RAM,tram-story-delivery,Deliver Story,TD,"Run BMad story creation, build, verification, and evidence receipt.",deliver,"{story: story path or identifier}",delivery,tram-agent-scout:recon,tram-quality-gate:review,true,,story evidence
+Team RAM,tram-quality-gate,Review and Validate,TR,"Run Pike/Fowler review and explicit validation on the current diff.",review,"{scope: diff or story}",review,tram-story-delivery:deliver,,true,,review verdict and checks
+Team RAM,tram-auto,Bounded Auto,TA,"Run bounded Team RAM Auto Mode with token and HITL limits.",auto,"{task: approved task}",anytime,tram-agent-scout:recon,,false,,terminal state and receipt

@@ -1,0 +1,26 @@
+{
+  "name": "team-ram-bmad-module",
+  "owner": { "name": "Allura Ecosystem" },
+  "license": "MIT",
+  "homepage": "https://github.com/Allura-Ecosystem/allura-team-ram",
+  "repository": "https://github.com/Allura-Ecosystem/allura-team-ram",
+  "keywords": ["bmad", "team-ram", "allura", "engineering", "agents"],
+  "plugins": [
+    {
+      "name": "team-ram-bmad-module",
+      "source": "./",
+      "description": "BMad module adapter for Team RAM governed engineering agents and workflows.",
+      "version": "1.0.0",
+      "author": { "name": "Allura Ecosystem" },
+      "skills": [
+        "./skills/tram-setup",
+        "./skills/tram-agent-brooks",
+        "./skills/tram-agent-scout",
+        "./skills/tram-agent-woz",
+        "./skills/tram-story-delivery",
+        "./skills/tram-quality-gate",
+        "./skills/tram-auto"
+      ]
+    }
+  ]
+}
