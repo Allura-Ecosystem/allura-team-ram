@@ -67,7 +67,9 @@ let _loaded = false;
 async function ensureStateDir(): Promise<void> {
   try {
     await Bun.write(resolve(STATE_DIR, ".keep"), "");
-  } catch { /* dir may already exist */ }
+  } catch {
+    /* dir may already exist */
+  }
 }
 
 async function loadState(): Promise<void> {
@@ -80,7 +82,9 @@ async function loadState(): Promise<void> {
     _nextAgentProposalId = state.nextAgentProposalId || 1;
     for (const r of state.revisions || []) revisions.set(r.id, r);
     for (const p of state.agentProposals || []) agentProposals.set(p.id, p);
-    console.log(`[Curator] Loaded state: ${revisions.size} revisions, ${agentProposals.size} agent proposals`);
+    console.log(
+      `[Curator] Loaded state: ${revisions.size} revisions, ${agentProposals.size} agent proposals`,
+    );
   } catch {
     console.log("[Curator] No existing state file — starting fresh");
   }
@@ -114,7 +118,7 @@ export function submitRevision(proposal: SkillRevisionProposal): StoredRevision 
 
   // Coherence gate check
   const deployment = isDeploymentAllowed();
-  const gate_status = deployment.allowed ? "passed" as const : "rejected" as const;
+  const gate_status = deployment.allowed ? ("passed" as const) : ("rejected" as const);
 
   const revision: StoredRevision = {
     id,
@@ -127,7 +131,9 @@ export function submitRevision(proposal: SkillRevisionProposal): StoredRevision 
   if (!deployment.allowed) {
     console.log(`[Curator] Revision #${id} rejected by coherence gate: ${deployment.reason}`);
   } else {
-    console.log(`[Curator] Revision #${id} passed coherence gate (score=${deployment.score.toFixed(2)}), awaiting curator review`);
+    console.log(
+      `[Curator] Revision #${id} passed coherence gate (score=${deployment.score.toFixed(2)}), awaiting curator review`,
+    );
   }
 
   revisions.set(id, revision);
@@ -234,7 +240,9 @@ export function submitAgentProposal(
 
   agentProposals.set(id, proposal);
   saveState().catch(() => {});
-  console.log(`[Curator] Agent proposal #${id}: ${agentName} for ${taskType} — gate=${proposal.gate_status}`);
+  console.log(
+    `[Curator] Agent proposal #${id}: ${agentName} for ${taskType} — gate=${proposal.gate_status}`,
+  );
   return proposal;
 }
 

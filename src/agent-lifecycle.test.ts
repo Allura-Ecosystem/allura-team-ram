@@ -1,16 +1,16 @@
-import { describe, test, expect } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import {
-  registerAgent,
-  promoteAgent,
-  retireAgent,
-  recordAgentInvocation,
   findRetirementCandidates,
+  getActiveAgents,
   getAgent,
   getAllAgents,
-  getActiveAgents,
   getExperimentalAgents,
-  getLifecycleEvents,
   getLifecycleDashboard,
+  getLifecycleEvents,
+  promoteAgent,
+  recordAgentInvocation,
+  registerAgent,
+  retireAgent,
 } from "./agent-lifecycle";
 
 // Agent registry is module-level and accumulates across tests.

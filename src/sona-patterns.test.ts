@@ -1,5 +1,5 @@
-import { describe, test, expect } from "bun:test";
-import { onInvocationComplete, runExtraction, getPatternStats } from "./sona-patterns";
+import { describe, expect, test } from "bun:test";
+import { getPatternStats, onInvocationComplete, runExtraction } from "./sona-patterns";
 
 // NOTE: sona-patterns uses a module-level counter (_invocationCount) that
 // persists across test calls. Tests are written to tolerate accumulated state

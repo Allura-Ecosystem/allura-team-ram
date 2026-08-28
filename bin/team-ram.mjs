@@ -9,7 +9,7 @@
  * Dependency-free ESM (node: builtins only) so it runs under both `npx` and
  * `bunx` without a toolchain.
  */
-import { existsSync, mkdirSync, readdirSync, statSync, copyFileSync, readFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -81,12 +81,11 @@ function copyTree(srcTree, targetRoot, force, tally) {
 }
 
 function init(opts) {
-  const selected =
-    opts.runtime === "all"
-      ? Object.values(RUNTIMES).flat()
-      : RUNTIMES[opts.runtime];
+  const selected = opts.runtime === "all" ? Object.values(RUNTIMES).flat() : RUNTIMES[opts.runtime];
   if (!selected) {
-    console.error(`Unknown runtime "${opts.runtime}". Choose one of: ${Object.keys(RUNTIMES).join(", ")}, all`);
+    console.error(
+      `Unknown runtime "${opts.runtime}". Choose one of: ${Object.keys(RUNTIMES).join(", ")}, all`,
+    );
     process.exit(2);
   }
 
@@ -96,7 +95,9 @@ function init(opts) {
 
   console.log(`  wrote   ${tally.written.length} file(s)`);
   if (tally.skipped.length) {
-    console.log(`  skipped ${tally.skipped.length} existing file(s) — re-run with --force to overwrite`);
+    console.log(
+      `  skipped ${tally.skipped.length} existing file(s) — re-run with --force to overwrite`,
+    );
   }
   if (tally.broken.length) {
     console.log(`  ⚠ ${tally.broken.length} dangling symlink(s) skipped (not copied):`);

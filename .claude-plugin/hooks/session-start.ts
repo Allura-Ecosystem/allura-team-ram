@@ -74,5 +74,5 @@ console.log(
       hookEventName: "SessionStart",
       additionalContext: brooksProtocol,
     },
-  })
+  }),
 );

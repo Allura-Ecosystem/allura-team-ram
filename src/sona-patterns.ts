@@ -154,8 +154,8 @@ export async function runExtraction(): Promise<ExtractionResult> {
   for (const p of patterns) {
     console.log(
       `[SONA-Patterns]   ${p.type}: ${p.agentId}` +
-      (p.taskType ? ` (${p.taskType})` : "") +
-      ` confidence=${p.confidence.toFixed(2)} — ${p.description}`,
+        (p.taskType ? ` (${p.taskType})` : "") +
+        ` confidence=${p.confidence.toFixed(2)} — ${p.description}`,
     );
   }
 

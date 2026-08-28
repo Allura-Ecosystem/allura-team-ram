@@ -6,7 +6,7 @@
  * and performs a health check on the memory stack (PostgreSQL + Neo4j).
  */
 
-import { memory_add } from 'mcp:allura-memory';
+import { memory_add, memory_search } from "mcp:allura-memory";
 
 export interface SessionStartParams {
   agentId: string;

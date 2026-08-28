@@ -86,17 +86,17 @@
       "type": "object",
       "description": "Map of agent names to their model configurations in a preset",
       "properties": {
-        "brooks":      { "$ref": "#/definitions/agentConfig" },
-        "jobs":        { "$ref": "#/definitions/agentConfig" },
-        "bahari":      { "$ref": "#/definitions/agentConfig" },
-        "scout":       { "$ref": "#/definitions/agentConfig" },
-        "woz":         { "$ref": "#/definitions/agentConfig" },
-        "bellard":     { "$ref": "#/definitions/agentConfig" },
-        "carmack":     { "$ref": "#/definitions/agentConfig" },
-        "pike":        { "$ref": "#/definitions/agentConfig" },
-        "fowler":      { "$ref": "#/definitions/agentConfig" },
-        "knuth":       { "$ref": "#/definitions/agentConfig" },
-        "hightower":   { "$ref": "#/definitions/agentConfig" }
+        "brooks": { "$ref": "#/definitions/agentConfig" },
+        "jobs": { "$ref": "#/definitions/agentConfig" },
+        "bahari": { "$ref": "#/definitions/agentConfig" },
+        "scout": { "$ref": "#/definitions/agentConfig" },
+        "woz": { "$ref": "#/definitions/agentConfig" },
+        "bellard": { "$ref": "#/definitions/agentConfig" },
+        "carmack": { "$ref": "#/definitions/agentConfig" },
+        "pike": { "$ref": "#/definitions/agentConfig" },
+        "fowler": { "$ref": "#/definitions/agentConfig" },
+        "knuth": { "$ref": "#/definitions/agentConfig" },
+        "hightower": { "$ref": "#/definitions/agentConfig" }
       }
     },
     "agentConfig": {

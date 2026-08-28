@@ -16,7 +16,7 @@
  * After S2, all tests should pass.
  */
 
-import { describe, it, expect, beforeAll } from "bun:test";
+import { beforeAll, describe, expect, it } from "bun:test";
 
 // ---------------------------------------------------------------------------
 // Config
@@ -36,10 +36,7 @@ const authedHeaders = {
 // ---------------------------------------------------------------------------
 
 /** Fetch with an AbortSignal timeout so no test hangs forever. */
-async function req(
-  path: string,
-  init?: RequestInit,
-): Promise<Response> {
+async function req(path: string, init?: RequestInit): Promise<Response> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
@@ -230,9 +227,7 @@ describe("Harness HTTP Service", () => {
 
       // If wiring is not complete yet, 501 is acceptable
       if (res.status === 501) {
-        console.log(
-          "  [info] /invoke returned 501 — executor not wired yet (expected before S2)",
-        );
+        console.log("  [info] /invoke returned 501 — executor not wired yet (expected before S2)");
         return;
       }
 
@@ -263,9 +258,7 @@ describe("Harness HTTP Service", () => {
       });
 
       if (res.status === 501) {
-        console.log(
-          "  [info] /invoke returned 501 — executor not wired yet (expected before S2)",
-        );
+        console.log("  [info] /invoke returned 501 — executor not wired yet (expected before S2)");
         return;
       }
 

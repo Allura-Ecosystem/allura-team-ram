@@ -1,10 +1,6 @@
 {
   "$comment": "SINGLE SOURCE OF TRUTH for agent bodies = .opencode/agent/core/*.md. The .claude/agents/*.md (Markdown) and .codex/agents/*.toml (TOML) files are GENERATED mirrors. Team RAM runs on THREE runtimes: codex, opencode, claude. The ONLY legitimate per-runtime differences are (a) the model and (b) the file format. Never hand-edit a mirror. Run sync-agents.mjs after editing a source agent; CI runs --check and fails on drift.",
-  "runtimes": [
-    "codex",
-    "opencode",
-    "claude"
-  ],
+  "runtimes": ["codex", "opencode", "claude"],
   "formats": {
     "codex": ".codex/agents/<name>.toml",
     "opencode": ".opencode/agent/core/<name>.md",

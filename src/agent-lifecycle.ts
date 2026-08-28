@@ -61,7 +61,7 @@ export async function initializeRegistry(): Promise<void> {
 
       // Extract status from frontmatter
       const statusMatch = content.match(/^status:\s*(\w+)/m);
-      const status = statusMatch?.[1] as AgentVersion["status"] || "active";
+      const status = (statusMatch?.[1] as AgentVersion["status"]) || "active";
 
       if (!agents.has(name)) {
         agents.set(name, {
@@ -127,14 +127,19 @@ export function promoteAgent(agentId: string): {
 } {
   const agent = agents.get(agentId);
   if (!agent) return { success: false, reason: `Agent "${agentId}" not found` };
-  if (agent.status !== "experimental") return { success: false, reason: `Agent is ${agent.status}, not experimental` };
+  if (agent.status !== "experimental")
+    return { success: false, reason: `Agent is ${agent.status}, not experimental` };
 
   // Run cognitum gate
   const existingAgents = [...agents.keys()];
   const gate = cognitumGate(
     "new_agent",
     agentId,
-    { trajectoryCount: agent.totalInvocations, confidence: agent.successRate, metric: agent.successRate },
+    {
+      trajectoryCount: agent.totalInvocations,
+      confidence: agent.successRate,
+      metric: agent.successRate,
+    },
     existingAgents,
   );
 
@@ -158,13 +163,16 @@ export function promoteAgent(agentId: string): {
   }
 
   console.log(`[Lifecycle] Agent promoted: ${agentId} v${agent.version} (active, ε=0.3)`);
-  return { success: true, agent, gate };
+  return { success: true, agent, gate, reason: "Promoted after Cognitum gate permit" };
 }
 
 /**
  * Retire an underperforming or superseded agent.
  */
-export function retireAgent(agentId: string, reason?: string): {
+export function retireAgent(
+  agentId: string,
+  reason?: string,
+): {
   success: boolean;
   agent?: AgentVersion;
   reason: string;
@@ -184,7 +192,9 @@ export function retireAgent(agentId: string, reason?: string): {
 
   logEvent("AGENT_RETIRED", agentId, agent.version, { reason: reason || "underperformance" });
 
-  console.log(`[Lifecycle] Agent retired: ${agentId} v${agent.version} — ${reason || "underperformance"}`);
+  console.log(
+    `[Lifecycle] Agent retired: ${agentId} v${agent.version} — ${reason || "underperformance"}`,
+  );
   return { success: true, agent, reason: reason || "underperformance" };
 }
 
@@ -219,7 +229,12 @@ export function findRetirementCandidates(): AgentVersion[] {
 // Event Logging
 // ---------------------------------------------------------------------------
 
-function logEvent(type: LifecycleEvent["type"], agentId: string, version: number, metadata: Record<string, unknown>) {
+function logEvent(
+  type: LifecycleEvent["type"],
+  agentId: string,
+  version: number,
+  metadata: Record<string, unknown>,
+) {
   lifecycleEvents.push({
     type,
     agentId,

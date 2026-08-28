@@ -24,8 +24,8 @@
  * NOTE: not yet run end-to-end (authored while the shell was unavailable). Run once and eyeball
  * the first generated mirror before trusting the batch — esp. the TOML escaping below.
  */
-import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from "node:fs";
-import { dirname, join, resolve, basename } from "node:path";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -36,10 +36,12 @@ const CODEX_DIR = join(HARNESS_ROOT, ".codex", "agents");
 const MAP = JSON.parse(readFileSync(join(__dirname, "models.map.json"), "utf8"));
 
 const APPLY = process.argv.includes("--apply"); // write the mirrors
-const CI = process.argv.includes("--check");    // CI gate: read-only, exit 1 on drift
+const CI = process.argv.includes("--check"); // CI gate: read-only, exit 1 on drift
 // SAFE BY DEFAULT: with neither flag this is a DRY RUN (reports, writes nothing).
-const MD_BANNER = "<!-- GENERATED — DO NOT EDIT. Source: .opencode/agent/core/%NAME%.md · regen: tooling/agent-sync/sync-agents.mjs -->";
-const TOML_BANNER = "# GENERATED — DO NOT EDIT. Source: .opencode/agent/core/%NAME%.md · regen: tooling/agent-sync/sync-agents.mjs";
+const MD_BANNER =
+  "<!-- GENERATED — DO NOT EDIT. Source: .opencode/agent/core/%NAME%.md · regen: tooling/agent-sync/sync-agents.mjs -->";
+const TOML_BANNER =
+  "# GENERATED — DO NOT EDIT. Source: .opencode/agent/core/%NAME%.md · regen: tooling/agent-sync/sync-agents.mjs";
 const CLAUDE_DEFAULT_TOOLS = ["Read", "Grep", "Glob", "Bash", "Edit", "Write", "Skill", "Task"];
 
 let drift = 0;
@@ -50,14 +52,26 @@ function split(md) {
   if (!m) throw new Error("no frontmatter");
   return { fm: m[1], body: m[2] };
 }
-const fmGet = (fm, k) => { const m = fm.match(new RegExp(`^${k}:\\s*(.+)$`, "m")); return m ? m[1].trim().replace(/^["']|["']$/g, "") : undefined; };
-const fmSet = (fm, k, v) => new RegExp(`^${k}:`, "m").test(fm) ? fm.replace(new RegExp(`^${k}:.*$`, "m"), `${k}: ${v}`) : `${fm}\n${k}: ${v}`;
+const fmGet = (fm, k) => {
+  const m = fm.match(new RegExp(`^${k}:\\s*(.+)$`, "m"));
+  return m ? m[1].trim().replace(/^["']|["']$/g, "") : undefined;
+};
+const fmSet = (fm, k, v) =>
+  new RegExp(`^${k}:`, "m").test(fm)
+    ? fm.replace(new RegExp(`^${k}:.*$`, "m"), `${k}: ${v}`)
+    : `${fm}\n${k}: ${v}`;
 
 function writeOrCheck(path, next, label) {
   const cur = existsSync(path) ? readFileSync(path, "utf8") : null;
-  if (cur === next) { log(`  ✓ ${label}`); return; }
+  if (cur === next) {
+    log(`  ✓ ${label}`);
+    return;
+  }
   drift++;
-  if (!APPLY) { log(`  ${CI ? "✗ DRIFT" : "~ would write"}: ${label}`); return; }
+  if (!APPLY) {
+    log(`  ${CI ? "✗ DRIFT" : "~ would write"}: ${label}`);
+    return;
+  }
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, next);
   log(`  → wrote ${label}`);
@@ -76,9 +90,15 @@ log(`agent-sync: ${files.length} source agents · runtimes: ${MAP.runtimes.join(
 for (const file of files) {
   const name = basename(file, ".md").toLowerCase();
   const spec = MAP.agents[name];
-  if (!spec) { log(`! ${name}: not in models.map.json — skipping`); continue; }
+  if (!spec) {
+    log(`! ${name}: not in models.map.json — skipping`);
+    continue;
+  }
   const tier = MAP.tiers[spec.tier];
-  if (!tier) { log(`! ${name}: unknown tier "${spec.tier}" — skipping`); continue; }
+  if (!tier) {
+    log(`! ${name}: unknown tier "${spec.tier}" — skipping`);
+    continue;
+  }
 
   const srcPath = join(SRC_DIR, file);
   const { fm, body } = split(readFileSync(srcPath, "utf8"));
@@ -118,7 +138,11 @@ for (const file of files) {
   writeOrCheck(join(CODEX_DIR, `${name}.toml`), codexOut, `.codex/agents/${name}.toml`);
 }
 
-const verb = APPLY ? "updated" : (CI ? "out of sync" : "would change");
+const verb = APPLY ? "updated" : CI ? "out of sync" : "would change";
 log(`\n${drift === 0 ? "✓ all three runtimes in sync" : `${drift} file(s) ${verb}`}`);
-log(APPLY ? "Re-run codex/opencode to confirm." : "Dry run — re-run with --apply to write the mirrors.");
+log(
+  APPLY
+    ? "Re-run codex/opencode to confirm."
+    : "Dry run — re-run with --apply to write the mirrors.",
+);
 process.exit(CI && drift > 0 ? 1 : 0);

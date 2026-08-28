@@ -211,9 +211,12 @@ function parseRawContextPacket(value: unknown): { packet: ContextPacket | null; 
       errors.push(`token_usage.${field} must be a number`);
     }
   }
-  if (typeof usage.input === "number" && usage.input < 0) errors.push("token usage cannot be negative");
-  if (typeof usage.output === "number" && usage.output < 0) errors.push("token usage cannot be negative");
-  if (typeof usage.budget === "number" && usage.budget <= 0) errors.push("token budget must be positive");
+  if (typeof usage.input === "number" && usage.input < 0)
+    errors.push("token usage cannot be negative");
+  if (typeof usage.output === "number" && usage.output < 0)
+    errors.push("token usage cannot be negative");
+  if (typeof usage.budget === "number" && usage.budget <= 0)
+    errors.push("token budget must be positive");
 
   if (errors.length > 0) return { packet: null, errors };
   return { packet: value as unknown as ContextPacket, errors };
@@ -232,10 +235,7 @@ function dropUntilBudget(packet: ContextPacket, budget: number, receipt: Compact
     packet.risks.pop();
     receipt.dropped.push({ kind: "risk", reason: "budget pressure" });
   }
-  while (
-    estimateTokens(JSON.stringify(packet)) > budget &&
-    packet.validation_commands.length > 1
-  ) {
+  while (estimateTokens(JSON.stringify(packet)) > budget && packet.validation_commands.length > 1) {
     packet.validation_commands.pop();
     receipt.dropped.push({ kind: "validation-command", reason: "budget pressure" });
   }
