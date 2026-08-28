@@ -1,6 +1,6 @@
 ---
 name: skill-advisor
-description: "Allura-native skill recommender. Analyzes the current task, searches Brain for past execution patterns, and suggests which skills to load, which hooks apply, and which governance policies are relevant. Use this skill whenever the user starts a new task, asks 'what skills should I use', 'which hooks apply', 'what policies matter here', asks for recommendations, or seems unsure which tools to reach for. Also triggers on 'suggest', 'recommend', 'advise', 'what do I need', or 'help me pick'."
+description: "Recommend task-relevant skills from evidence and context."
 allowed-tools:
   - Read
   - Grep

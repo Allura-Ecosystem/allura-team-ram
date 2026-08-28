@@ -1,6 +1,6 @@
 ---
 name: bmad-sprint-loop
-description: 'Autonomous EPIC execution loop under Allura governance. Brooks orchestrates from the main thread; dispatches real Allura-governed Team RAM subagents (Scout, Woz, Knuth, Pike, Fowler) via the Task tool to implement, review, and close every story in an epic — searching Allura Brain before each story and writing outcome traces after — then runs the retrospective. Use when the user says "sprint loop", "run the epic", "dev loop", or "run the whole epic".'
+description: "Run a governed Team RAM epic to verified completion."
 ---
 
 # Sprint Loop — Autonomous Epic Execution via Allura-Governed Team RAM

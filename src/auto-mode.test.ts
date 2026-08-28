@@ -1,5 +1,11 @@
 import { describe, test, expect } from "bun:test";
-import { assessComplexity, isDestructive } from "./auto-mode";
+import {
+  assessComplexity,
+  isDestructive,
+  isTokenBudgetExceeded,
+  mapAutoTaskToAgent,
+  normalizeIterationLimit,
+} from "./auto-mode";
 
 describe("auto-mode", () => {
   describe("assessComplexity", () => {
@@ -63,6 +69,34 @@ describe("auto-mode", () => {
       expect(isDestructive("bun test")).toBe(false);
       expect(isDestructive("SELECT * FROM events")).toBe(false);
       expect(isDestructive("echo hello")).toBe(false);
+    });
+  });
+
+  describe("bounded execution budgets", () => {
+    test("caps requested iterations and uses conservative defaults", () => {
+      expect(normalizeIterationLimit(undefined, "simple")).toBe(1);
+      expect(normalizeIterationLimit(undefined, "multi")).toBe(5);
+      expect(normalizeIterationLimit(99, "epic")).toBe(10);
+      expect(normalizeIterationLimit(0, "multi")).toBe(1);
+    });
+
+    test("stops when combined token use reaches the budget", () => {
+      expect(isTokenBudgetExceeded(8_000, 4_000, 12_000)).toBe(true);
+      expect(isTokenBudgetExceeded(7_999, 4_000, 12_000)).toBe(false);
+    });
+  });
+
+  describe("auto routing", () => {
+    test("routes implementation to Woz instead of the Brooks fallback", () => {
+      expect(mapAutoTaskToAgent("implement a typed response contract")).toBe("woz");
+      expect(mapAutoTaskToAgent("add tests for the packet")).toBe("woz");
+    });
+
+    test("routes specialist task classes explicitly", () => {
+      expect(mapAutoTaskToAgent("debug a crash in the executor")).toBe("bellard");
+      expect(mapAutoTaskToAgent("refactor the routing module")).toBe("fowler");
+      expect(mapAutoTaskToAgent("architect the public contract")).toBe("brooks");
+      expect(mapAutoTaskToAgent("deploy with docker and CI")).toBe("hightower");
     });
   });
 });

@@ -1,5 +1,6 @@
 ---
-description: "Auto-mode — bounded autonomous execution governed by Allura Brain. Loopy finds/crafts the loop, ultra executes it, debrief writes outcome to Brain. Single front door for /auto. --epic flag extends to full sprint via bmad-sprint-loop."
+name: auto-mode
+description: "Run bounded autonomous Team RAM execution."
 ---
 
 # Auto-Mode Skill
@@ -43,6 +44,21 @@ Every auto-mode run follows this cycle. No step is optional.
    `group_id: "allura-system"`, `user_id: "auto-mode"`, `agent_id: "auto-mode"`.
 6. **Repeat or Stop** — Continue only while progress is measurable and the
    iteration budget remains. Otherwise enter a named terminal state.
+
+## Performance Budget
+
+Auto-mode uses adaptive loading; it does not hydrate the entire harness or skill catalog.
+
+| Mode | Trigger | Loading | Budget |
+|---|---|---|---:|
+| Quick | path/config/read-only recon | Scout + scoped local search | 4,000 tokens |
+| Normal | bounded implementation/review | Scout ContextPacket + one Brain search + routed skill | 12,000 tokens |
+| Epic | explicit `--epic` | BMad story context per story, never the whole epic at once | 32,000 tokens/story |
+
+Scout returns a compact `ContextPacket` with `goal`, `summary`, `files`, `memories`,
+`risks`, `recommended_route`, and token usage. Normal Scout output is capped at 700
+tokens. Team/skill definitions are lazy-loaded only after routing. Hitting the token
+budget ends the run as `exhausted`; it never silently expands context.
 
 ## Terminal States
 

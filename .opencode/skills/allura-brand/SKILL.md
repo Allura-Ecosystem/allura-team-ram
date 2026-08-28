@@ -1,13 +1,6 @@
 ---
 name: allura-brand
-description: >
-  Use whenever work must follow Allura brand identity, brand compliance, README
-  images, dashboard visuals, Memory Command Center UI, marketing/docs visuals,
-  logo usage, color/token choices, copy voice, or Team Durham brand review.
-  This global skill is mandatory when the user says brand, on-brand, brand
-  compliance, Allura visuals, README images, dashboard design, logo, wordmark,
-  colors, typography, or asks to stop generated logos. Keep it scoped to Allura
-  or explicit user requests; do not impose Allura branding on unrelated projects.
+description: "Apply approved Allura brand rules to visual work."
 ---
 
 # Allura Brand

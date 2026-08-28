@@ -1,0 +1,95 @@
+{
+  "version": "1.0",
+  "generated_from": ".",
+  "prompts": [
+    {
+      "id": "bahari",
+      "path": ".opencode/agent/core/bahari.md",
+      "chars": 5103,
+      "lines": 147,
+      "approximate_tokens": 1276
+    },
+    {
+      "id": "bellard",
+      "path": ".opencode/agent/core/bellard.md",
+      "chars": 3104,
+      "lines": 97,
+      "approximate_tokens": 776
+    },
+    {
+      "id": "brooks",
+      "path": ".opencode/agent/core/brooks.md",
+      "chars": 5247,
+      "lines": 145,
+      "approximate_tokens": 1312
+    },
+    {
+      "id": "carmack",
+      "path": ".opencode/agent/core/carmack.md",
+      "chars": 3210,
+      "lines": 97,
+      "approximate_tokens": 803
+    },
+    {
+      "id": "fowler",
+      "path": ".opencode/agent/core/fowler.md",
+      "chars": 3223,
+      "lines": 97,
+      "approximate_tokens": 806
+    },
+    {
+      "id": "hightower",
+      "path": ".opencode/agent/core/hightower.md",
+      "chars": 3265,
+      "lines": 98,
+      "approximate_tokens": 817
+    },
+    {
+      "id": "jobs",
+      "path": ".opencode/agent/core/jobs.md",
+      "chars": 2162,
+      "lines": 75,
+      "approximate_tokens": 541
+    },
+    {
+      "id": "knuth",
+      "path": ".opencode/agent/core/knuth.md",
+      "chars": 3862,
+      "lines": 100,
+      "approximate_tokens": 966
+    },
+    {
+      "id": "pike",
+      "path": ".opencode/agent/core/pike.md",
+      "chars": 3355,
+      "lines": 99,
+      "approximate_tokens": 839
+    },
+    {
+      "id": "scout",
+      "path": ".opencode/agent/core/scout.md",
+      "chars": 2430,
+      "lines": 73,
+      "approximate_tokens": 608
+    },
+    {
+      "id": "woz",
+      "path": ".opencode/agent/core/woz.md",
+      "chars": 3601,
+      "lines": 95,
+      "approximate_tokens": 901
+    }
+  ],
+  "catalog": {
+    "skills": 164,
+    "full_chars": 1131736,
+    "approximate_full_tokens": 282934,
+    "description_chars": 27489,
+    "approximate_description_tokens": 6873,
+    "descriptions_over_120_chars": 103
+  },
+  "totals": {
+    "prompt_tokens": 9645,
+    "catalog_description_tokens": 6873
+  }
+}

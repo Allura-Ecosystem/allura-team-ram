@@ -1,6 +1,6 @@
 ---
 name: multi-search
-description: Comprehensive multi-source research skill coordinating five intelligence sources — Context7 (official docs), prompts.chat (AI instruction patterns), grep-mcp (real GitHub code), Perplexica (self-hosted AI search), and local grep (our codebase). Use this skill when you need to answer complex technical questions, research libraries/frameworks, find implementation patterns, or gather information from multiple sources to solve problems. Automatically orchestrates all five sources with correct tool names and intake-only policy for prompts.chat.
+description: "Research technical questions across multiple grounded sources."
 ---
 
 # Multi-Search — Five-Source Intelligence Orchestration

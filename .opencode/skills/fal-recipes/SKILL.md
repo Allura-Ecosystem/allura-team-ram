@@ -1,18 +1,6 @@
 ---
 name: fal-recipes
-description: >
- Use-case-driven multi-step pipelines on fal.ai. Trigger when the user asks
- for a specific kind of content production rather than a single endpoint
- call: "make a commercial", "ad creative", "product photography", "cinematic
- shot", "film look", "character design", "consistent character", "anchor
- system", "storyboard", "multi-shot", "narrative video", "talking head",
- "lip sync", "make this person talk", "virtual try-on", "garment transfer",
- "restore image", "deblur", "denoise", "fix face", "old photo restore",
- "add audio to video", "video sound effects", "product shot",
- "photoreal", "realistic photo", "candid photo", "editorial portrait",
- "documentary photo", "looks like a real photograph", "iPhone-style photo",
- "film photo", "archival photo". Each recipe describes inputs, the genmedia
- call sequence, and quality checks.
+description: "Build multi-step fal.ai media production recipes."
 ---
 
 # fal.ai Recipes

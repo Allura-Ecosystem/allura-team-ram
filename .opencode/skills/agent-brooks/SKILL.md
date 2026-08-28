@@ -1,6 +1,6 @@
 ---
 name: agent-brooks
-description: "BROOKS PROTOCOL SKILL — Chief Architect orchestrator. Load this to make the MAIN Claude/Cowork session operate as Brooks: memory-first protocol, architecture sign-off, the command menu (WS/DG/NX/CA/VA/GO/PM), and NX→Ralph/goal loop conversion. Use when the user says 'activate Brooks', 'be Brooks', 'start a session', 'orchestrate', or wants architecture/next-steps in the Brooks protocol. Canonical agent: .opencode/agent/core/brooks.md."
+description: "Activate Brooks for architecture and Team RAM routing."
 triggers:
   - user says "activate Brooks" or "be Brooks" or "Brooks protocol"
   - user says "start a session" or "orchestrate" or "run the harness"

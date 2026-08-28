@@ -1,6 +1,6 @@
 ---
 name: loopy
-description: Discover, find, compare, audit, repair, adapt, craft, run, debrief, save, and prepare repeatable AI-agent loops for publication. Use when a user asks to analyze code or coding threads for recurring work, find a published loop, interview them to turn a goal into a bounded loop, review a loop for weak checks or unsafe authority, execute a loop with an evidence receipt, learn from completed runs, save or reuse a project loop, or validate and submit a loop to Loop Library.
+description: "Create, run, evaluate, and preserve bounded agent loops."
 ---
 
 # Loopy

@@ -118,10 +118,21 @@ const AGENT_DIR = resolve(import.meta.dir, "../.opencode/agent");
  * Load agent definition from .opencode/agent/<name>.md
  * Extracts the markdown body (skips YAML frontmatter).
  */
-async function loadAgentDefinition(agentId: string): Promise<string> {
-  const path = resolve(AGENT_DIR, `${agentId}.md`);
+export async function loadAgentDefinition(agentId: string): Promise<string> {
+  const candidates = [
+    resolve(AGENT_DIR, `${agentId}.md`),
+    resolve(AGENT_DIR, "core", `${agentId}.md`),
+    resolve(AGENT_DIR, "subagents", "core", `${agentId}.md`),
+    resolve(AGENT_DIR, "subagents", "code", `${agentId}.md`),
+    resolve(AGENT_DIR, "subagents", "review", `${agentId}.md`),
+    resolve(AGENT_DIR, "subagents", "infrastructure", `${agentId}.md`),
+  ];
 
   try {
+    const path = await firstExistingPath(candidates);
+    if (!path) {
+      throw new Error(`No agent definition found in: ${candidates.join(", ")}`);
+    }
     const content = await Bun.file(path).text();
     const lines = content.split("\n");
 
@@ -138,6 +149,13 @@ async function loadAgentDefinition(agentId: string): Promise<string> {
     console.warn(`[Executor] Could not load agent definition for "${agentId}": ${err}`);
     return `You are the "${agentId}" agent. Execute the task below.`;
   }
+}
+
+async function firstExistingPath(candidates: string[]): Promise<string | null> {
+  for (const candidate of candidates) {
+    if (await Bun.file(candidate).exists()) return candidate;
+  }
+  return null;
 }
 
 // ---------------------------------------------------------------------------

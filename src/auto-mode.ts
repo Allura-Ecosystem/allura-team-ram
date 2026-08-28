@@ -2,8 +2,8 @@
  * Auto Mode — Fully autonomous task execution orchestrator
  *
  * Detects task complexity, selects execution strategy (single pass,
- * iterative loop, or epic dispatch), and runs without approval gates.
- * Destructive changes are the only pause point.
+ * iterative loop, or epic dispatch), within explicit iteration and token
+ * budgets. Governance, destructive, and authority boundaries always pause.
  *
  * Integrates with:
  * - SONA trajectories (every step is a learning signal)
@@ -12,9 +12,19 @@
  * - Agent lifecycle (track which agents are invoked)
  */
 
-import { spawnAgentProcess, mapProcessToAgent, type AgentExecutionResult } from "./agent-executor";
+import { spawnAgentProcess } from "./agent-executor";
 import { beginTrajectory } from "./sona-trajectory";
 import { calculateCoherence } from "./coherence-monitor";
+import {
+  parseContextPacketWithReceipt,
+  type CompactionReceipt,
+} from "./context-packet";
+import {
+  createContextCheckpoint,
+  shouldCompactContext,
+  type ContextCheckpoint,
+} from "./context-checkpoint";
+import { planToolLoading } from "./tool-loading";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -22,11 +32,13 @@ import { calculateCoherence } from "./coherence-monitor";
 
 export type ComplexityLevel = "simple" | "multi" | "epic";
 export type ExecutionMode = "api" | "auto" | "interactive";
+export type AutoTerminalState = "success" | "blocked" | "exhausted";
 
 export interface AutoModeRequest {
   task: string;
   group_id: string;
   max_iterations?: number;
+  token_budget?: number;
   mode?: ExecutionMode;
 }
 
@@ -43,6 +55,11 @@ export interface AutoModeResult {
     summary: string;
   }>;
   coherence_score: number;
+  terminal_state: AutoTerminalState;
+  tokens_in: number;
+  tokens_out: number;
+  checkpoint?: ContextCheckpoint;
+  context_compaction_receipt?: CompactionReceipt;
   errors: string[];
 }
 
@@ -82,6 +99,18 @@ export function isDestructive(action: string): boolean {
   return DESTRUCTIVE_PATTERNS.some((p) => p.test(action));
 }
 
+export function normalizeIterationLimit(
+  requested: number | undefined,
+  strategy: ComplexityLevel,
+): number {
+  const defaultLimit = strategy === "simple" ? 1 : 5;
+  return Math.max(1, Math.min(10, Math.floor(requested ?? defaultLimit)));
+}
+
+export function isTokenBudgetExceeded(tokensIn: number, tokensOut: number, budget: number): boolean {
+  return tokensIn + tokensOut >= budget;
+}
+
 // ---------------------------------------------------------------------------
 // Auto Mode Executor
 // ---------------------------------------------------------------------------
@@ -101,6 +130,12 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
   const mode = request.mode || detectExecutionMode();
   const outputs: AutoModeResult["outputs"] = [];
   const errors: string[] = [];
+  const tokenBudget = Math.max(1_000, request.token_budget ?? 12_000);
+  let tokensIn = 0;
+  let tokensOut = 0;
+  let terminalState: AutoTerminalState = "blocked";
+  let checkpoint: ContextCheckpoint | undefined;
+  let contextCompactionReceipt: CompactionReceipt | undefined;
 
   console.log(`[AUTO] Starting: "${request.task}" (mode=${mode})`);
 
@@ -116,11 +151,39 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
     const scoutResult = await spawnAgentProcess("scout", {
       task: `Recon for auto-mode: ${request.task}`,
       process_name: "auto.recon",
+      output_contract: {
+        version: "1.0",
+        fields: [
+          "goal",
+          "summary",
+          "files",
+          "memories",
+          "risks",
+          "recommended_route",
+          "validation_commands",
+          "token_usage",
+        ],
+        max_output_tokens: 700,
+      },
     }, request.group_id);
 
-    scoutReport = typeof scoutResult.output === "string"
-      ? scoutResult.output
-      : JSON.stringify(scoutResult.output);
+    const contextResult = parseContextPacketWithReceipt(scoutResult.output);
+    if (contextResult?.status === "impossible") {
+      throw new Error(
+        `Scout ContextPacket cannot fit budget (${contextResult.required_tokens}/${contextResult.budget})`,
+      );
+    }
+    const contextPacket = contextResult?.status === "compacted" ? contextResult.packet : null;
+    if (contextResult?.status === "compacted") {
+      contextCompactionReceipt = contextResult.receipt;
+    }
+    scoutReport = contextPacket
+      ? JSON.stringify(contextPacket)
+      : typeof scoutResult.output === "string"
+        ? scoutResult.output
+        : JSON.stringify(scoutResult.output);
+    tokensIn += scoutResult.tokens_in ?? 0;
+    tokensOut += scoutResult.tokens_out ?? 0;
 
     outputs.push({
       step: 1,
@@ -133,9 +196,37 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
     outputs.push({ step: 1, agent: "scout", success: false, summary: e.message });
   }
 
+  if (errors.length > 0) {
+    const duration_ms = Math.round(performance.now() - startTime);
+    const coherence = calculateCoherence();
+    trajectory.complete({
+      success: false,
+      confidence: 0,
+      duration_ms,
+      tokens_in: tokensIn,
+      tokens_out: tokensOut,
+      errors,
+    });
+    return {
+      success: false,
+      strategy: "simple",
+      mode,
+      steps_executed: 1,
+      duration_ms,
+      outputs,
+      coherence_score: coherence.score,
+      terminal_state: "blocked",
+      tokens_in: tokensIn,
+      tokens_out: tokensOut,
+      checkpoint,
+      context_compaction_receipt: contextCompactionReceipt,
+      errors,
+    };
+  }
+
   // ---- Phase 2: Complexity Assessment ----
   const strategy = assessComplexity(request.task, scoutReport.length);
-  const maxIterations = request.max_iterations || (strategy === "epic" ? 5 : strategy === "multi" ? 10 : 1);
+  const maxIterations = normalizeIterationLimit(request.max_iterations, strategy);
 
   console.log(`[AUTO] Strategy: ${strategy} (max ${maxIterations} iterations)`);
 
@@ -144,13 +235,16 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
 
   if (strategy === "simple") {
     // Single pass — route to appropriate agent and execute
-    const agentId = mapProcessToAgent(`auto.${inferProcessType(request.task)}`);
+    const agentId = mapAutoTaskToAgent(request.task);
     try {
       const result = await spawnAgentProcess(agentId, {
         task: request.task,
         scout_report: scoutReport,
+        tool_load_plan: planToolLoading(request.task, agentId),
         process_name: "auto.execute",
       }, request.group_id);
+      tokensIn += result.tokens_in ?? 0;
+      tokensOut += result.tokens_out ?? 0;
 
       stepsExecuted++;
       outputs.push({
@@ -162,6 +256,11 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
 
       if (!result.success) {
         errors.push(...result.errors);
+      } else if (isTokenBudgetExceeded(tokensIn, tokensOut, tokenBudget)) {
+        terminalState = "exhausted";
+        errors.push(`Token budget exhausted (${tokensIn + tokensOut}/${tokenBudget})`);
+      } else {
+        terminalState = "success";
       }
     } catch (e: any) {
       errors.push(`Execution failed: ${e.message}`);
@@ -169,7 +268,7 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
   } else {
     // Multi-step or Epic — iterative execution
     for (let i = 0; i < maxIterations; i++) {
-      const agentId = i === 0 ? "woz" : mapProcessToAgent(`auto.${inferProcessType(request.task)}`);
+      const agentId = i === 0 ? "woz" : mapAutoTaskToAgent(request.task);
 
       try {
         const result = await spawnAgentProcess(agentId, {
@@ -177,8 +276,24 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
           scout_report: scoutReport,
           iteration: i + 1,
           max_iterations: maxIterations,
+          token_budget_remaining: Math.max(0, tokenBudget - tokensIn - tokensOut),
+          tool_load_plan: planToolLoading(request.task, agentId),
           process_name: `auto.iterate.${i + 1}`,
         }, request.group_id);
+        tokensIn += result.tokens_in ?? 0;
+        tokensOut += result.tokens_out ?? 0;
+
+        if (shouldCompactContext(tokensIn + tokensOut)) {
+          checkpoint = createContextCheckpoint({
+            goal: request.task,
+            decisions: outputs.map((output) => output.summary),
+            changed_files: [],
+            evidence: result.errors.length > 0 ? result.errors : ["iteration completed"],
+            blocker: result.success ? null : result.errors.join("; ") || "agent execution failed",
+            next_action: result.success ? "verify completion" : "resolve blocker",
+            source_tokens: tokensIn + tokensOut,
+          });
+        }
 
         stepsExecuted++;
         outputs.push({
@@ -190,12 +305,19 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
 
         // If task is complete, stop iterating
         if (result.success && result.confidence >= 0.8) {
+          terminalState = "success";
           console.log(`[AUTO] Task complete at iteration ${i + 1} (confidence=${result.confidence})`);
           break;
         }
 
         if (!result.success) {
           errors.push(...result.errors);
+        }
+
+        if (isTokenBudgetExceeded(tokensIn, tokensOut, tokenBudget)) {
+          terminalState = "exhausted";
+          errors.push(`Token budget exhausted (${tokensIn + tokensOut}/${tokenBudget})`);
+          break;
         }
       } catch (e: any) {
         errors.push(`Iteration ${i + 1} failed: ${e.message}`);
@@ -208,18 +330,21 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
   const coherence = calculateCoherence();
   if (coherence.level === "red") {
     errors.push(`Coherence dropped to RED (${coherence.score.toFixed(2)}) — review required`);
+    terminalState = "blocked";
   }
 
   // ---- Complete Trajectory ----
   const duration_ms = Math.round(performance.now() - startTime);
-  const success = errors.length === 0;
+  if (errors.length > 0 && terminalState !== "exhausted") terminalState = "blocked";
+  if (terminalState !== "success" && errors.length === 0) terminalState = "exhausted";
+  const success = terminalState === "success" && errors.length === 0;
 
   trajectory.complete({
     success,
     confidence: success ? 0.85 : 0.3,
     duration_ms,
-    tokens_in: 0,
-    tokens_out: 0,
+    tokens_in: tokensIn,
+    tokens_out: tokensOut,
     errors,
   });
 
@@ -236,6 +361,11 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
     duration_ms,
     outputs,
     coherence_score: coherence.score,
+    terminal_state: terminalState,
+    tokens_in: tokensIn,
+    tokens_out: tokensOut,
+    checkpoint,
+    context_compaction_receipt: contextCompactionReceipt,
     errors,
   };
 }
@@ -259,4 +389,21 @@ function inferProcessType(task: string): string {
   if (/\b(architect|design|plan)\b/i.test(task)) return "architecture";
   if (/\b(deploy|infra|docker|ci)\b/i.test(task)) return "devops";
   return "implementation";
+}
+
+export function mapAutoTaskToAgent(task: string): string {
+  switch (inferProcessType(task)) {
+    case "debug":
+      return "bellard";
+    case "refactor":
+      return "fowler";
+    case "architecture":
+      return "brooks";
+    case "devops":
+      return "hightower";
+    case "test":
+    case "implementation":
+    default:
+      return "woz";
+  }
 }

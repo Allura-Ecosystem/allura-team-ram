@@ -12,7 +12,9 @@
     "./curator": "./src/curator.ts",
     "./coherence": "./src/coherence-monitor.ts",
     "./sona": "./src/sona-trajectory.ts",
-    "./lifecycle": "./src/agent-lifecycle.ts"
+    "./lifecycle": "./src/agent-lifecycle.ts",
+    "./context": "./src/context-packet.ts",
+    "./tool-loading": "./src/tool-loading.ts"
   },
   "bin": {
     "team-ram": "./bin/team-ram.mjs"
@@ -75,7 +77,9 @@
     "lint": "bunx @biomejs/biome check .",
     "lint:fix": "bunx @biomejs/biome check . --write",
     "format": "bunx @biomejs/biome format . --write",
-    "typecheck": "bunx tsc --noEmit"
+    "typecheck": "bunx tsc --noEmit",
+    "prompt:baseline": "bun tooling/prompt-evals/prompt-eval.ts .",
+    "prompt:eval": "bun test tooling/prompt-evals/prompt-eval.test.ts"
   },
   "dependencies": {
     "@ruvector/sona": "^0.1.6"

@@ -1,6 +1,6 @@
 ---
 name: mcp-docker
-description: Discover, configure, and manage MCP servers from Docker Hub's MCP Catalog using MCP_DOCKER tools. Use this skill when you need to add new MCP tools like Neo4j, PostgreSQL, GitHub, web search, databases, or any containerized MCP server. This skill provides workflows for finding MCP servers with MCP_DOCKER_mcp-find, configuring them with MCP_DOCKER_mcp-config-set, adding them with MCP_DOCKER_mcp-add, and executing their tools with MCP_DOCKER_mcp-exec.
+description: "Discover and operate containerized MCP servers."
 ---
 
 # MCP Docker

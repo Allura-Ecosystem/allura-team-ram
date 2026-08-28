@@ -1,6 +1,6 @@
 ---
 name: dev-loop
-description: "Allura-governed Ralph-style development loop that chains BMad dev-story, code review, and retrospective with Context7 doc lookups and Allura Brain memory at every phase. Searches Brain before each story, persists research findings, review patterns, and lessons learned so each story gets smarter. Triggers on: 'dev loop', 'sprint loop', 'run the stories', 'implement and review', 'dev cycle', 'story loop', or when the user wants to continuously implement, review, and retro through a backlog of stories."
+description: "Run governed BMad story, review, and retrospective loops."
 ---
 
 # Dev Loop — Implement, Review, Retro, Repeat

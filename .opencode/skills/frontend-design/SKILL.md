@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: Production-grade frontend design skill for the Allura Memory project. Combines Huashu-style visual exploration (3 design directions, real brand assets, HTML prototypes) with Impeccable-style discipline (audit, shape, craft, harden, polish). Use when designing, redesigning, auditing, or polishing any page, section, block, or component in the Next.js / Tailwind / ForceGraph2D stack. Covers visual hierarchy, typography, color, layout, spacing, interaction states, accessibility, responsive behavior, and motion. Routes to Woz for implementation after shape is confirmed.
+description: "Design and polish accessible Allura frontend interfaces."
 ---
 
 # Frontend Design Skill — Allura Memory

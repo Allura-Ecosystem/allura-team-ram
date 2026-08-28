@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { mapProcessToAgent } from "./agent-executor";
+import { loadAgentDefinition, mapProcessToAgent } from "./agent-executor";
 
 describe("mapProcessToAgent", () => {
   test("maps harness.speckit.implement to woz", () => {
@@ -34,5 +34,14 @@ describe("mapProcessToAgent", () => {
     expect(mapProcessToAgent("unknown.process")).toBe("brooks");
     expect(mapProcessToAgent("")).toBe("brooks");
     expect(mapProcessToAgent("harness.nonexistent.task")).toBe("brooks");
+  });
+});
+
+describe("loadAgentDefinition", () => {
+  test("loads nested canonical Scout definition instead of fallback text", async () => {
+    const definition = await loadAgentDefinition("scout");
+    expect(definition).toContain("Scout — Recon and Context Hydration");
+    expect(definition).toContain("ContextPacket");
+    expect(definition).not.toContain('You are the "scout" agent. Execute the task below.');
   });
 });

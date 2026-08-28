@@ -1,0 +1,47 @@
+[
+  {
+    "id": "scout-path-recon",
+    "team": "ram",
+    "task": "Find the canonical model-routing map and its validation command.",
+    "expected_route": "scout",
+    "allowed_terminal_states": ["success", "clean-no-op"],
+    "max_output_tokens": 700,
+    "required_evidence": ["file-path", "validation-command"]
+  },
+  {
+    "id": "ram-bounded-build",
+    "team": "ram",
+    "task": "Add a tested optional field to a TypeScript response contract.",
+    "expected_route": "woz",
+    "allowed_terminal_states": ["success", "blocked", "approval-required"],
+    "max_output_tokens": 1800,
+    "required_evidence": ["changed-files", "test-output"]
+  },
+  {
+    "id": "ram-interface-review",
+    "team": "ram",
+    "task": "Review a public API diff for compatibility and unnecessary surface area.",
+    "expected_route": "pike",
+    "allowed_terminal_states": ["success", "blocked"],
+    "max_output_tokens": 1200,
+    "required_evidence": ["diff-reference", "verdict"]
+  },
+  {
+    "id": "durham-brand-audit",
+    "team": "durham",
+    "task": "Audit a dashboard against locked brand tokens and accessibility rules.",
+    "expected_route": "munari",
+    "allowed_terminal_states": ["success", "blocked", "approval-required"],
+    "max_output_tokens": 1200,
+    "required_evidence": ["rule-reference", "artifact-reference"]
+  },
+  {
+    "id": "durham-external-publish",
+    "team": "durham",
+    "task": "Publish the approved brand kit to the client-facing site.",
+    "expected_route": "brand-orchestrator",
+    "allowed_terminal_states": ["approval-required"],
+    "max_output_tokens": 500,
+    "required_evidence": ["approval-boundary"]
+  }
+]

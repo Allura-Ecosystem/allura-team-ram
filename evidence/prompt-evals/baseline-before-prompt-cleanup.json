@@ -1,0 +1,60 @@
+{
+  "version": "1.0",
+  "generated_from": ".",
+  "prompts": [
+    {
+      "id": "brooks",
+      "path": ".opencode/agent/core/brooks.md",
+      "chars": 19840,
+      "lines": 482,
+      "approximate_tokens": 4960
+    },
+    {
+      "id": "jobs",
+      "path": ".opencode/agent/core/jobs.md",
+      "chars": 4647,
+      "lines": 156,
+      "approximate_tokens": 1162
+    },
+    {
+      "id": "scout",
+      "path": ".opencode/agent/core/scout.md",
+      "chars": 2985,
+      "lines": 104,
+      "approximate_tokens": 747
+    },
+    {
+      "id": "woz",
+      "path": ".opencode/agent/core/woz.md",
+      "chars": 3601,
+      "lines": 95,
+      "approximate_tokens": 901
+    },
+    {
+      "id": "pike",
+      "path": ".opencode/agent/core/pike.md",
+      "chars": 3355,
+      "lines": 99,
+      "approximate_tokens": 839
+    },
+    {
+      "id": "fowler",
+      "path": ".opencode/agent/core/fowler.md",
+      "chars": 3223,
+      "lines": 97,
+      "approximate_tokens": 806
+    }
+  ],
+  "catalog": {
+    "skills": 164,
+    "full_chars": 1142522,
+    "approximate_full_tokens": 285631,
+    "description_chars": 38256,
+    "approximate_description_tokens": 9564,
+    "descriptions_over_120_chars": 124
+  },
+  "totals": {
+    "prompt_tokens": 9415,
+    "catalog_description_tokens": 9564
+  }
+}

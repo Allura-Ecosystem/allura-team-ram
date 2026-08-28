@@ -1,6 +1,6 @@
 ---
 name: plugin-builder
-description: "Build plugins compatible with Codex, Codex CLI, and/or OpenCode. Generates correct directory structure, manifests (plugin.json), hooks, skills, agents, and commands for each target runtime. Use this skill whenever the user wants to create a plugin, build an extension, package skills/hooks/agents into a distributable plugin, scaffold a plugin project, make a Codex plugin, make a Codex plugin, make an OpenCode plugin, or port a plugin between runtimes. Also use when the user asks about plugin structure, plugin anatomy, or how plugins work across runtimes."
+description: "Build and port plugins for Codex, Claude, and OpenCode."
 ---
 
 # Plugin Builder

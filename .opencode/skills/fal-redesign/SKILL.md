@@ -1,6 +1,6 @@
 ---
 name: fal-redesign
-description: Upgrade a coded website to award-tier, editorially-crafted design using fal.ai. Takes a local HTML file or a dev-server URL, screenshots it, has an opus-4.7 vision model write a gpt-image-2 edit prompt, uses fal-ai/gpt-image-2/edit to produce the redesigned reference image, then opus-4.7 vision writes a Markdown build-spec with a "Hard constraints" section + a tokens.json. Also supports iterate (screenshot implemented site → delta-spec vs reference) and greenfield generate (brief → mockup → single-file HTML). Invoke when the user says "improve the design", "make it world-class", "redesign this landing page", "upgrade this site", "design pass", or points at a local HTML / dev server for a visual review.
+description: "Redesign coded sites using fal.ai visual references."
 metadata:
  author: fal-ai-community
  version: "0.1.0"

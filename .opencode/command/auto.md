@@ -1,6 +1,6 @@
 ---
-description: "Auto-mode — bounded autonomous execution. Loopy finds/crafts the loop, ultra executes, debrief writes to Brain. Use --epic for full sprint. Destructive changes are the only pause point."
-argument-hint: "[--epic] <task description>"
+description: "Auto-mode — bounded autonomous execution with Scout-first loading, token/iteration budgets, verification, Brain receipts, and governance hard stops. Use --epic for full sprint."
+argument-hint: "[--epic] [--budget <tokens>] [--max <iterations>] <task description>"
 allowed-tools:
   - Read
   - Write
@@ -72,6 +72,14 @@ Agent(subagent_type: "Explore", prompt: "Scout recon for: <task>. Find relevant 
 ```
 
 Scout report informs complexity assessment. This step is non-negotiable — never skip recon.
+
+Return a compact ContextPacket (`goal`, `summary`, `files`, `memories`, `risks`,
+`recommended_route`, `token_usage`) capped at 700 output tokens. Do not load all
+skills, full agent personas, archives, or whole epics before routing.
+
+Default budgets: quick recon 4,000 tokens; normal run 12,000 tokens; explicit
+epic 32,000 tokens per story. `--budget` overrides within policy. Budget exhaustion
+is terminal state `exhausted`, never permission to truncate evidence and claim success.
 
 ### Phase 1.5: Loopy Find-or-Craft (NEW — Loop Curation)
 
