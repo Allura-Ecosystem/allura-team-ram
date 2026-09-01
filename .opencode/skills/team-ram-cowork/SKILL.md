@@ -70,7 +70,7 @@ Do not say memory was searched or written unless an actual memory tool or MCP ca
 - Scout: local context, repo discovery, Allura memory lookup.
 - Woz: practical builder, working code, simple implementation.
 - Ralph: readiness and validation gate.
-- Pike: interface simplicity, API shape, concurrency/complexity concerns.
+- Pike: interface simplicity, interface design, concurrency/complexity concerns.
 - Fowler: refactor safety, maintainability, small reversible changes.
 - Knuth: data model, schema, query correctness.
 - Hightower: deployment, secrets, infrastructure, observability.

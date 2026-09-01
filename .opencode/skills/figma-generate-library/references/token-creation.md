@@ -76,7 +76,7 @@ const valueMode = primColl.modes[0].modeId;
 
 // Tag for idempotency
 primColl.setSharedPluginData('dsb', 'run_id', RUN_ID);
-primColl.setSharedPluginData('dsb', 'key', 'collection/primitives');
+primColl.setSharedPluginData('dsb', 'identifier', 'collection/primitives');
 
 return {
   collectionId: primColl.id,
@@ -101,7 +101,7 @@ const lightModeId = colorColl.modes[0].modeId;
 const darkModeId = colorColl.addMode("Dark");
 
 colorColl.setSharedPluginData('dsb', 'run_id', RUN_ID);
-colorColl.setSharedPluginData('dsb', 'key', 'collection/color');
+colorColl.setSharedPluginData('dsb', 'identifier', 'collection/color');
 
 return {
   collectionId: colorColl.id,
@@ -122,7 +122,7 @@ spacingColl.renameMode(spacingColl.modes[0].modeId, "Value");
 const valueMode = spacingColl.modes[0].modeId;
 
 spacingColl.setSharedPluginData('dsb', 'run_id', RUN_ID);
-spacingColl.setSharedPluginData('dsb', 'key', 'collection/spacing');
+spacingColl.setSharedPluginData('dsb', 'identifier', 'collection/spacing');
 
 return {
   collectionId: spacingColl.id,
@@ -180,7 +180,7 @@ const RUN_ID = "ds-build-2024-001";
 
 // Get the Primitives collection created in the previous step
 const collections = await figma.variables.getLocalVariableCollectionsAsync();
-const primColl = collections.find(c => c.getSharedPluginData('dsb', 'key') === 'collection/primitives');
+const primColl = collections.find(c => c.getSharedPluginData('dsb', 'identifier') === 'collection/primitives');
 if (!primColl) throw new Error("Primitives collection not found — run collection creation first");
 const valueMode = primColl.modes[0].modeId;
 
@@ -220,7 +220,7 @@ const valueMode = primColl.modes[0].modeId;
       // Code syntax from the actual CSS variable name
       v.setVariableCodeSyntax('WEB', `var(--color-${name.replace('/', '-')})`);
       v.setSharedPluginData('dsb', 'run_id', RUN_ID);
-      v.setSharedPluginData('dsb', 'key', `primitive/${name}`);
+      v.setSharedPluginData('dsb', 'identifier', `primitive/${name}`);
       created.push({ name, id: v.id });
     }
 
@@ -234,7 +234,7 @@ return { created, count: created.length };
 ```javascript
 const RUN_ID = "ds-build-2024-001";
 const collections = await figma.variables.getLocalVariableCollectionsAsync();
-const spacingColl = collections.find(c => c.getSharedPluginData('dsb', 'key') === 'collection/spacing');
+const spacingColl = collections.find(c => c.getSharedPluginData('dsb', 'identifier') === 'collection/spacing');
 if (!spacingColl) throw new Error("Spacing collection not found");
 const valueMode = spacingColl.modes[0].modeId;
 
@@ -262,7 +262,7 @@ for (const { name, value, scope, cssVar } of [...spacingTokens, ...radiusTokens]
   v.scopes = [scope];
   v.setVariableCodeSyntax('WEB', `var(${cssVar})`);
   v.setSharedPluginData('dsb', 'run_id', RUN_ID);
-  v.setSharedPluginData('dsb', 'key', name);
+  v.setSharedPluginData('dsb', 'identifier', name);
   created.push({ name, value, id: v.id });
 }
 
@@ -274,7 +274,7 @@ return { created, count: created.length };
 ```javascript
 const RUN_ID = "ds-build-2024-001";
 const collections = await figma.variables.getLocalVariableCollectionsAsync();
-const typoPrimColl = collections.find(c => c.getSharedPluginData('dsb', 'key') === 'collection/typography-primitives');
+const typoPrimColl = collections.find(c => c.getSharedPluginData('dsb', 'identifier') === 'collection/typography-primitives');
 if (!typoPrimColl) throw new Error("Typography Primitives collection not found");
 const valueMode = typoPrimColl.modes[0].modeId;
 
@@ -295,7 +295,7 @@ for (const { name, value, scope, cssVar } of fontTokens) {
   v.scopes = [scope];
   v.setVariableCodeSyntax('WEB', `var(${cssVar})`);
   v.setSharedPluginData('dsb', 'run_id', RUN_ID);
-  v.setSharedPluginData('dsb', 'key', `typo-prim/${name}`);
+  v.setSharedPluginData('dsb', 'identifier', `typo-prim/${name}`);
   created.push({ name, value, id: v.id });
 }
 
@@ -309,7 +309,7 @@ BOOLEAN variables have no scopes (scopes are not supported for BOOLEAN type).
 ```javascript
 const RUN_ID = "ds-build-2024-001";
 const collections = await figma.variables.getLocalVariableCollectionsAsync();
-const coll = collections.find(c => c.getSharedPluginData('dsb', 'key') === 'collection/tokens');
+const coll = collections.find(c => c.getSharedPluginData('dsb', 'identifier') === 'collection/tokens');
 if (!coll) throw new Error("Collection not found");
 const valueMode = coll.modes[0].modeId;
 
@@ -317,7 +317,7 @@ const v = figma.variables.createVariable('feature-flags/show-beta-badge', coll, 
 v.setValueForMode(valueMode, false);
 // No scopes — BOOLEAN does not support scopes
 v.setSharedPluginData('dsb', 'run_id', RUN_ID);
-v.setSharedPluginData('dsb', 'key', 'feature-flags/show-beta-badge');
+v.setSharedPluginData('dsb', 'identifier', 'feature-flags/show-beta-badge');
 
 return { id: v.id, name: v.name };
 ```
@@ -350,8 +350,8 @@ function hexToRgb(hex) {
 const RUN_ID = "ds-build-2024-001";
 const collections = await figma.variables.getLocalVariableCollectionsAsync();
 
-const primColl = collections.find(c => c.getSharedPluginData('dsb', 'key') === 'collection/primitives');
-const colorColl = collections.find(c => c.getSharedPluginData('dsb', 'key') === 'collection/color');
+const primColl = collections.find(c => c.getSharedPluginData('dsb', 'identifier') === 'collection/primitives');
+const colorColl = collections.find(c => c.getSharedPluginData('dsb', 'identifier') === 'collection/color');
 if (!primColl || !colorColl) throw new Error("Collections not found — run primitive/color collection creation first");
 
 const primValueMode = primColl.modes[0].modeId;
@@ -363,7 +363,7 @@ const allVars = await figma.variables.getLocalVariablesAsync();
 const primsByKey = {};
 for (const v of allVars) {
   if (v.variableCollectionId === primColl.id) {
-    primsByKey[v.getSharedPluginData('dsb', 'key')] = v;
+    primsByKey[v.getSharedPluginData('dsb', 'identifier')] = v;
   }
 }
 
@@ -409,7 +409,7 @@ for (const { name, lightPrim, darkPrim, cssVar, scopes } of semanticColors) {
   // Code syntax
   v.setVariableCodeSyntax('WEB', `var(${cssVar})`);
   v.setSharedPluginData('dsb', 'run_id', RUN_ID);
-  v.setSharedPluginData('dsb', 'key', name);
+  v.setSharedPluginData('dsb', 'identifier', name);
   created.push({ name, id: v.id });
 }
 
@@ -659,7 +659,7 @@ for (const { name, effects } of shadows) {
   style.name = name;
   style.effects = effects;
   style.setSharedPluginData('dsb', 'run_id', RUN_ID);
-  style.setSharedPluginData('dsb', 'key', `effect-style/${name}`);
+  style.setSharedPluginData('dsb', 'identifier', `effect-style/${name}`);
   created.push({ name, id: style.id });
 }
 
@@ -716,7 +716,7 @@ for (const { name, family, style, size, lineHeight, letterSpacing } of textStyle
   ts.lineHeight = { value: lineHeight, unit: 'PIXELS' };
   ts.letterSpacing = { value: letterSpacing, unit: 'PIXELS' };
   ts.setSharedPluginData('dsb', 'run_id', RUN_ID);
-  ts.setSharedPluginData('dsb', 'key', `text-style/${name}`);
+  ts.setSharedPluginData('dsb', 'identifier', `text-style/${name}`);
   created.push({ name, id: ts.id });
 }
 
@@ -732,12 +732,12 @@ Every creation script should check whether the entity already exists before crea
 ### Check-Before-Create for Collections
 
 ```javascript
-const DSB_KEY = 'collection/primitives';
+const DSB_IDENTIFIER = 'collection/primitives';
 const RUN_ID = "ds-build-2024-001";
 
 // Check if already exists
 const existing = await figma.variables.getLocalVariableCollectionsAsync();
-let primColl = existing.find(c => c.getSharedPluginData('dsb', 'key') === DSB_KEY);
+let primColl = existing.find(c => c.getSharedPluginData('dsb', 'identifier') === DSB_IDENTIFIER);
 
 if (primColl) {
   return { status: 'already_exists', collectionId: primColl.id, name: primColl.name };
@@ -747,7 +747,7 @@ if (primColl) {
 primColl = figma.variables.createVariableCollection("Primitives");
 primColl.renameMode(primColl.modes[0].modeId, "Value");
 primColl.setSharedPluginData('dsb', 'run_id', RUN_ID);
-primColl.setSharedPluginData('dsb', 'key', DSB_KEY);
+primColl.setSharedPluginData('dsb', 'identifier', DSB_IDENTIFIER);
 
 return { status: 'created', collectionId: primColl.id };
 ```
@@ -755,12 +755,12 @@ return { status: 'created', collectionId: primColl.id };
 ### Check-Before-Create for Variables
 
 ```javascript
-const VARIABLE_KEY = 'primitive/blue/500';
+const VARIABLE_IDENTIFIER = 'primitive/blue/500';
 const RUN_ID = "ds-build-2024-001";
 
 // Check if already exists by sharedPluginData key
 const allVars = await figma.variables.getLocalVariablesAsync();
-const existing = allVars.find(v => v.getSharedPluginData('dsb', 'key') === VARIABLE_KEY);
+const existing = allVars.find(v => v.getSharedPluginData('dsb', 'identifier') === VARIABLE_IDENTIFIER);
 
 if (existing) {
   return { status: 'already_exists', id: existing.id, name: existing.name };
@@ -777,7 +777,7 @@ Tag every created node immediately after creation. The `key` is the stable logic
 ```javascript
 node.setSharedPluginData('dsb', 'run_id', RUN_ID);       // build run ID
 node.setSharedPluginData('dsb', 'phase', 'phase1');       // which phase
-node.setSharedPluginData('dsb', 'key', 'color/bg/primary'); // stable logical key
+node.setSharedPluginData('dsb', 'identifier', 'color/bg/primary'); // stable logical key
 ```
 
 **Cleanup by run ID (safe — targets only tagged nodes, never user-owned nodes):**
