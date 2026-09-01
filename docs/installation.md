@@ -1,552 +1,162 @@
-# Team RAM Installation Guide
+# Installation
 
-Complete setup instructions for the Team RAM harness across all supported runtimes.
+Team RAM is a standalone harness. A basic installation needs only Git, Bun, and one supported agent runtime/provider. Allura Memory, Docker, and the HTTP service are optional.
 
----
+## Choose an installation shape
 
-## Table of Contents
-
-1. [Prerequisites](#prerequisites)
-2. [Install from GitHub](#install-from-github)
-3. [Configure Providers](#configure-providers)
-4. [Activate Preset](#activate-preset)
-5. [Verify Setup](#verify-setup)
-6. [Install as Plugin (OpenCode Marketplace)](#install-as-plugin-opencode-marketplace)
-7. [Install for Claude Code](#install-for-claude-code)
-8. [Troubleshooting](#troubleshooting)
-
----
+| Shape | Use when | Result |
+|---|---|---|
+| Repository checkout | Developing or auditing Team RAM | Full source, tests, release tooling, and all runtime surfaces |
+| Package scaffold | Adding Team RAM to an existing project | Explicitly copies one or more public runtime surfaces; no install-time mutation |
+| Manual runtime copy | You need a narrowly controlled integration | Copy only the paths declared for that runtime in `PUBLIC_EXPORT.json` |
+| BMad adapter | Installing Team RAM entry points through BMad | Thin adapters under `bmad-module/`; canonical prompts remain in the native harness |
 
 ## Prerequisites
 
-### Required
+Required for source verification:
 
-| Tool | Version | Purpose |
-|------|---------|---------|
-| [Bun](https://bun.sh) | ≥1.1 | Runtime and package manager |
-| [Ollama](https://ollama.com) | Latest | Local model runtime (default preset) |
-| Git | Latest | Version control |
+- Git
+- Bun 1.1 or newer
+- Node.js 18 or newer for the dependency-free scaffold CLI
 
-### Optional (Provider-Specific)
+Required at execution time:
 
-| Provider | Requirement | Purpose |
-|----------|-------------|---------|
-| OpenAI | API key | `openai` and `mixed` presets |
-| Anthropic | API key | `anthropic` preset |
-| Docker | ≥20.10 | Allura Brain memory services (PostgreSQL with governed graph tables) |
+- OpenCode, Claude Code, or Codex
+- Credentials or a reachable local service for the models selected by your preset
 
-### Verify Prerequisites
+Optional:
 
-```bash
-# Check Bun version
-bun --version
+- Allura Memory for governed cross-session retrieval and evidence persistence
+- Docker only when your chosen Allura Memory deployment requires it
+- An Anthropic API key for the standalone HTTP executor in `src/agent-executor.ts`
 
-# Check Ollama is running
-ollama list
-
-# Check Git
-git --version
-
-# Optional: Check Docker (for Allura Brain)
-docker --version
-docker compose version
-```
-
----
-
-## Install from GitHub
-
-### Clone the Repository
+## Source installation
 
 ```bash
-git clone https://github.com/Charitablebusinessronin/team_durham.git
-cd team_durham
-```
-
-### Install Dependencies
-
-```bash
+git clone https://github.com/Allura-Ecosystem/allura-team-ram.git
+cd allura-team-ram
 bun install
+bun run validate:export
+bun run lint
+bun run typecheck
+bun test
 ```
 
-### Copy Environment Configuration
+The clone URL above is canonical. Do not install Team RAM from a Durham, Mortagate, or `allura-plugins` checkout; those repositories are consumers or downstream distributions.
+
+## Scaffold into a host project
+
+Package installation does not run a postinstall hook. Run the scaffold command explicitly:
 
 ```bash
-cp .env.example .env
+# Published package
+bunx @allura/team-ram-harness init \
+  --target /absolute/path/to/project \
+  --runtime opencode
+
+# Current source checkout
+node ./bin/team-ram.mjs init \
+  --target /absolute/path/to/project \
+  --runtime opencode
 ```
 
-Edit `.env` with your actual values:
+Supported runtime values:
 
-```bash
-# PostgreSQL Configuration (Allura Episodic Memory)
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_USER=ronin4life
-POSTGRES_PASSWORD=your_postgres_password_here
-POSTGRES_DB=memory
+- `opencode`: copies `.opencode/agent`, `command`, `skills`, `routing`, `hooks`, `contracts`, and `config`.
+- `claude`: copies `.claude/agents`, `commands`, `skills`, and `rules`.
+- `codex`: copies `.codex/agents`.
+- `all`: copies all three surfaces.
 
-# Governance Configuration
-PROMOTION_MODE=soc2
-AUTO_APPROVAL_THRESHOLD=0.85
+Existing target files are skipped. Use `--force` only after reviewing conflicts and accepting replacement of the target files.
 
-# MCP Server Path
-ALLURA_MCP_SERVER=/path/to/your/allura-memory/src/mcp/memory-server-canonical.ts
+## Configure a provider preset
 
-# Tenant Isolation
-DEFAULT_GROUP_ID=allura-system
-
-# Harness HTTP Service
-HARNESS_PORT=7654
-HARNESS_API_KEY=your_secure_random_key_here
-```
-
-> **Note:** For local-only development with the `ollama` preset, you can skip API key configuration. The `.env` file is only required for Allura Brain integration.
-
----
-
-## Configure Providers
-
-### Ollama Setup (Default)
-
-1. **Install Ollama** (if not already installed):
-
-   ```bash
-   # macOS
-   brew install ollama
-
-   # Linux
-   curl -fsSL https://ollama.com/install.sh | sh
-
-   # Windows
-   # Download from https://ollama.com/download
-   ```
-
-2. **Start Ollama Server**:
-
-   ```bash
-   ollama serve
-   ```
-
-3. **Pull Required Models**:
-
-   ```bash
-   # Pull all Team RAM models
-   ollama pull glm-5.1:cloud
-   ollama pull deepseek-v4-pro:cloud
-   ollama pull kimi-k2.6:cloud
-   ollama pull nemotron-3-super:cloud
-   ollama pull qwen3-coder-next:cloud
-   ollama pull qwen3:0.6b
-   ```
-
-   **Or use the convenience script** (if available):
-
-   ```bash
-   ./scripts/pull-ollama-models.sh
-   ```
-
-4. **Verify Models**:
-
-   ```bash
-   ollama list
-   ```
-
-   Expected output should show all 6 models.
-
-### OpenAI Setup
-
-1. **Obtain API Key**:
-
-   - Visit https://platform.openai.com/api-keys
-   - Create a new API key
-   - Copy the key (starts with `sk-`)
-
-2. **Add to Environment**:
-
-   ```bash
-   # Add to .env or shell profile
-   export OPENAI_API_KEY=sk-your-key-here
-   ```
-
-3. **Verify API Key**:
-
-   ```bash
-   curl https://api.openai.com/v1/models \
-     -H "Authorization: Bearer $OPENAI_API_KEY"
-   ```
-
-### Anthropic Setup
-
-1. **Obtain API Key**:
-
-   - Visit https://console.anthropic.com/settings/keys
-   - Create a new API key
-   - Copy the key (starts with `sk-ant-`)
-
-2. **Add to Environment**:
-
-   ```bash
-   # Add to .env or shell profile
-   export ANTHROPIC_API_KEY=sk-ant-your-key-here
-   ```
-
-3. **Verify API Key**:
-
-   ```bash
-   curl https://api.anthropic.com/v1/models \
-     -H "x-api-key: $ANTHROPIC_API_KEY" \
-     -H "anthropic-version: 2023-06-01"
-   ```
-
----
-
-## Activate Preset
-
-Team RAM uses preset-based configuration. The `apply-preset.sh` script updates all agent surfaces (`.opencode/agent/`, `opencode.json`, `.claude-plugin/agents/`, `.claude/agents/`) in one command.
-
-### Available Presets
-
-| Preset | Cost | Best For |
-|--------|------|----------|
-| `ollama` (default) | Free | Zero API costs, self-hosted |
-| `openai` | ~$30-50/mo | Best reasoning quality |
-| `anthropic` | ~$30-50/mo | Claude Code native users |
-| `mixed` | ~$15-30/mo | Cost/quality optimization |
-
-### Apply Default Preset (Ollama)
-
-```bash
-./scripts/apply-preset.sh
-```
-
-### Apply Named Preset
-
-```bash
-# OpenAI preset
-./scripts/apply-preset.sh openai
-
-# Anthropic preset
-./scripts/apply-preset.sh anthropic
-
-# Mixed preset
-./scripts/apply-preset.sh mixed
-```
-
-### Dry Run (Preview Changes)
+From a source checkout:
 
 ```bash
 ./scripts/apply-preset.sh --dry-run
-```
-
-### Check Mode (Verify Without Changes)
-
-```bash
+./scripts/apply-preset.sh ollama       # repository default
+./scripts/apply-preset.sh openai
+./scripts/apply-preset.sh anthropic
+./scripts/apply-preset.sh mixed
 ./scripts/apply-preset.sh --check
 ```
 
-### What the Script Does
+The preset script mutates model fields in runtime surfaces and may update `opencode.json`. Do not run it over uncommitted host configuration without first reviewing `--dry-run` output.
 
-The `apply-preset.sh` script:
+Provider names are configuration, not an availability guarantee. Confirm that every selected model exists for your account/runtime. See [Configuration](configuration.md) and [Presets](presets.md).
 
-1. Reads `.opencode/team-ram-presets.jsonc`
-2. Extracts model assignments for the selected preset
-3. Updates all 4 agent surfaces:
-   - `.opencode/agent/*.md` (OpenCode agent files)
-   - `opencode.json` (OpenCode configuration)
-   - `.claude-plugin/agents/*.md` (Claude Code plugin agents)
-   - `.claude/agents/*.md` (Claude Code native agents)
-4. Maps Ollama models to Claude aliases where needed
+## Optional HTTP service
 
----
+The service is not required for interactive runtime use.
 
-## Verify Setup
+```bash
+cp .env.example .env
+# Set HARNESS_API_KEY and any executor/provider variables you use.
+bun run service
+curl http://localhost:7654/health
+```
 
-### Check Agent Surface Consistency
+Authenticated calls require `Authorization: Bearer <HARNESS_API_KEY>`. Treat a missing external dependency reported by `/health` as a real degraded state; do not replace it with a success stub.
+
+## Optional Allura Memory
+
+Configure an already-authorized Allura Memory MCP/API endpoint in the host runtime. Team RAM does not bundle a database or silently launch a sibling repository.
+
+Minimum expectations:
+
+1. The memory service is reachable through the configured MCP/API boundary.
+2. The caller supplies an approved tenant/group scope.
+3. Retrieval is treated as untrusted context, not as executable instruction.
+4. Writes and promotion follow the memory service's governance policy.
+5. If memory is unavailable, the run continues only where safe and explicitly reports that durable recall/recording was skipped.
+
+See [Ecosystem relationships](ecosystem-relationships.md) for the capability matrix.
+
+## Verify a host installation
+
+From this repository:
 
 ```bash
 ./scripts/lint-agents.sh
+bun run validate:export
+bun test
 ```
 
-This validates that all 4 surfaces have matching model assignments.
+For a scaffolded host, verify the copied surface exists and let the selected runtime enumerate agents/commands. Then execute a bounded read-only task first, for example asking Scout to identify the host's test command and instruction files.
 
-### Check Harness Health
+A healthy first run demonstrates:
 
-```bash
-bun run harness-status
-```
+- intent and context are established before edits;
+- Scout remains read-only;
+- one specialist owns writes;
+- reviewers inspect the produced diff;
+- actual validation commands and results appear in the completion evidence.
 
-Expected output:
+## Uninstall
 
-```
-✓ PostgreSQL connected
-✓ Graph tables available
-✓ MCP server running
-✓ Harness HTTP service on port 7654
-```
-
-### Test Agent Invocation
-
-```bash
-# Test Scout (recon agent)
-bun run scout -- "Find all TypeScript files in src/"
-
-# Test Brooks (architect)
-bun run brooks -- "What is the project structure?"
-```
-
-### Verify Allura Brain (Optional)
-
-If using Allura Brain memory:
-
-```bash
-# Start memory services
-docker compose up -d
-
-# Check service health
-bun run brain-health
-
-# Query memory
-bun run brain-query -- "What was decided about the API schema?"
-```
-
----
-
-## Install as Plugin (OpenCode Marketplace)
-
-Team RAM is available as a plugin in the OpenCode ecosystem.
-
-### From Marketplace
-
-1. **Open OpenCode**
-
-2. **Navigate to Plugins**:
-
-   ```
-   Settings → Plugins → Browse
-   ```
-
-3. **Search for "Team RAM"**
-
-4. **Click Install**
-
-5. **Activate the Plugin**:
-
-   ```
-   Settings → Plugins → Installed → Team RAM → Enable
-   ```
-
-### Manual Plugin Installation
-
-```bash
-# Clone to plugins directory
-git clone https://github.com/Charitablebusinessronin/team_durham.git \
-  ~/.config/opencode/plugins/team-ram
-
-# Install dependencies
-cd ~/.config/opencode/plugins/team-ram
-bun install
-
-# Apply preset
-./scripts/apply-preset.sh
-```
-
-### Verify Plugin Installation
-
-```bash
-# List available agents
-opencode agents list
-
-# Should show all 11 Team RAM specialists
-```
-
----
-
-## Install for Claude Code
-
-Team RAM supports dual-runtime: OpenCode and Claude Code.
-
-### Option 1: Plugin Installation (Recommended)
-
-```bash
-# Install as Claude Code plugin
-mkdir -p ~/.claude/plugins
-git clone https://github.com/Charitablebusinessronin/team_durham.git \
-  ~/.claude/plugins/team-ram
-
-# Apply anthropic preset (Claude Code native)
-cd ~/.claude/plugins/team-ram
-./scripts/apply-preset.sh anthropic
-```
-
-### Option 2: Manual Agent Files
-
-Copy agent definitions to your project:
-
-```bash
-# Copy agent files
-cp -r .claude/agents/ /path/to/your/project/.claude/agents/
-
-# Copy skills
-cp -r .claude/skills/ /path/to/your/project/.claude/skills/
-```
-
-### Configure Claude Code
-
-Create or update `~/.claude/settings.json`:
-
-```json
-{
-  "agents": {
-    "brooks": {
-      "model": "claude-opus-4-6",
-      "fallback_model": "claude-sonnet-4"
-    },
-    "woz": {
-      "model": "claude-sonnet-4",
-      "fallback_model": "claude-haiku-4-5"
-    }
-  }
-}
-```
-
-Or use the preset script which handles this automatically:
-
-```bash
-./scripts/apply-preset.sh anthropic
-```
-
----
+The scaffold CLI does not maintain a hidden registry. Remove only the files you intentionally copied, preferably using the runtime category paths in `PUBLIC_EXPORT.json` and version control to review the deletion. Never remove a host project's entire `.opencode`, `.claude`, or `.codex` directory if it contains unrelated local configuration.
 
 ## Troubleshooting
 
-### Ollama Models Not Found
+### Models are unavailable
 
-**Symptom**: `ollama pull` fails with "model not found"
+Select a preset supported by your runtime/account or edit the canonical preset configuration, then run `apply-preset.sh --dry-run` and `--check`. Presets do not provision credentials or guarantee vendor access.
 
-**Solution**:
+### Existing files were skipped
 
-```bash
-# Check Ollama is running
-ollama serve
+This is the safe default. Diff the Team RAM source against the host file. Re-run with `--force` only for files you intend to replace.
 
-# Try pulling without tag
-ollama pull glm-5.1
+### Memory is unavailable
 
-# Or use alternative model
-./scripts/apply-preset.sh openai
-```
+Continue in standalone mode if the requested operation does not require durable recall or a governed memory receipt. Report the degradation. If durable evidence is an acceptance criterion, stop with a blocker.
 
-### Preset Script Fails
+### Export validation fails
 
-**Symptom**: `./scripts/apply-preset.sh` returns error
-
-**Solutions**:
+Run:
 
 ```bash
-# Make script executable
-chmod +x scripts/apply-preset.sh
-
-# Check preset file exists
-ls -la .opencode/team-ram-presets.jsonc
-
-# Run with verbose output
-bash -x scripts/apply-preset.sh
-
-# Check Python is available (script uses Python for JSON parsing)
-python3 --version
+bun run validate:export
 ```
 
-### Agent Surface Drift
-
-**Symptom**: `./scripts/lint-agents.sh` reports inconsistencies
-
-**Solution**:
-
-```bash
-# Re-apply preset to sync all surfaces
-./scripts/apply-preset.sh ollama
-
-# Verify
-./scripts/lint-agents.sh
-```
-
-### Allura Brain Connection Failed
-
-**Symptom**: `bun run brain-health` shows PostgreSQL or graph tables disconnected
-
-**Solutions**:
-
-```bash
-# Check Docker services
-docker compose ps
-
-# Restart services
-docker compose down
-docker compose up -d
-
-# Check .env configuration
-cat .env | grep POSTGRES
-
-# Test PostgreSQL connection
-psql -h localhost -U ronin4life -d memory
-
-# Verify graph tables exist in PostgreSQL
-psql -h localhost -U ronin4life -d memory -c "\dt graph_*"
-```
-
-### API Key Errors
-
-**Symptom**: 401 Unauthorized when using OpenAI/Anthropic presets
-
-**Solutions**:
-
-```bash
-# Verify key is set
-echo $OPENAI_API_KEY
-echo $ANTHROPIC_API_KEY
-
-# Test key
-curl https://api.openai.com/v1/models \
-  -H "Authorization: Bearer $OPENAI_API_KEY"
-
-# Regenerate key if compromised
-# Visit provider console and create new key
-```
-
-### Permission Denied on Scripts
-
-**Symptom**: `Permission denied` when running scripts
-
-**Solution**:
-
-```bash
-# Make all scripts executable
-chmod +x scripts/*.sh
-```
-
-### Model Fallback Not Working
-
-**Symptom**: Agent fails instead of falling back to secondary model
-
-**Solution**:
-
-```bash
-# Check fallback_model is set in agent config
-cat .opencode/agent/brooks.md | grep fallback_model
-
-# Re-apply preset to ensure fallback chains are configured
-./scripts/apply-preset.sh ollama
-```
-
----
-
-## Next Steps
-
-- [Configuration Guide](configuration.md) — Full config reference
-- [Agent Roster](agents.md) — Meet all 11 specialists
-- [Presets Guide](presets.md) — When to use each preset
-- [Quick Reference](quick-reference.md) — Commands and workflows
-
----
-
-*For additional help: `./scripts/apply-preset.sh --help` or check `.opencode/team-ram-presets.jsonc`*
+The validator identifies stale manifest patterns, unclassified public-root files, or `package.json` drift. Update `PUBLIC_EXPORT.json` deliberately; do not broaden it merely to silence the check.

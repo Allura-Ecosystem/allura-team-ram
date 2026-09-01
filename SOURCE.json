@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "project": "allura-team-ram",
+  "canonical": true,
+  "repository": "https://github.com/Allura-Ecosystem/allura-team-ram.git",
+  "defaultBranch": "main",
+  "authority": {
+    "owns": [
+      "team-ram-agents",
+      "team-ram-commands",
+      "team-ram-skills",
+      "team-ram-runtime-config",
+      "team-ram-export-contract"
+    ],
+    "manifest": "PUBLIC_EXPORT.json"
+  },
+  "downstream": {
+    "consumer": "https://github.com/Allura-Ecosystem/allura-plugins.git",
+    "mode": "pinned-generated-export",
+    "contract": "allura-plugins must pin an exact source commit, generate only files allowed by PUBLIC_EXPORT.json, record repository and commit provenance, and contribute edits back to this repository before regeneration."
+  },
+  "nonAuthorities": [
+    "generated exports in allura-plugins",
+    "runtime-installed copies",
+    "Durham consumer repositories",
+    "Mortagate consumer repositories",
+    "historical planning documents"
+  ]
+}
