@@ -17,7 +17,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dir);
-const BRAIN_GATEWAY = process.env.ALLURA_BRAIN_GATEWAY || process.env.ALLURA_MCP_URL || "http://127.0.0.1:5888";
+const BRAIN_GATEWAY =
+  process.env.ALLURA_BRAIN_GATEWAY || process.env.ALLURA_MCP_URL || "http://127.0.0.1:5888";
 const REQUIRE_BRAIN = process.env.REQUIRE_ALLURA_BRAIN === "1";
 
 interface TestResult {
@@ -59,7 +60,9 @@ async function testBrainGatewayHealthy(): Promise<void> {
     });
   } catch (error) {
     if (!REQUIRE_BRAIN) {
-      console.warn(`⚠️  Allura Brain unavailable; standalone degraded mode active (${String(error)})`);
+      console.warn(
+        `⚠️  Allura Brain unavailable; standalone degraded mode active (${String(error)})`,
+      );
       return;
     }
     throw error;
@@ -115,10 +118,7 @@ async function testEnvExample(): Promise<void> {
 
 // Test 7: Memory is an optional integration skill, not embedded role authority.
 async function testOptionalMemoryIntegration(): Promise<void> {
-  const skill = readFileSync(
-    requireFile(".agents/skills/allura-memory-skill/SKILL.md"),
-    "utf8",
-  );
+  const skill = readFileSync(requireFile(".agents/skills/allura-memory-skill/SKILL.md"), "utf8");
   if (!/Allura (Memory|Brain)|memory_search|memory_add/i.test(skill)) {
     throw new Error("Optional Allura Memory integration skill is missing its contract markers");
   }
