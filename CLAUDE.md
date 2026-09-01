@@ -85,7 +85,7 @@ Start with: `bun run service` or `bun src/http-server.ts`
 
 - `opencode.json` -- Global config (fallback model: `ollama-cloud/glm-5.1`, MCP server definitions)
 - `.opencode/config/agent-metadata.json` -- Agent routing and permission mappings
-- `.opencode/mcp-client-config.json` -- MCP server connection details (PostgreSQL credentials)
+- `.opencode/mcp-client-config.json` -- Portable remote Allura Brain MCP template; credentials are environment placeholders
 - `.opencode/mcp-approved-servers.json` -- Approved MCP servers (Brooks signs off)
 - `.opencode/MODEL_REGISTRY.md` -- Role-first model assignments per agent
 - `.env.example` -- Environment variables template for Allura Brain integration

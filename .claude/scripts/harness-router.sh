@@ -4,8 +4,9 @@
 
 set -e
 
-# Navigate to project root
-cd "/home/ronin704/Projects/allura memory"
+# Navigate to the canonical Team RAM repository root.
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$REPO_ROOT"
 
 # Route to harness orchestrator
 # Expected usage: ./harness-router.sh mcp-discover [keyword]

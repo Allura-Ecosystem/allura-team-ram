@@ -265,7 +265,7 @@ If all 3 pass → promote via `memory_propose_insight`. If PROMOTION_MODE is `so
   "allura-memory": {
     "command": "bun",
     "args": ["run", "src/mcp/memory-server.ts"],
-    "cwd": "/home/ronin704/Projects/allura memory"
+    "cwd": "<project-root>"
   }
 }
 ```

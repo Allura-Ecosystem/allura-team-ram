@@ -151,7 +151,7 @@ docker exec -it <pg_container> psql -U postgres -d memory -c "\d canonical_propo
 "allura-memory": {
   "command": "bun",
   "args": ["run", "src/mcp/memory-server-canonical.ts"],
-  "cwd": "/home/ronin704/Projects/allura memory"
+  "cwd": "<project-root>"
 }
 ```
 

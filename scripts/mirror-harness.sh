@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
-# mirror-harness.sh — Apply harness updates from opencode-config to allura-memory
-# Usage: bash scripts/mirror-harness.sh
-# 
-# This script mirrors the same changes made to the opencode-config project
-# to the allura-memory project path.
+# mirror-harness.sh — Apply canonical Team RAM harness updates to a host project
+# Usage: TEAM_RAM_TARGET=/path/to/project bash scripts/mirror-harness.sh
+#
+# The standalone repository is the default source. Callers must explicitly name
+# the destination; no user-specific filesystem path is embedded.
 
 set -euo pipefail
 
-SOURCE="/home/ronin704/Projects/opencode config"
-TARGET="/home/ronin704/Projects/allura memory"
+SOURCE="${TEAM_RAM_SOURCE:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+: "${TEAM_RAM_TARGET:?Set TEAM_RAM_TARGET to the host project directory}"
+TARGET="$TEAM_RAM_TARGET"
 
 echo "=== Mirror Harness: opencode-config → allura-memory ==="
 echo ""

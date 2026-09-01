@@ -6,6 +6,6 @@
     "preset": "starter"
   },
   "authorizedRoots": [
-    "/home/ronin704/Projects/Allura-ecosystem/Allura-TeamRam"
+    "."
   ]
 }

@@ -109,14 +109,14 @@ MCP_DOCKER_mcp-exec --name perplexica --tool search --arguments '{
 ```
 # Configure filesystem (restrict to project directories)
 MCP_DOCKER_mcp-config-set --server filesystem --config '{
-  "paths": ["/home/ronin704/dev/projects/memory"]
+  "paths": ["<project-root>"]
 }'
 
 MCP_DOCKER_mcp-add --name filesystem --activate
 
 # Read a file
 MCP_DOCKER_mcp-exec --name filesystem --tool read_file --arguments '{
-  "path": "/home/ronin704/dev/projects/memory/README.md"
+  "path": "<project-root>/README.md"
 }'
 ```
 

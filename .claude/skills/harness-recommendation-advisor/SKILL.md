@@ -53,7 +53,7 @@ Inspect a project's CLI harness setup, compare its work needs against available 
 
 ## Example
 ```
-Run harness-recommendation-advisor on /home/ronin704/Projects/ai-agents/allura-memory with mode=ram
+Run harness-recommendation-advisor on <project-root> with mode=ram
 ```
 
 ## Related

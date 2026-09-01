@@ -180,7 +180,7 @@ MCP_DOCKER_get-library-docs(
 grep-mcp_grep_query(query="moduleResolution", language="TypeScript", path="tsconfig.json")
 
 # Step 4: Check our own codebase
-# Use local grep tool: pattern="moduleResolution" path=/home/ronin704/Projects/allura memory/
+# Use local grep tool: pattern="moduleResolution" path=<project-root>/
 ```
 
 ### Strategy 3: Pattern Discovery
@@ -204,7 +204,7 @@ MCP_DOCKER_get-library-docs(
 MCP_DOCKER_perplexica_search(query="TypeScript error handling patterns 2025 best practices")
 
 # Step 4: Check our own patterns
-# Use local grep tool: pattern="catch" include="*.ts" path=/home/ronin704/Projects/allura memory/src/
+# Use local grep tool: pattern="catch" include="*.ts" path=<project-root>/src/
 ```
 
 ### Strategy 4: Agent Instruction Design
@@ -241,7 +241,7 @@ prompts_chat_improve_prompt(
 
 ```
 # Step 1: Search our own codebase first
-# Use local grep tool: pattern="ECONNREFUSED" path=/home/ronin704/Projects/allura memory/
+# Use local grep tool: pattern="ECONNREFUSED" path=<project-root>/
 # Use local grep tool: pattern="neo4j.*driver.*session" include="*.ts"
 
 # Step 2: Search for the error message online
@@ -449,7 +449,7 @@ MCP_DOCKER_perplexica_search(
 
 ### 5. Local grep — Our Codebase Search (built-in tool)
 
-Search our own codebase at `/home/ronin704/Projects/allura memory/`. Instant, no rate limits, codebase-specific.
+Search our own codebase at `<project-root>/`. Instant, no rate limits, codebase-specific.
 
 #### Usage
 
@@ -457,13 +457,13 @@ Use the built-in `grep` tool to search file contents by regex pattern, or `glob`
 
 ```
 # Search for a pattern in our codebase
-grep(pattern="SUPERSEDES", path="/home/ronin704/Projects/allura memory/src/")
+grep(pattern="SUPERSEDES", path="<project-root>/src/")
 
 # Find all TypeScript files matching a pattern
-grep(pattern="group_id", include="*.ts", path="/home/ronin704/Projects/allura memory/src/")
+grep(pattern="group_id", include="*.ts", path="<project-root>/src/")
 
 # Find files by glob pattern
-glob(pattern="**/*.test.ts", path="/home/ronin704/Projects/allura memory/src/")
+glob(pattern="**/*.test.ts", path="<project-root>/src/")
 ```
 
 **When to use local grep:**
@@ -530,7 +530,7 @@ MCP_DOCKER_get-library-docs(
 ### Local grep
 
 - **Rate limit:** None — instant, local search.
-- **Scope:** Limited to `/home/ronin704/Projects/allura memory/` codebase only.
+- **Scope:** Limited to `<project-root>/` codebase only.
 - **Best for:** Understanding our own implementation before making changes, debugging local issues, consistency checks.
 - **Tip:** Always search locally before searching externally — know what we have before looking at what others have.
 

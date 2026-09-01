@@ -20,7 +20,7 @@ Use this entry in your MCP configuration:
   "mcpServers": {
     "memory": {
       "command": "bun",
-      "args": ["run", "/home/ronin704/Projects/allura memory/src/mcp/memory-server-canonical.ts"],
+      "args": ["run", "<project-root>/src/mcp/memory-server-canonical.ts"],
       "env": {
         "POSTGRES_HOST": "localhost",
         "POSTGRES_PORT": "5432",

@@ -2,10 +2,10 @@
 /**
  * Integration smoke test for the Team RAM harness (allura-team-ram).
  *
- * Verifies the harness wiring that lives IN THIS REPO plus reachability of the
- * governed Allura Brain gateway. It does NOT reach into sibling repos or touch
- * the databases directly — per the repo's MCP-integration rule, DB access goes
- * through the Brain gateway (:5888), never `docker exec`.
+ * Verifies the harness wiring that lives IN THIS REPO plus the optional governed
+ * Allura Brain gateway boundary. It does NOT reach into sibling repositories or
+ * touch databases directly. An unreachable optional gateway is reported as
+ * standalone degraded mode; a reachable but unhealthy gateway remains a failure.
  *
  * All paths are resolved relative to this file, so the test is machine-agnostic.
  * (Rewritten 2026-07-04: the prior version hardcoded a former machine's layout —
@@ -17,7 +17,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dir);
-const BRAIN_GATEWAY = process.env.ALLURA_BRAIN_GATEWAY || "http://127.0.0.1:5888";
+const BRAIN_GATEWAY = process.env.ALLURA_BRAIN_GATEWAY || process.env.ALLURA_MCP_URL || "http://127.0.0.1:5888";
+const REQUIRE_BRAIN = process.env.REQUIRE_ALLURA_BRAIN === "1";
 
 interface TestResult {
   name: string;
@@ -49,11 +50,20 @@ function requireFile(relPath: string): string {
   return path;
 }
 
-// Test 1: Allura Brain gateway is reachable and healthy (governed DB surface)
+// Test 1: Allura Brain is optional, but a reachable gateway must be healthy.
 async function testBrainGatewayHealthy(): Promise<void> {
-  const res = await fetch(`${BRAIN_GATEWAY}/health`, {
-    signal: AbortSignal.timeout(5000),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${BRAIN_GATEWAY}/health`, {
+      signal: AbortSignal.timeout(5000),
+    });
+  } catch (error) {
+    if (!REQUIRE_BRAIN) {
+      console.warn(`⚠️  Allura Brain unavailable; standalone degraded mode active (${String(error)})`);
+      return;
+    }
+    throw error;
+  }
   if (!res.ok) {
     throw new Error(`Brain gateway ${BRAIN_GATEWAY}/health returned ${res.status}`);
   }
@@ -89,25 +99,31 @@ async function testMCPClientConfig(): Promise<void> {
   }
 }
 
-// Test 6: Environment example documents the required DB variables
+// Test 6: Environment example documents the governed remote MCP boundary.
 async function testEnvExample(): Promise<void> {
   const path = requireFile(".env.example");
   const content = readFileSync(path, "utf8");
-  if (!content.includes("POSTGRES_HOST")) {
-    throw new Error(".env.example missing POSTGRES_HOST");
+  for (const required of ["ALLURA_MCP_URL", "ALLURA_MCP_TOKEN", "DEFAULT_GROUP_ID"]) {
+    if (!content.includes(required)) {
+      throw new Error(`.env.example missing ${required}`);
+    }
+  }
+  if (/POSTGRES_|NEO4J_/i.test(content)) {
+    throw new Error(".env.example must not expose direct database configuration");
   }
 }
 
-// Test 7: Core agent definitions carry the memory protocol
-async function testAgentDefinitionsHaveMemory(): Promise<void> {
-  const brooks = readFileSync(requireFile(".opencode/agent/core/brooks.md"), "utf8");
-  const scout = readFileSync(requireFile(".opencode/agent/core/scout.md"), "utf8");
-  if (!/memory_add|allura-brain_memory|Memory Protocol/i.test(brooks)) {
-    throw new Error("Brooks agent definition missing memory-protocol markers");
+// Test 7: Memory is an optional integration skill, not embedded role authority.
+async function testOptionalMemoryIntegration(): Promise<void> {
+  const skill = readFileSync(
+    requireFile(".agents/skills/allura-memory-skill/SKILL.md"),
+    "utf8",
+  );
+  if (!/Allura (Memory|Brain)|memory_search|memory_add/i.test(skill)) {
+    throw new Error("Optional Allura Memory integration skill is missing its contract markers");
   }
-  if (!/memory_search|allura-brain_memory|Memory/i.test(scout)) {
-    throw new Error("Scout agent definition missing memory markers");
-  }
+  requireFile(".opencode/agent/core/brooks.md");
+  requireFile(".opencode/agent/core/scout.md");
 }
 
 // Test 8: Model tier map is the single machine authority and stays parseable
@@ -126,13 +142,13 @@ async function main() {
   console.log("\n🧪 Team RAM Harness Integration Tests\n");
   console.log("=".repeat(60));
 
-  await runTest("Allura Brain gateway is healthy", testBrainGatewayHealthy);
+  await runTest("Allura Brain is healthy when reachable", testBrainGatewayHealthy);
   await runTest("Agent lifecycle hooks exist", testAgentHooksExist);
   await runTest("Performance router exists", testPerformanceRouterExists);
   await runTest("Governance layer exists", testGovernanceLayerExists);
   await runTest("MCP client config declares memory server", testMCPClientConfig);
-  await runTest(".env.example documents DB variables", testEnvExample);
-  await runTest("Core agents carry the memory protocol", testAgentDefinitionsHaveMemory);
+  await runTest(".env.example documents remote MCP boundary", testEnvExample);
+  await runTest("Optional memory integration skill is available", testOptionalMemoryIntegration);
   await runTest("Model tier map is coherent", testModelsMapAuthority);
 
   console.log(`\n${"=".repeat(60)}`);
