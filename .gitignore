@@ -38,3 +38,6 @@ my-project/
 # Bun
 bun.lock
 .git
+
+# Local-only machine config backups (never published)
+*.bak.local-only.*
