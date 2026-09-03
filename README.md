@@ -14,13 +14,13 @@ Turn a software request into a controlled work graph: scope intent, hydrate cont
 
 ## How Team RAM operates
 
-### 1. The governed workflow
+### 1. Specialists move as one team
 
 <p align="center">
-  <a href="docs/images/allura-team-ram-governed-workflow-v1.png"><img src="docs/images/allura-team-ram-governed-workflow-v1.png" alt="Team RAM governed workflow: orchestration, specialist roles, governance checks, optional shared memory, and controlled delivery" width="900" /></a>
+  <a href="docs/images/specialists-move-as-one-team.png"><img src="docs/images/specialists-move-as-one-team.png" alt="Specialists move as one team: a task is framed, work is coordinated, specialists contribute, and results are verified. Brooks orchestration sits at the center of architecture, implementation, review, test, and governance, producing a verified deliverable." width="900" /></a>
 </p>
 
-Team RAM is built for **controlled software delivery**: orchestration (Brooks coordinates), specialist lanes (10 focused roles), governance (policy and human review), optional memory (Allura Brain for cross-session context), and evidence-backed release.
+Team RAM routes a task brief through **Brooks orchestration** to the lanes that fit it — architecture, implementation, review, test, and governance — and returns a verified deliverable. **Task is framed** → **work is coordinated** → **specialists contribute** → **results are verified**. Clear routing replaces isolated handoffs, and repeatable checkpoints replace ad hoc ones.
 
 ---
 
