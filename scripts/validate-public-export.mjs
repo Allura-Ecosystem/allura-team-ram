@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { syncCodexSkills } from "./sync-codex-skills.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MANIFEST_PATH = resolve(ROOT, "PUBLIC_EXPORT.json");
@@ -43,7 +44,7 @@ export function validatePublicExport() {
   const source = readJson(SOURCE_PATH);
   const pkg = readJson(PACKAGE_PATH);
   const tracked = trackedFiles();
-  const errors = [];
+  const errors = [...syncCodexSkills(ROOT, true).errors];
 
   if (manifest.canonicalRepository !== source.repository) {
     errors.push("PUBLIC_EXPORT.json canonicalRepository differs from SOURCE.json repository");

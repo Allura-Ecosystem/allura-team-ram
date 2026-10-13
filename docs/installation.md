@@ -160,3 +160,22 @@ bun run validate:export
 ```
 
 The validator identifies stale manifest patterns, unclassified public-root files, or `package.json` drift. Update `PUBLIC_EXPORT.json` deliberately; do not broaden it merely to silence the check.
+
+## Codex skill packaging
+
+The Codex manifest uses `skills/` and `mcpServers: ./.mcp.json`. It does not
+register OpenCode agent or command definitions as Codex plugin fields. Canonical
+prompts remain in `.opencode/skills/`; `bun run sync:codex-skills` deterministically
+creates relative directory links under `skills/`. Never edit those links by hand.
+`bun run check:codex-skills` and public-export validation reject missing, stale,
+or unmanaged entries. The public export preserves links and their in-package
+canonical targets, including skill resources and relative references.
+
+`figma-create-new-file` is excluded from Codex discovery because its canonical
+frontmatter sets `disable-model-invocation: true`, which the native Codex plugin
+validator rejects. The canonical skill and its invocation restriction remain
+available to the other runtime packages. No automatic Figma mutation is enabled.
+
+The legacy Claude compatibility reviewer `reality-checker-tram.md` remains
+outside the canonical agent generator roster; it inherits the host model while
+retaining its independent evidence-review instructions.

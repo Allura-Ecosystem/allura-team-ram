@@ -7,7 +7,6 @@
   },
   "license": "MIT",
   "repository": "https://github.com/Allura-Ecosystem/allura-team-ram.git",
-  "mcp": "./.mcp.json",
   "keywords": [
     "opencode",
     "harness",
@@ -20,56 +19,7 @@
     "allura",
     "governance"
   ],
-  "skills": "./.opencode/skills/",
-  "agents": [
-    "./.opencode/agent/core/brooks.md",
-    "./.opencode/agent/core/jobs.md",
-    "./.opencode/agent/core/bahari.md",
-    "./.opencode/agent/core/woz.md",
-    "./.opencode/agent/core/scout.md",
-    "./.opencode/agent/core/pike.md",
-    "./.opencode/agent/core/fowler.md",
-    "./.opencode/agent/core/bellard.md",
-    "./.opencode/agent/core/carmack.md",
-    "./.opencode/agent/core/knuth.md",
-    "./.opencode/agent/core/hightower.md"
-  ],
-  "commands": [
-    "./.opencode/command/start-session.md",
-    "./.opencode/command/architect.md",
-    "./.opencode/command/debug.md",
-    "./.opencode/command/commit.md",
-    "./.opencode/command/party.md",
-    "./.opencode/command/task.md",
-    "./.opencode/command/test.md",
-    "./.opencode/command/scout.md",
-    "./.opencode/command/orchestrate.md",
-    "./.opencode/command/goal.md",
-    "./.opencode/command/analyst.md",
-    "./.opencode/command/analyze-patterns.md",
-    "./.opencode/command/clean.md",
-    "./.opencode/command/context.md",
-    "./.opencode/command/add-context.md",
-    "./.opencode/command/curator-team-promote.md",
-    "./.opencode/command/harness-status.md",
-    "./.opencode/command/intent-gate.md",
-    "./.opencode/command/mcp-approve.md",
-    "./.opencode/command/mcp-discover.md",
-    "./.opencode/command/mcp-load.md",
-    "./.opencode/command/optimize.md",
-    "./.opencode/command/quickprompt.md",
-    "./.opencode/command/run-day.md",
-    "./.opencode/command/run-night.md",
-    "./.opencode/command/scribe.md",
-    "./.opencode/command/skill-load.md",
-    "./.opencode/command/skill-propose.md",
-    "./.opencode/command/ultra.md",
-    "./.opencode/command/update.md",
-    "./.opencode/command/validate-repo.md",
-    "./.opencode/command/loopy.md",
-    "./.opencode/command/auto.md",
-    "./.opencode/command/suggest.md"
-  ],
+  "skills": "./skills",
   "interface": {
     "displayName": "Team RAM Harness",
     "shortDescription": "Self-evolving multi-agent orchestration for software development",
@@ -77,6 +27,10 @@
     "developerName": "Team RAM",
     "category": "Coding",
     "capabilities": ["Read", "Write", "Interactive", "Memory"],
-    "brandColor": "#7C3AED"
-  }
+    "brandColor": "#7C3AED",
+    "defaultPrompt": [
+      "Use Team RAM to complete this task with the appropriate owner and validation."
+    ]
+  },
+  "mcpServers": "./.mcp.json"
 }

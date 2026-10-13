@@ -30,6 +30,7 @@
     ".claude-plugin/commands/**",
     ".agents/skills/**",
     ".opencode/skills/**",
+    "skills/**",
     ".claude/skills/**",
     ".claude-plugin/skills/**",
     "bmad-module/skills/**",
@@ -72,7 +73,8 @@
     ".claude-plugin/README.md",
     "bmad-module/README.md",
     "scripts/export-public.mjs",
-    "scripts/validate-public-export.mjs"
+    "scripts/validate-public-export.mjs",
+    "scripts/sync-codex-skills.mjs"
   ],
   "keywords": [
     "opencode",
@@ -113,7 +115,9 @@
     "validate:export": "node scripts/validate-public-export.mjs",
     "export:public": "node scripts/export-public.mjs",
     "prompt:baseline": "bun tooling/prompt-evals/prompt-eval.ts .",
-    "prompt:eval": "bun test tooling/prompt-evals/prompt-eval.test.ts"
+    "prompt:eval": "bun test tooling/prompt-evals/prompt-eval.test.ts",
+    "sync:codex-skills": "node scripts/sync-codex-skills.mjs",
+    "check:codex-skills": "node scripts/sync-codex-skills.mjs --check"
   },
   "dependencies": {
     "@ruvector/sona": "^0.1.6"

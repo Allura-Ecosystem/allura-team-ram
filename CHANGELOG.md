@@ -5,6 +5,8 @@
 - Inherit configured host models; generate both runtime and plugin agent mirrors.
 - Require explicit direct API models and report non-executable diagnostics honestly.
 - Align package and plugin release versions.
+- Fix native Codex manifest fields and expose deterministic links to eligible canonical skills; retain invocation-disabled restrictions and validate export link parity.
+- Repair three malformed skill metadata headers and let the compatibility reality reviewer inherit the host model.
 
 # Changelog
 

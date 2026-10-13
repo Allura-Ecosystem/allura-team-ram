@@ -18,7 +18,8 @@
       ".opencode/skills/**",
       ".claude/skills/**",
       ".claude-plugin/skills/**",
-      "bmad-module/skills/**"
+      "bmad-module/skills/**",
+      "skills/**"
     ],
     "config": [
       ".opencode/config/**",
@@ -64,7 +65,11 @@
       ".claude-plugin/README.md",
       "bmad-module/README.md"
     ],
-    "release": ["scripts/export-public.mjs", "scripts/validate-public-export.mjs"]
+    "release": [
+      "scripts/export-public.mjs",
+      "scripts/validate-public-export.mjs",
+      "scripts/sync-codex-skills.mjs"
+    ]
   },
   "publicRoots": {
     "agents": [
@@ -80,7 +85,8 @@
       ".opencode/skills/",
       ".claude/skills/",
       ".claude-plugin/skills/",
-      "bmad-module/skills/"
+      "bmad-module/skills/",
+      "skills/"
     ],
     "config": [
       ".opencode/config/",
@@ -104,6 +110,7 @@
     ".claude-plugin/commands/**",
     ".agents/skills/**",
     ".opencode/skills/**",
+    "skills/**",
     ".claude/skills/**",
     ".claude-plugin/skills/**",
     "bmad-module/skills/**",
@@ -146,7 +153,8 @@
     ".claude-plugin/README.md",
     "bmad-module/README.md",
     "scripts/export-public.mjs",
-    "scripts/validate-public-export.mjs"
+    "scripts/validate-public-export.mjs",
+    "scripts/sync-codex-skills.mjs"
   ],
   "excluded": [
     "opencode.json is a repository-local runnable example and may contain host-specific changes",
