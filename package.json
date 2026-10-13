@@ -1,6 +1,6 @@
 {
   "name": "@allura/team-ram-harness",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Standalone governed multi-agent software-delivery harness with context-first routing, specialist lanes, review gates, and evidence-backed completion.",
   "author": "Team RAM Contributors",
   "license": "MIT",

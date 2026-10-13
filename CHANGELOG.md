@@ -1,3 +1,8 @@
+# 0.5.1 — Codex marketplace identity
+
+- Match the native Codex manifest name to the public `team-ram-coding` selector.
+- Preserve the standalone Claude and package names and validate their explicit source-owned identities before export.
+
 # 0.5.0 — Adaptive delivery
 
 - Remove Scout-length complexity escalation and preserve specialist ownership.

@@ -179,3 +179,11 @@ available to the other runtime packages. No automatic Figma mutation is enabled.
 The legacy Claude compatibility reviewer `reality-checker-tram.md` remains
 outside the canonical agent generator roster; it inherits the host model while
 retaining its independent evidence-review instructions.
+
+### Runtime identities
+
+`SOURCE.json` owns the runtime identity contract. The Codex marketplace selector
+`team-ram-coding@allura-ecosystem` requires `.codex-plugin/plugin.json` name
+`team-ram-coding`. The standalone Claude plugin remains `team-ram-harness`, and
+the package remains `@allura/team-ram-harness`. Public exports copy these source
+identities unchanged; downstream consumers must not patch generated manifests.

@@ -5,6 +5,12 @@
   "canonical": true,
   "repository": "https://github.com/Allura-Ecosystem/allura-team-ram.git",
   "defaultBranch": "main",
+  "runtimeIdentities": {
+    "packageName": "@allura/team-ram-harness",
+    "claudeManifestName": "team-ram-harness",
+    "codexManifestName": "team-ram-coding",
+    "codexMarketplaceAlias": "team-ram-coding"
+  },
   "authority": {
     "owns": [
       "team-ram-agents",
