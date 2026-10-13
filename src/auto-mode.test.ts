@@ -30,12 +30,10 @@ describe("auto-mode", () => {
       expect(assessComplexity("overhaul the permission model")).toBe("epic");
     });
 
-    test("returns 'epic' when scout report is long (>500 chars)", () => {
-      expect(assessComplexity("do something", 600)).toBe("epic");
-    });
-
-    test("returns 'multi' when scout report is medium (>200 chars)", () => {
-      expect(assessComplexity("do something", 300)).toBe("multi");
+    test("context length cannot escalate task scope", () => {
+      expect(assessComplexity("fix typo in readme", 10_000)).toBe("simple");
+      expect(assessComplexity("do something", 300)).toBe("simple");
+      expect(assessComplexity("refactor routing", 10_000)).toBe("multi");
     });
 
     test("returns 'simple' for unrecognized task with no scout report", () => {

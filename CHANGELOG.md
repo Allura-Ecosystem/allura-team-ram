@@ -1,3 +1,11 @@
+# 0.5.0 — Adaptive delivery
+
+- Remove Scout-length complexity escalation and preserve specialist ownership.
+- Share risk-based workflow and scoped context freshness rules across agents and entry skills.
+- Inherit configured host models; generate both runtime and plugin agent mirrors.
+- Require explicit direct API models and report non-executable diagnostics honestly.
+- Align package and plugin release versions.
+
 # Changelog
 
 All notable changes to the Team RAM OpenCode Harness will be documented in this file.

@@ -142,3 +142,11 @@ The gates keep the work honest.
 ---
 
 **Invoke with:** `/party <task description>`
+
+## Adaptive routing
+
+Apply `.opencode/contracts/adaptive-workflow.md`: quick uses one owner, standard
+adds one relevant independent reviewer, sensitive work preserves required approval.
+Keep the chosen specialist on the first iteration and retries. Context length does
+not determine task complexity. Reuse hydration only when scoped revisions and
+authority are unchanged; refresh missing or stale evidence.

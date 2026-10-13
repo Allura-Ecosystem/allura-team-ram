@@ -238,3 +238,21 @@ CI rejects stale patterns, unclassified files under public roots, package/manife
 This repository is the canonical standalone source for Team RAM. Ownership and export semantics are declared in [`SOURCE.json`](SOURCE.json); the public package boundary is declared in [`PUBLIC_EXPORT.json`](PUBLIC_EXPORT.json). Historical planning records may describe earlier ownership arrangements, but they do not override these machine-readable contracts.
 
 MIT licensed. See [LICENSE](LICENSE).
+
+## Adaptive workflows (0.5)
+
+Team RAM now selects quick, standard, or sensitive delivery based on risk and scope.
+See [.opencode/contracts/adaptive-workflow.md](.opencode/contracts/adaptive-workflow.md).
+Scout output length never escalates a task, and the selected specialist owns the
+first iteration as well as retries. Runtime and plugin agents are generated from
+one source; run `node tooling/agent-sync/sync-agents.mjs --check` to detect drift.
+Models inherit the configured host selection. Configure supported explicit tier
+choices in `tooling/agent-sync/models.map.json`, then regenerate with `--apply`.
+
+The standalone HTTP executor is a text-only Anthropic transport, not a workspace
+coding runtime. Direct API mode needs both `ANTHROPIC_API_KEY` and a concrete
+`TEAM_RAM_ANTHROPIC_MODEL`; CLI aliases such as `inherit` are rejected. Without a
+backend it returns a failed diagnostic. Hydration and implementation requests
+require a tool-capable Codex, Claude Code, or OpenCode host; generated text and model
+confidence cannot establish completion. No existing task approval is renewed merely
+because work crosses a persona boundary.
