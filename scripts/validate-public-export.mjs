@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { existsSync, lstatSync, readdirSync, readFileSync } from "node:fs";
+import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { syncCodexSkills } from "./sync-codex-skills.mjs";
+import { validatePackedPlugin } from "./validate-packed-plugin.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MANIFEST_PATH = resolve(ROOT, "PUBLIC_EXPORT.json");
@@ -57,7 +58,18 @@ function trackedFiles() {
     { cwd: ROOT, encoding: "utf8" },
   );
   if (result.status !== 0) throw new Error(result.stderr || "git ls-files failed");
-  return result.stdout.split("\0").filter(Boolean).sort();
+  const files = new Set();
+  const visit = (path) => {
+    if (!existsSync(path)) return;
+    const stat = lstatSync(path);
+    if (!stat.isDirectory() || stat.isSymbolicLink()) {
+      files.add(relative(ROOT, path));
+      return;
+    }
+    for (const name of readdirSync(path)) visit(resolve(path, name));
+  };
+  for (const file of result.stdout.split("\0").filter(Boolean)) visit(resolve(ROOT, file));
+  return [...files].sort();
 }
 
 export function validatePublicExport() {
@@ -67,6 +79,7 @@ export function validatePublicExport() {
   const tracked = trackedFiles();
   const errors = [
     ...syncCodexSkills(ROOT, true).errors,
+    ...validatePackedPlugin(ROOT).errors,
     ...validateRuntimeIdentities(
       source,
       pkg,

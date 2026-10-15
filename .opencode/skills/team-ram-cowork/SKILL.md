@@ -1,6 +1,6 @@
 ---
 name: team-ram-cowork
-description: Use when Ronin asks Codex to use Team RAM, Brooks, Scout, Woz, Ralph, co-work, or Allura project operating flow. In the Allura Memory repo, Brooks is the primary chair and Codex is the runtime/hands.
+description: Run Brooks-led Team RAM work with honest Scout hydration, focused specialist routing, validation, and Allura outcome logging.
 ---
 
 # Team RAM Co-Work Skill

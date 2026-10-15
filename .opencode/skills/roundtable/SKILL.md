@@ -1,6 +1,6 @@
 ---
 name: roundtable
-description: "Orchestrate multi-agent roundtable discussions between Team RAM specialists. Each agent spawns as an independent subagent with authentic persona, expertise, and voice. Use when you want diverse perspectives, debate, or brainstorming."
+description: Convene two to four real Team RAM specialists for independent perspectives, debate, or a bounded design decision.
 allowed-tools: ["Task", "Read", "Grep", "Bash", "allura-brain_memory_*"]
 ---
 

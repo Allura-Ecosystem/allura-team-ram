@@ -6,9 +6,21 @@ const read = (path: string) =>
   JSON.parse(readFileSync(new URL(`../${path}`, import.meta.url), "utf8"));
 
 test("Codex manifest matches the public marketplace selector without renaming Claude or package", () => {
+  expect(read("plugin.json").name).toBe("team-ram-coding");
   expect(read(".codex-plugin/plugin.json").name).toBe("team-ram-coding");
   expect(read(".claude-plugin/plugin.json").name).toBe("team-ram-harness");
   expect(read("package.json").name).toBe("@allura/team-ram-harness");
+});
+
+test("portable and compatibility Codex manifests keep identity and version parity", () => {
+  const portable = read("plugin.json");
+  const compatibility = read(".codex-plugin/plugin.json");
+  expect({ name: portable.name, version: portable.version }).toEqual({
+    name: compatibility.name,
+    version: compatibility.version,
+  });
+  expect(portable.skills).toBe("./skills");
+  expect(portable.mcpServers).toBe("./.mcp.json");
 });
 
 test("export gate rejects mismatched Codex aliases and runtime version drift", () => {

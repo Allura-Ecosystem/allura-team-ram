@@ -1,0 +1,31 @@
+{
+  "name": "team-ram-coding",
+  "version": "0.6.0",
+  "description": "Lean Team RAM overlay with ten canonical specialists, focused public skills, optional Allura Brain memory, and evidence-backed delivery.",
+  "author": {
+    "name": "Team RAM Contributors"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/Allura-Ecosystem/allura-team-ram.git",
+  "keywords": [
+    "opencode",
+    "harness",
+    "team-ram",
+    "multi-agent",
+    "orchestration",
+    "allura",
+    "governance"
+  ],
+  "skills": "./skills",
+  "interface": {
+    "displayName": "Team RAM Harness",
+    "shortDescription": "Lean governed specialist routing for software delivery",
+    "longDescription": "A portable overlay with ten canonical Team RAM specialists and ten focused public skills. Brooks routes, Scout hydrates context, Woz builds, and other specialists join on demand. Allura Brain is optional and human-governed.",
+    "developerName": "Team RAM",
+    "category": "Coding",
+    "capabilities": ["Read", "Write", "Interactive", "Memory"],
+    "brandColor": "#7C3AED",
+    "defaultPrompt": ["Use Brooks, Scout, and Woz to complete this task with focused validation."]
+  },
+  "mcpServers": "./.mcp.json"
+}

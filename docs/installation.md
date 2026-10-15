@@ -62,10 +62,14 @@ node ./bin/team-ram.mjs init \
 
 Supported runtime values:
 
-- `opencode`: copies `.opencode/agent`, `command`, `skills`, `routing`, `hooks`, `contracts`, and `config`.
-- `claude`: copies `.claude/agents`, `commands`, `skills`, and `rules`.
+- `opencode`: copies the packaged agent, routing, hook, and contract surfaces.
+- `claude`: copies the packaged agents and rules.
 - `codex`: copies `.codex/agents`.
 - `all`: copies all three surfaces.
+
+For OpenCode and Claude, the CLI maps the packaged root `skills/` catalog to
+`.opencode/skills/` or `.claude/skills/` respectively. Preflight requires all
+ten allowlisted skills, and the receipt reports how many were actually copied.
 
 Existing target files are skipped. Use `--force` only after reviewing conflicts and accepting replacement of the target files.
 
@@ -123,7 +127,7 @@ bun run validate:export
 bun test
 ```
 
-For a scaffolded host, verify the copied surface exists and let the selected runtime enumerate agents/commands. Then execute a bounded read-only task first, for example asking Scout to identify the host's test command and instruction files.
+For a scaffolded host, verify the copied surface exists and let the selected runtime enumerate agents and skills. Then execute a bounded read-only task first, for example asking Scout to identify the host's test command and instruction files.
 
 A healthy first run demonstrates:
 
@@ -161,24 +165,40 @@ bun run validate:export
 
 The validator identifies stale manifest patterns, unclassified public-root files, or `package.json` drift. Update `PUBLIC_EXPORT.json` deliberately; do not broaden it merely to silence the check.
 
-## Codex skill packaging
+## Public skill packaging
 
-The Codex manifest uses `skills/` and `mcpServers: ./.mcp.json`. It does not
-register OpenCode agent or command definitions as Codex plugin fields. Canonical
-prompts remain in `.opencode/skills/`; `bun run sync:codex-skills` deterministically
-creates relative directory links under `skills/`. Never edit those links by hand.
-`bun run check:codex-skills` and public-export validation reject missing, stale,
-or unmanaged entries. The public export preserves links and their in-package
-canonical targets, including skill resources and relative references.
+`plugin.json` is the portable manifest; `.codex-plugin/plugin.json` is retained
+for compatibility. Their identity and version must match. Both advertise
+`skills/` and `mcpServers: ./.mcp.json` and avoid runtime-specific agent or
+command fields.
 
-`figma-create-new-file` is excluded from Codex discovery because its canonical
-frontmatter sets `disable-model-invocation: true`, which the native Codex plugin
-validator rejects. The canonical skill and its invocation restriction remain
-available to the other runtime packages. No automatic Figma mutation is enabled.
+`codex-public-skills.json` is the explicit ten-skill discovery contract used by
+every packaged runtime. Canonical prompts remain source-only under
+`.opencode/skills/`; `bun run sync:codex-skills` materializes only the allowlisted
+directories under `skills/`. In an installed artifact, `--check` validates that
+materialized catalog without canonical sources, while regeneration refuses with
+an explicit source-only message. Generated public skills are real files and
+directories, never symlinks. Do not edit them or an installed cache by hand.
 
-The legacy Claude compatibility reviewer `reality-checker-tram.md` remains
-outside the canonical agent generator roster; it inherits the host model while
-retaining its independent evidence-review instructions.
+The portable 0.6.0 overlay is skill-driven through `allura-menu`. Legacy command
+trees remain canonical repository sources but are not included in exports or
+publish artifacts, so they cannot reference omitted skills at runtime.
+
+Run `bun run check:codex-skills`, `bun run validate:packed`, `bun run
+validate:tarball`, and `bun run validate:export` before release. The tarball gate
+uses `bun pm pack`, extracts the publish artifact in a temporary directory, and
+runs strict validation on its `package/` root. Validation checks manifest parity,
+the exact skill set, frontmatter and metadata budgets, exactly the ten canonical
+agent definitions, execution modes, and advertised paths. `bun run
+team-ram:doctor` reports the same local state without repairing it; pass
+`--installed-root <path>` to compare a cache or unpacked install.
+
+Skill regeneration is staged in a same-filesystem sibling and swapped only
+after content and marker verification. A failed swap restores the previous
+generated tree; unmanaged real content is never deleted.
+
+Legacy and product-specific agents remain source-only. The public artifact
+contains only the ten canonical Team RAM definitions on every runtime surface.
 
 ### Runtime identities
 

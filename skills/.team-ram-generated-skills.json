@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "generated": true,
+  "source": ".opencode/skills",
+  "skills": [
+    "team-ram-cowork",
+    "allura-memory-skill",
+    "multi-search",
+    "roundtable",
+    "party-mode",
+    "allura-menu",
+    "systematic-debugging-memory",
+    "code-review",
+    "team-ram-setup",
+    "team-ram-doctor"
+  ]
+}

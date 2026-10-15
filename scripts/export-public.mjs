@@ -11,6 +11,7 @@ import {
 } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { validatePackedPlugin } from "./validate-packed-plugin.mjs";
 import { validatePublicExport } from "./validate-public-export.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -47,6 +48,13 @@ for (const file of validation.files) {
   else copyFileSync(source, target);
 }
 copyFileSync(resolve(ROOT, "package.json"), resolve(output, "package.json"));
+
+const packed = validatePackedPlugin(output, { artifact: true });
+if (!packed.ok) {
+  console.error(`exported plugin validation failed (${packed.errors.length} errors):`);
+  for (const error of packed.errors) console.error(`- ${error}`);
+  process.exit(1);
+}
 
 const provenance = {
   schemaVersion: 1,

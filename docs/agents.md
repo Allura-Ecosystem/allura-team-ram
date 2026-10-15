@@ -1,6 +1,6 @@
 # Meet the Team
 
-> 11 AI agents modeled after computing pioneers. Instead of generalists, you get one architect and ten specialists who own their domains completely.
+> Ten canonical agents modeled after computing pioneers. One architect coordinates focused specialists who own their domains.
 
 ## The Architecture
 
@@ -12,14 +12,14 @@
                    │ delegates
      ┌─────────────┬─────────────┬──┴───┬──────┐
      ▼             ▼             ▼      ▼       ▼
-   ┌────┐   ┌──────────┐  ┌─────┐  ┌───┴───┐  ┌───►
-   │Jobs│   │  Bahari  │  │Scout│  │  Woz  │  │ ...
-   │⚫  │   │  💎      │  │🟣  │  │🟢  │  │
-   └────┘   └──────────┘  └─────┘  └───────┘  └─────
-     ▲          │          ▲           │         ▲
-     │intent     │memory    │recon      │build   │review
-     │gate     │curator   │& discover │        │
-     └──────────┴──────────┴─────┴──────┴─────────┘
+   ┌────┐   ┌─────┐  ┌───────┐  ┌───►
+   │Jobs│   │Scout│  │  Woz  │  │ ...
+   │⚫  │   │🟣  │  │🟢    │  │
+   └────┘   └─────┘  └───────┘  └─────
+     ▲          ▲          │         ▲
+     │intent     │recon     │build    │review
+     │gate       │discover  │         │
+     └───────────┴──────────┴─────────┘
 ```
 
 ## Agent Cards
@@ -74,32 +74,6 @@
 - Scope creep detection
 
 **Jobs's Razor:** If you can't explain what you're building in one sentence, you don't know what you're building.
-
----
-
-### 💎 Bahari — Memory Curator
-
-> *"Memory is what we are. Your very soul and your very reason to be alive is tied up in memory."* — Nick Cave
-
-| | |
-|---|---|
-| **Persona** | Allura Memory Companion |
-| **Role** | Memory Curation & Onboarding |
-| **Mode** | `primary` |
-| **Model** | `ollama/kimi-k2.6:cloud` |
-| **Fallback** | `ollama/deepseek-v4-pro:cloud` |
-| **Color** | `#EC4899` |
-| **Skills** | agent-bahari, allura-memory-skill, mcp-docker |
-
-**What she does:** Helps manage Allura Brain memories — search, curation, onboarding, hygiene. Warm conversation partner for memory management.
-
-**When to invoke:**
-- "Remember that thing we built?"
-- "What did we decide about X?"
-- "How do I use Allura Brain?"
-- Memory hygiene check
-
-**Critical constraint:** Bahari **must not** use `group_id: "allura-system"`. Always use the user's configured group.
 
 ---
 
@@ -339,7 +313,7 @@ Task flows through a Brooksian pipeline:
 | Schema/migration | **Knuth** | Data correctness gate |
 | Refactoring | **Fowler** | Maintainability gate |
 | Infrastructure | **Hightower** | Deployment expert |
-| Memory query | **Bahari** | Brain curator |
+| Memory query | **Scout** | Governed Brain retrieval |
 | Multi-agent task | **Party Mode** | All hands |
 
 ### The Immutable Rules
@@ -352,7 +326,7 @@ Task flows through a Brooksian pipeline:
 6. **Fowler reviews, not rewrites** — incremental safe changes
 7. **Hightower automates** — if it requires manual steps, route to Hightower
 8. **Knuth enforces correctness** — no schema changes without his gate
-9. **Bahari curates memory** — Brain operations only through her
+9. **Memory stays governed** — use authenticated Brain tools and the task tenant
 
 ---
 
@@ -362,7 +336,6 @@ Task flows through a Brooksian pipeline:
 |-------|-----------------|--------|-----------|-------|
 | Brooks | `glm-5.1:cloud` | `gpt-5.5` | `opus` | `glm-5.1:cloud` |
 | Jobs | `deepseek-v4-pro` | `gpt-5.5` | `opus` | `gpt-5.5` |
-| Bahari | `kimi-k2.6:cloud` | `gpt-5.4-mini` | `sonnet` | `kimi-k2.6:cloud` |
 | Scout | `nemotron-3-super` | `gpt-5.4-mini` | `haiku` | `nemotron-3-super` |
 | Woz | `qwen3-coder-next` | `gpt-5.5` | `sonnet` | `qwen3-coder-next` |
 | Bellard | `glm-5.1:cloud` | `gpt-5.4-mini` | `sonnet` | `sonnet` |

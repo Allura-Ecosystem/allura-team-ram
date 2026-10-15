@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "skills": [
+    "team-ram-cowork",
+    "allura-memory-skill",
+    "multi-search",
+    "roundtable",
+    "party-mode",
+    "allura-menu",
+    "systematic-debugging-memory",
+    "code-review",
+    "team-ram-setup",
+    "team-ram-doctor"
+  ]
+}

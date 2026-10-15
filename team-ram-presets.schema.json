@@ -68,7 +68,7 @@
           "type": "object",
           "description": "Per-agent fallback model chains",
           "patternProperties": {
-            "^(brooks|jobs|bahari|scout|woz|bellard|carmack|pike|fowler|knuth|hightower)$": {
+            "^(brooks|jobs|scout|woz|bellard|carmack|pike|fowler|knuth|hightower)$": {
               "type": "array",
               "description": "Ordered fallback models for this agent",
               "items": {
@@ -88,7 +88,6 @@
       "properties": {
         "brooks": { "$ref": "#/definitions/agentConfig" },
         "jobs": { "$ref": "#/definitions/agentConfig" },
-        "bahari": { "$ref": "#/definitions/agentConfig" },
         "scout": { "$ref": "#/definitions/agentConfig" },
         "woz": { "$ref": "#/definitions/agentConfig" },
         "bellard": { "$ref": "#/definitions/agentConfig" },

@@ -30,7 +30,6 @@ MH  Full Menu       DA  Exit
 |-------|-----|------|----------------|
 | **Brooks** | 🔴 | Architect | Planning, decisions, conflicts |
 | **Jobs** | ⚫ | Intent Gate | Vague requests, scope creep |
-| **Bahari** | 💎 | Memory Curator | "Remember...", Brain queries |
 | **Scout** | 🟣 | Recon | Always first. Search & discovery |
 | **Woz** | 🟢 | Builder | Implementation, bug fixes |
 | **Pike** | 🔵 | Interface Gate | API review, complexity |
@@ -46,7 +45,6 @@ MH  Full Menu       DA  Exit
 |-------|-------|----------|
 | Brooks | `glm-5.1:cloud` | `deepseek-v4-pro:cloud` |
 | Jobs | `deepseek-v4-pro:cloud` | `kimi-k2.6:cloud` |
-| Bahari | `kimi-k2.6:cloud` | `deepseek-v4-pro:cloud` |
 | Scout | `nemotron-3-super:cloud` | `qwen3:0.6b` |
 | Woz | `qwen3-coder-next:cloud` | `deepseek-v4-pro:cloud` |
 | Pike | `deepseek-v4-pro:cloud` | `nemotron-3-super:cloud` |
@@ -69,7 +67,7 @@ MH  Full Menu       DA  Exit
 @carmack   Optimize this function
 @knuth     Schema change needed
 @hightower CI/CD issue
-@bahari    What did we decide about X?
+@scout     What did we decide about X?
 ```
 
 ## 📁 Key Files
@@ -100,7 +98,7 @@ Specialist executes → Pike/Fowler reviews
 6. Fowler reviews, not rewrites
 7. Hightower automates
 8. Knuth enforces correctness
-9. Bahari curates memory
+9. Memory uses authenticated Brain tools
 
 ## 🛠️ Tools Permission
 

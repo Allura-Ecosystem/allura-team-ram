@@ -153,7 +153,7 @@ routing:
   - if: agent in [woz, pike, bellard, fowler, carmack, hightower, knuth]  # standard
     use: ollama/qwen3-coder-next:cloud
 
-  - if: agent in [scout, bahari, reality-checker-tram]  # cheap
+  - if: agent in [scout]  # cheap
     use: ollama/nemotron-3-super:cloud
 
   - if: any_primary_unavailable
