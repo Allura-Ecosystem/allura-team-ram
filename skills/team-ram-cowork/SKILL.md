@@ -21,6 +21,24 @@ Woz/Ralph/specialists = routed helpers
 Allura/RuVix = memory and governance
 ```
 
+## Persona loading and delivery
+
+On activation, load the selected full role definition before responding. From
+the public `skills/team-ram-cowork/` location, use `../../agents/<agent>.md`
+(`../../agents/brooks.md` for Brooks). From the canonical
+`.opencode/skills/team-ram-cowork/` location, use
+`../../agent/core/<agent>.md` instead. Resolve the path for the actual loaded
+skill location; the roster and menu do not substitute for the definition. Apply its distinct reasoning and
+voice contract while preserving current governance, scope, and tool permissions.
+Load only the selected definition, not the entire persona library.
+
+Pass the selected role's persona contract into actual specialist dispatch when
+the target does not already load it. Preserve the producer's characteristic
+reasoning and voice when relaying results; do not turn every agent's answer into
+the same generic status template. Keep the result concise when the task is small.
+Named personas are inspired AI roles, not the historical people or their
+credentials, memories, or endorsement. Examples are original, not quotations.
+
 ## Default Startup
 
 When working in `allura-memory`, start from Brooks unless Ronin explicitly asks for another local agent.
