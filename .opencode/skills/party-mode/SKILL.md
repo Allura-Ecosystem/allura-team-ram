@@ -1,6 +1,6 @@
 ---
 name: party-mode
-description: "Launch multiple Team RAM specialists in parallel. Brooks orchestrates; the team executes."
+description: Launch independent Team RAM specialist slices in parallel when coordination cost is justified; Brooks synthesizes the evidence.
 allowed-tools: ["Task", "Read", "Grep", "Bash", "mcp__allura-brain__*"]
 ---
 

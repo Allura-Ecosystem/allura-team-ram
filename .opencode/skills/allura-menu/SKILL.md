@@ -1,220 +1,106 @@
 ---
 name: allura-menu
-description: "Interactive menu for Allura Memory surgical team. Quick prompts for common workflows."
-allowed-tools: ["Read", "Grep", "Bash", "mcp__allura-brain__*", "allura-brain_*"]
+description: Show the Allura chat choices and guide next steps, prompt help, real Council, work, bounded loops, and validation for Team RAM.
 ---
 
-# Allura Menu — Quick Prompts
-
-Interactive menu for common Allura Memory workflows.
-
-## Menu Structure
-
-```
-╔═══════════════════════════════════════════════════════════════╗
-║                    ALLURA MEMORY MENU                        ║
-╠═══════════════════════════════════════════════════════════════╣
-║  [1] 🚀 Start Session      — Load memory, verify infra       ║
-║  [2] 📋 Create Task        — Generate structured task         ║
-║  [3] 🎉 Party Mode         — Launch parallel agents           ║
-║  [4] 📝 Quick Update        — Sync docs with memory            ║
-║  [5] 🔍 Code Review        — Surgical team review             ║
-║  [6] 📊 Dashboard           — View system status               ║
-║  [7] 🧠 Memory Query       — Search Allura Brain              ║
-║  [8] 📤 Promote            — HITL promotion workflow           ║
-║  [9] 🏁 End Session        — Persist and archive              ║
-║  [0] ❓ Help               — Show this menu                    ║
-╚═══════════════════════════════════════════════════════════════╝
-```
-
-## Menu Options
-
-### [1] 🚀 Start Session
-
-**Trigger:** `start-session`
-
-**What it does:**
-
-- Verifies Neo4j and PostgreSQL connectivity
-- Hydrates context from Allura Brain via Scout
-- Searches recent events and insights for blockers and decisions
-- Logs session start
-
-**Equivalent command:** `/start-session`
-
----
-
-### [2] 📋 Create Task
-
-**Trigger:** `task-management`
-
-**What it does:**
-
-- Creates structured task files with dependency resolution
-- Tracks progress via CLI (`router.sh status/next/blocked`)
-- Validates task integrity and dependency trees
-- Links to memory insights via Brain
-
-**Equivalent skill:** `task-management <description>`
-
----
-
-### [3] 🎉 Party Mode
-
-**Trigger:** `party-mode`
-
-**What it does:**
-
-- Launches all agents in parallel
-- Each agent works independently
-- Brooks synthesizes results
-- Maximum throughput
-
-**Equivalent skill:** `party-mode <task>`
-
----
-
-### [4] 📝 Quick Update
-
-**Trigger:** `memory-client`
-
-**What it does:**
-
-- Stores updates to Allura Brain via `allura-brain_*` tools
-- Search-before-write discipline (Hydrate → Plan → Build → Debug → Reflect)
-- Syncs with canonical docs in `docs/allura/`
-- Logs changes to PostgreSQL events
-
-**Equivalent skill:** `memory-client` (Build mode)
-
----
-
-### [5] 🔍 Code Review
-
-**Trigger:** `code-review`
-
-**What it does:**
-
-- Pike reviews architecture
-- Scout finds patterns
-- UX reviews accessibility
-- Brooks synthesizes
-
-**Equivalent skill:** `code-review`
-
----
-
-### [6] 📊 Dashboard
-
-**Trigger:** `dashboard`
-
-**What it does:**
-
-- Shows system status
-- Displays active tasks
-- Lists recent insights
-- Shows blockers
-
-**Equivalent command:** `/dashboard`
-
----
-
-### [7] 🧠 Memory Query
-
-**Trigger:** `memory-query`
-
-**What it does:**
-
-- Searches Allura Brain
-- Returns relevant insights
-- Links to related entities
-- Shows confidence scores
-
-**Usage:** `memory-query <search term>`
-
----
-
-### [8] 📤 Promote
-
-**Trigger:** `hitl-governance`
-
-**What it does:**
-
-- Proposes promotion from PostgreSQL to Neo4j
-- Runs HITL governance workflow (draft → evaluating → proposed → approved → promoted)
-- Requires human approval
-- Logs to audit trail
-
-**Equivalent skill:** `hitl-governance`
-
----
-
-## Menu Options
-
-### [9] 🏁 End Session
-
-**Trigger:** `end-session`
-
-**What it does:**
-
-- Persists session reflection to Neo4j
-- Logs completion to PostgreSQL
-- Archives temporary files
-- Updates progress
-
-**Equivalent command:** `/end-session <summary>`
-
----
-
-### [0] ❓ Help
-
-**Trigger:** `help`
-
-**What it does:**
-
-- Shows this menu
-- Lists available skills
-- Shows current context
-- Displays agent status
-
----
-
-## Quick Prompts
-
-Type these directly in your IDE:
-
-| Prompt            | Action            |
-| ----------------- | ----------------- |
-| `start`           | Start session     |
-| `task <desc>`     | Create/manage task |
-| `party <task>`    | Launch party mode |
-| `update <target>` | Memory client sync |
-| `review`          | Code review       |
-| `dash`            | Dashboard         |
-| `query <term>`    | Memory query      |
-| `promote`         | HITL promotion    |
-| `debug <issue>`   | Systematic debug  |
-| `end <summary>`   | End session       |
-
----
-
-## Agent Shortcuts
-
-> **Source of truth:** `.opencode/agent/*.md` — 10 canonical agents. This table is derived, not defining.
-
-| Agent      | Shortcut                 | Persona           | Role                        |
-| ---------- | ------------------------ | ----------------- | --------------------------- |
-| Brooks     | `@brooks-architect`      | Frederick Brooks  | Architect + Orchestrator    |
-| Jobs       | `@jobs-intent-gate`     | Steve Jobs        | Intent Gate + Scope Owner   |
-| Woz        | `@woz-builder`          | Steve Wozniak     | Primary Builder             |
-| Pike       | `@pike-interface-review` | Rob Pike          | Simplicity Gate (read-only) |
-| Scout      | `@scout-recon`          | (none)            | Fast Discovery (read-only)  |
-| Bellard    | `@bellard-diagnostics`  | Fabrice Bellard   | Diagnostics + Perf         |
-| Carmack    | `@carmack-perf`         | John Carmack      | Performance Specialist      |
-| Fowler     | `@fowler-refactor-gate` | Martin Fowler     | Maintainability Gate        |
-| Knuth      | `@knuth-data`           | Donald Knuth      | Data Architect              |
-| Hightower  | `@hightower-devops`     | Kelsey Hightower  | DevOps + Infrastructure     |
-
----
-
-**Invoke with:** `allura-menu` or type any quick prompt directly.
+# Allura Menu
+
+Help the user move from their current situation to a useful result. Ordinary
+language is sufficient. Preserve current intent, selected owner, permissions,
+authenticated project scope, and the configured runtime.
+
+## Public chat menu
+
+Show this menu on activation or an explicit menu/help/MH request:
+
+- Next steps — recommend the next useful action and why.
+- Help with a prompt — create or improve ready-to-use instructions.
+- Council — examine one decision with relevant RAM and Durham specialists.
+- Work — carry out the selected task and check the result.
+- Loop — repeat work, check, and improve within agreed bounds.
+- Validate — compare actual evidence with the requested result.
+- More — research, memory, skill creation, Party, Setup, and Doctor when available.
+
+These are conversational choices, not promises of registered slash commands.
+NX, GO, VA, PM, SK, and MH retain their familiar intent where supported by the
+host. Legacy R/S conversion choices are offered in context, not treated as a
+verified Ralph executable or prerequisite. Never invent a missing command.
+
+## Interaction
+
+For an unclear idea, recommend a small next step. Ask only for missing facts
+that materially change the task; use information already supplied. Give one to
+three prioritized actions when useful, with reasons and proposed ownership.
+Offer a relevant continuation: shape a prompt or task, work, loop, or Council.
+Do not force the user through every choice or ask for authorization already given.
+
+For a clear authorized task, do the task directly. Prompt creation, Next steps,
+and Council are optional. Give the actual result and proportionate verification.
+Offer another action only if it advances an unfinished goal. Do not repeat the
+full menu during ordinary work.
+
+Prompt help preserves intent, constraints, sources, deliverable, and success
+criteria. Return a copyable prompt. Run it only when execution is requested;
+"make a prompt and run it" authorizes both within the task's existing boundaries.
+
+## Council and Party
+
+Council discusses one bounded decision. Select two to four actually available
+specialists for distinct useful contributions, using both RAM and Durham when
+the decision spans delivery and experience. Load their actual roles and invoke
+them through available tools. Preserve actual contributions and disagreements;
+the lead owns the resulting recommendation and next step. If delegation is
+unavailable, disclose that and provide a proposed council brief rather than
+inventing participants, dialogue, consensus, or validation.
+
+Party performs independent authorized tasks with clear artifact ownership.
+It does not imply dispatching every agent. Neither Council agreement nor Party
+completion is evidence that an artifact passed validation.
+
+## Work, Loop, and Validate
+
+Before a loop starts, establish its goal, permitted actions, useful completion
+evidence, and iteration or other explicit bound. Reuse supplied bounds and
+criteria. After each meaningful pass, check evidence and choose whether to
+continue, finish, or stop. Report completed work and remaining uncertainty.
+Stop on a required missing input, denied authority, unavailable essential tool,
+stagnation, or exhausted bounds. A blocker does not authorize wider access,
+another tenant or credential, or indefinite retries. Exhaustion is not success.
+Use an available verified loop mechanism or the current conversation; do not
+claim background execution, Ralph, or another runtime ran without invocation.
+
+Validation compares a concrete result with its acceptance criteria and records
+observed evidence and gaps. A draft, model confidence, proposed check, or council
+agreement is insufficient for a claimed pass. Distinguish scenario checks from
+live runtime checks and human review from agent review.
+
+## Team RAM routes
+
+This skill is self-contained in the ten-skill public RAM package. If Allura
+Cowork's `allura-menu` is available, use its shared interaction protocol; its
+absence does not prevent these conversational choices.
+
+- Next steps and Help with a prompt run in this conversation. Reuse fresh local
+  context and a scoped Brain receipt; recommend one useful action with a reason
+  and an accountable owner. A prompt includes intent, constraints, sources,
+  deliverable and success criteria; do not execute a prompt unless requested.
+- Council uses `roundtable`. When delivery and brand experience both matter,
+  include relevant available RAM and Durham specialists. Resolve and load real
+  role definitions, then invoke the host's actual delegation tool. Without it,
+  report Council unavailable and return a proposed brief. Persona guidance
+  alone does not invoke another specialist.
+- Work uses `team-ram-cowork`; Validate uses actual artifact evidence and
+  `code-review` where relevant. Validate is usable without implementation work.
+- Loop uses the current conversation or a verified host loop. Before execution,
+  establish goal, permitted actions, completion evidence and an iteration or
+  other explicit bound. Request missing bounds; approval of a goal alone does
+  not authorize an indefinite loop.
+- More offers Research (`multi-search`), Memory/Rehydrate (`allura-memory-skill`),
+  Party (`party-mode`), Debug (`systematic-debugging-memory`), Review
+  (`code-review`), Setup (`team-ram-setup`) and Doctor (`team-ram-doctor`). Offer
+  skill creation only when an actual authoring capability is available; otherwise
+  provide a proposed skill brief and state that limitation.
+
+Use `group_id: allura-system` for this project's Brain operations. Selecting a
+Durham participant never grants access to `allura-team-durham` or client records;
+share only context authorized for that participant. Promotion remains human-governed.

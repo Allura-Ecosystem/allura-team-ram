@@ -222,3 +222,11 @@ Every run ends in exactly one. **Never report an error or exhausted budget as su
 5. **Brain logging** — if Allura is available, log start/complete/decisions
 6. **Coherence check** — after multi-step work, verify the system is still coherent
 7. **Graceful degradation** — if Brain is unavailable, continue without memory (log to console)
+
+## Adaptive routing
+
+Apply `.opencode/contracts/adaptive-workflow.md`: quick uses one owner, standard
+adds one relevant independent reviewer, sensitive work preserves required approval.
+Keep the chosen specialist on the first iteration and retries. Context length does
+not determine task complexity. Reuse hydration only when scoped revisions and
+authority are unchanged; refresh missing or stale evidence.

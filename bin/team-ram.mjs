@@ -10,28 +10,31 @@
  * `bunx` without a toolchain.
  */
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { dirname, join, relative, resolve } from "node:path";
+import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const PKG_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const pkg = JSON.parse(readFileSync(join(PKG_ROOT, "package.json"), "utf8"));
 
-// Runtime → the source trees copied into the host project.
-// opencode is the source of truth; claude/codex are generated mirrors.
+// Runtime → packaged source trees and their native scaffold destinations.
+// The root materialized catalog is the only shipped skill source.
 const RUNTIMES = {
   opencode: [
-    ".opencode/agent",
-    ".opencode/command",
-    ".opencode/skills",
-    ".opencode/routing",
-    ".opencode/hooks",
-    ".opencode/contracts",
-    ".opencode/config",
+    { source: "skills", target: ".opencode/skills", required: true, kind: "skills" },
+    { source: ".opencode/agent", target: ".opencode/agent" },
+    { source: ".opencode/routing", target: ".opencode/routing" },
+    { source: ".opencode/hooks", target: ".opencode/hooks" },
+    { source: ".opencode/contracts", target: ".opencode/contracts" },
   ],
-  claude: [".claude/agents", ".claude/commands", ".claude/skills", ".claude/rules"],
-  codex: [".codex/agents"],
+  claude: [
+    { source: "skills", target: ".claude/skills", required: true, kind: "skills" },
+    { source: ".claude/agents", target: ".claude/agents" },
+    { source: ".claude/rules", target: ".claude/rules" },
+  ],
+  codex: [{ source: ".codex/agents", target: ".codex/agents" }],
 };
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: compact dependency-free CLI parsing keeps the public entry point self-contained.
 function parseArgs(argv) {
   const opts = { target: process.cwd(), runtime: "opencode", force: false };
   for (let i = 0; i < argv.length; i++) {
@@ -62,22 +65,54 @@ function walk(dir, out = [], broken = []) {
   return out;
 }
 
-function copyTree(srcTree, targetRoot, force, tally) {
-  const absSrc = join(PKG_ROOT, srcTree);
+function publicSkillNames() {
+  const contract = join(PKG_ROOT, "codex-public-skills.json");
+  if (!existsSync(contract)) return null;
+  try {
+    const skills = JSON.parse(readFileSync(contract, "utf8")).skills;
+    return Array.isArray(skills) ? skills : null;
+  } catch {
+    return null;
+  }
+}
+
+function preflight(entry) {
+  const absSrc = join(PKG_ROOT, entry.source);
+  if (!existsSync(absSrc)) {
+    return entry.required ? `required packaged source is missing: ${entry.source}` : null;
+  }
+  if (entry.kind !== "skills") return null;
+  const expected = publicSkillNames();
+  if (!expected) return "public skill contract is missing or invalid";
+  const actual = readdirSync(absSrc)
+    .filter((name) => existsSync(join(absSrc, name, "SKILL.md")))
+    .sort();
+  if (JSON.stringify(actual) !== JSON.stringify([...expected].sort())) {
+    return `packaged skills must contain exactly ${expected.length} allowlisted entries`;
+  }
+  return null;
+}
+
+function copyTree(entry, targetRoot, force, tally) {
+  const absSrc = join(PKG_ROOT, entry.source);
   if (!existsSync(absSrc)) return; // mirror not shipped in this runtime — skip quietly
   const broken = [];
   for (const file of walk(absSrc, [], broken)) {
-    const rel = relative(PKG_ROOT, file); // e.g. .opencode/agent/core/brooks.md
-    const dest = join(targetRoot, rel);
+    const rel = relative(absSrc, file);
+    const destinationRelative = join(entry.target, rel);
+    const dest = join(targetRoot, destinationRelative);
     if (existsSync(dest) && !force) {
-      tally.skipped.push(rel);
+      tally.skipped.push(destinationRelative);
       continue;
     }
     mkdirSync(dirname(dest), { recursive: true });
     copyFileSync(file, dest);
-    tally.written.push(rel);
+    tally.written.push(destinationRelative);
+    if (entry.kind === "skills" && basename(file) === "SKILL.md") {
+      tally.skills += 1;
+    }
   }
-  for (const p of broken) tally.broken.push(relative(PKG_ROOT, p));
+  for (const p of broken) tally.broken.push(relative(absSrc, p));
 }
 
 function init(opts) {
@@ -89,11 +124,20 @@ function init(opts) {
     process.exit(2);
   }
 
-  const tally = { written: [], skipped: [], broken: [] };
+  const preflightErrors = selected.map(preflight).filter(Boolean);
+  if (preflightErrors.length) {
+    console.error("team-ram: scaffold preflight failed:");
+    for (const error of preflightErrors) console.error(`  - ${error}`);
+    process.exitCode = 1;
+    return;
+  }
+
+  const tally = { written: [], skipped: [], broken: [], skills: 0 };
   console.log(`team-ram: scaffolding "${opts.runtime}" harness into ${opts.target}\n`);
-  for (const tree of selected) copyTree(tree, opts.target, opts.force, tally);
+  for (const entry of selected) copyTree(entry, opts.target, opts.force, tally);
 
   console.log(`  wrote   ${tally.written.length} file(s)`);
+  console.log(`  skills  ${tally.skills} copied from the public allowlist`);
   if (tally.skipped.length) {
     console.log(
       `  skipped ${tally.skipped.length} existing file(s) — re-run with --force to overwrite`,
@@ -106,7 +150,7 @@ function init(opts) {
   if (!tally.written.length && !tally.skipped.length) {
     console.log("  nothing to copy — is this the right runtime?");
   }
-  console.log(`\nNext: point your OpenCode config at the copied .opencode/ tree.`);
+  console.log(`\nNext: configure ${opts.runtime} to use the copied runtime surface.`);
 }
 
 const HELP = `team-ram ${pkg.version} — ${pkg.description ?? "Team RAM harness"}

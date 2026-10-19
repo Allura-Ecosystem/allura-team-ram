@@ -14,7 +14,7 @@
 | **Fallback** | Not supported | `fallback_model` / `fallback.chains` |
 | **Permissions** | `permissionMode` | `permission` with glob patterns |
 | **Tools** | Whitelist array (`tools: [...]`) | `permission` object |
-| **Skills** | `.claude/skills/*/SKILL.md` | `.opencode/skills/*/SKILL.md` |
+| **Packaged skills** | `skills/*/SKILL.md` | `skills/*/SKILL.md` |
 | **MCP servers** | `.mcp.json` or `~/.claude.json` | `opencode.json` `mcp` section |
 | **Hooks** | `.claude/hooks/` | `hooks.json` in plugin |
 | **Session start** | Predefined (no injection) | `SessionStart` hook runs code |
@@ -28,8 +28,7 @@ allura-memory/                    # Product repo (Allura Brain)
 │   ├── agent/
 │   │   ├── core/                 # Primary agents
 │   │   │   ├── brooks.md
-│   │   │   ├── jobs.md
-│   │   │   └── bahari.md
+│   │   │   └── jobs.md
 │   │   └── subagents/
 │   │       ├── core/scout.md
 │   │       ├── code/woz.md, bellard.md, carmack.md

@@ -7,7 +7,7 @@
  * API directly. No CLI spawning, no Bun.spawn().
  */
 
-import { resolve } from "path";
+import { resolve } from "node:path";
 import { beginTrajectory, type TrajectoryRecord } from "./sona-trajectory";
 
 // ---------------------------------------------------------------------------
@@ -59,14 +59,8 @@ export function mapProcessToAgent(processName: string): string {
 // ---------------------------------------------------------------------------
 
 // Tier assignments come from the machine authority (tooling/agent-sync/models.map.json);
-// this executor only translates the claude tier alias to a concrete Anthropic model ID.
+// direct API mode requires a concrete model override or TEAM_RAM_ANTHROPIC_MODEL.
 // Do NOT hand-maintain per-agent model IDs here — that recreates a fifth model authority.
-const CLAUDE_TIER_IDS: Record<string, string> = {
-  opus: "claude-opus-4-8",
-  sonnet: "claude-sonnet-5",
-  haiku: "claude-haiku-4-5",
-};
-
 interface ModelsMap {
   tiers: Record<string, { claude: string }>;
   agents: Record<string, { tier: string }>;
@@ -85,11 +79,22 @@ async function loadModelsMap(): Promise<ModelsMap | null> {
   }
 }
 
+export function resolveApiModel(alias: string | undefined, configured: string | undefined): string {
+  // CLI aliases (especially inherit) are not valid concrete Messages API IDs.
+  const selected = configured?.trim() || alias?.trim();
+  if (!selected || ["inherit", "opus", "sonnet", "haiku"].includes(selected)) {
+    throw new Error(
+      "Set TEAM_RAM_ANTHROPIC_MODEL to a concrete supported Anthropic model ID for direct API mode",
+    );
+  }
+  return selected;
+}
+
 async function getModelForAgent(agentId: string): Promise<string> {
   const map = await loadModelsMap();
   const tierName = map?.agents[agentId]?.tier;
   const alias = tierName ? map?.tiers[tierName]?.claude : undefined;
-  return CLAUDE_TIER_IDS[alias ?? "sonnet"] ?? CLAUDE_TIER_IDS.sonnet;
+  return resolveApiModel(alias, process.env.TEAM_RAM_ANTHROPIC_MODEL);
 }
 
 // Task classification for stratified per-model reporting. Bellard's rule:
@@ -277,9 +282,18 @@ ${JSON.stringify(payload, null, 2)}
 Group ID for this invocation: ${group_id}`;
 
     // 4. Invoke agent — API mode or local mode
-    const model = modelOverride ?? (await getModelForAgent(agentId));
+    const model = ANTHROPIC_API_KEY
+      ? modelOverride
+        ? resolveApiModel(modelOverride, undefined)
+        : await getModelForAgent(agentId)
+      : "unconfigured";
 
     if (ANTHROPIC_API_KEY) {
+      if (taskType.startsWith("auto.") || ["codegen", "refactor"].includes(task_class)) {
+        throw new Error(
+          "Direct API executor has no workspace tools; use a tool-capable host for hydration, implementation and validation",
+        );
+      }
       // ---- API mode: call Anthropic Messages API directly ----
       console.log(`[Executor] Calling Anthropic API: model=${model} agent=${agentId}`);
 
@@ -320,7 +334,7 @@ Group ID for this invocation: ${group_id}`;
     } else {
       // ---- Local mode: agent definition loaded, return structured result ----
       // This mode is used when running without an API key (dev/test).
-      // The agent definition was loaded successfully, proving the pipeline works.
+      // Definition loading is a diagnostic only, never successful task execution.
       console.log(
         `[Executor] Local mode (no ANTHROPIC_API_KEY): agent=${agentId} definition loaded (${agentDef.length} chars)`,
       );
@@ -328,7 +342,7 @@ Group ID for this invocation: ${group_id}`;
       const duration_ms = Math.round(performance.now() - startTime);
 
       const result: AgentExecutionResult = {
-        success: true,
+        success: false,
         output: {
           mode: "local",
           agent: agentId,
@@ -336,26 +350,28 @@ Group ID for this invocation: ${group_id}`;
           payload_received: payload,
           agent_definition_loaded: true,
           agent_definition_length: agentDef.length,
-          message: `Agent "${agentId}" invoked in local mode. Set ANTHROPIC_API_KEY for live API calls.`,
+          message: `Agent "${agentId}" definition loaded only. No task was executed.`,
         },
-        confidence: 0.5,
+        confidence: 0,
         duration_ms,
         tokens_in: 0,
         tokens_out: 0,
-        errors: [],
+        errors: [
+          "No execution backend configured; loading an agent definition does not execute a task",
+        ],
         model,
-        outcome: "success",
+        outcome: "failure",
         task_class,
       };
 
       // Record SONA trajectory (local mode)
       result.trajectory = trajectory.complete({
-        success: true,
-        confidence: 0.5,
+        success: false,
+        confidence: 0,
         duration_ms,
         tokens_in: 0,
         tokens_out: 0,
-        errors: [],
+        errors: result.errors,
       });
 
       return result;

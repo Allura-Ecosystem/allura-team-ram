@@ -106,7 +106,7 @@ for (const file of files) {
   log(`• ${name} [${spec.tier}]`);
 
   // 1) .opencode SOURCE — keep its model aligned to the map (opencode model).
-  let srcFm = fmSet(fm, "model", tier.opencode);
+  let srcFm = tier.opencode ? fmSet(fm, "model", tier.opencode) : fm.replace(/^model:.*$\n?/m, "");
   srcFm = srcFm.replace(/^fallback_model:.*$\n?/m, ""); // fallback is a provider-level concern in opencode.jsonc, not a per-agent field
   writeOrCheck(srcPath, `---\n${srcFm}\n---\n${body}`, `.opencode/agent/core/${file}`);
 
@@ -120,10 +120,16 @@ for (const file of files) {
     `status: ${fmGet(fm, "status") ?? "active"}`,
     `model: ${tier.claude}`,
     `tools:`,
-    ...CLAUDE_DEFAULT_TOOLS.map((t) => `  - ${t}`),
+    ...CLAUDE_DEFAULT_TOOLS.filter(
+      (t) => !(["Edit", "Write"].includes(t) && /^ {2}(edit|write): deny$/m.test(fm)),
+    ).map((t) => `  - ${t}`),
   ].join("\n");
   const claudeOut = `---\n${claudeFm}\n---\n\n${MD_BANNER.replace("%NAME%", name)}\n${body}`;
   writeOrCheck(join(CLAUDE_DIR, `${name}.md`), claudeOut, `.claude/agents/${name}.md`);
+  // Plugin loaders use these paths independently of the runtime adapter directory.
+  for (const pluginDir of ["agents", ".claude-plugin/agents"]) {
+    writeOrCheck(join(HARNESS_ROOT, pluginDir, `${name}.md`), claudeOut, `${pluginDir}/${name}.md`);
+  }
 
   // 3) .codex MIRROR — TOML. Body -> developer_instructions. Model is set in .codex/config.toml,
   //    NOT here; we record it as a comment for traceability.

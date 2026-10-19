@@ -13,6 +13,7 @@ It uses tool-name guards to avoid false positives on non-DB tools.
 """
 import json
 import re
+import shlex
 import sys
 
 # ── Patterns ──────────────────────────────────────────────────────────────────
@@ -42,8 +43,51 @@ def _is_db_tool(tool_name: str) -> bool:
 
 # ── Checks ────────────────────────────────────────────────────────────────────
 
+
+def _shell_text_for_checks(command: str) -> str:
+    """Ignore only literal apply_patch heredoc data, never an executable tail.
+
+    Quoted delimiters suppress shell expansion. Unquoted heredocs and other
+    programs remain fully inspected, including SQL piped into a DB client.
+    """
+    patch = re.compile(
+        r"(?ms)\A[ \t]*apply_patch[ \t]+<<[ \t]*'(?P<end>[A-Za-z_][A-Za-z0-9_]*)'[ \t]*\n"
+        r".*?^(?P=end)(?:\n|$)"
+    )
+    return patch.sub("apply_patch\n", command)
+
+
+def _is_static_search(command: str) -> bool:
+    """Recognize a single inert search, not a wrapper or shell expression."""
+    if any(marker in command for marker in ("\n", "$", "\x60", "<(", ">(", "{", "}", "*", "?", "[")):
+        return False
+    try:
+        lexer = shlex.shlex(command, posix=True, punctuation_chars=";&|()<>\n")
+        lexer.whitespace_split = True
+        tokens = list(lexer)
+    except ValueError:
+        return False
+    if not tokens or tokens[0] not in ("rg", "grep"):
+        return False
+    # ripgrep config may enable an executable preprocessor.
+    if tokens[0] == "rg" and (len(tokens) < 2 or tokens[1] != "--no-config"):
+        return False
+    # ripgrep preprocessors/hostname helpers can execute other programs.
+    if any(t == "--pre" or t.startswith("--pre=") or
+           t == "--hostname-bin" or t.startswith("--hostname-bin=") for t in tokens):
+        return False
+    return not any(t and all(c in ";&|()<>" for c in t) for t in tokens)
+
+
 def check_bash(tool_input: dict) -> tuple[bool, str]:
     cmd = str(tool_input.get("command") or tool_input.get("cmd") or "")
+    if _is_static_search(cmd):
+        return False, ""
+    cmd = _shell_text_for_checks(cmd)
+    # Shell DB clients bypass the required governed MCP database surface.
+    if re.search(r"\b(?:psql|pgcli|cypher-shell)\b", cmd):
+        return True, "BLOCKED — Use MCP_DOCKER tools for database operations."
+
     if DOCKER_EXEC.search(cmd):
         return True, (
             "BLOCKED — `docker exec` is banned.\n"

@@ -64,16 +64,16 @@ export interface AutoModeResult {
 // Complexity Assessment
 // ---------------------------------------------------------------------------
 
-const SIMPLE_KEYWORDS = /\b(fix|typo|update|rename|change|remove|delete|bump|correct)\b/i;
 const MULTI_KEYWORDS = /\b(add|implement|refactor|migrate|convert|replace|upgrade|integrate)\b/i;
 const EPIC_KEYWORDS = /\b(build|create\s+system|redesign|architect|overhaul|rewrite|scaffold)\b/i;
 
-export function assessComplexity(task: string, scoutReportLength: number = 0): ComplexityLevel {
+export function assessComplexity(task: string, _scoutReportLength: number = 0): ComplexityLevel {
+  // Keep the second argument for API compatibility. Context volume is not task scope.
   // Epic signals
-  if (EPIC_KEYWORDS.test(task) || scoutReportLength > 500) return "epic";
+  if (EPIC_KEYWORDS.test(task)) return "epic";
 
   // Multi-step signals
-  if (MULTI_KEYWORDS.test(task) || scoutReportLength > 200) return "multi";
+  if (MULTI_KEYWORDS.test(task)) return "multi";
 
   // Default to simple
   return "simple";
@@ -126,7 +126,10 @@ export function isTokenBudgetExceeded(
  * 4. Coherence check
  * 5. Return result
  */
-export async function executeAutoMode(request: AutoModeRequest): Promise<AutoModeResult> {
+export async function executeAutoMode(
+  request: AutoModeRequest,
+  execute: typeof spawnAgentProcess = spawnAgentProcess,
+): Promise<AutoModeResult> {
   const startTime = performance.now();
   const mode = request.mode || detectExecutionMode();
   const outputs: AutoModeResult["outputs"] = [];
@@ -149,7 +152,7 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
 
   let scoutReport = "";
   try {
-    const scoutResult = await spawnAgentProcess(
+    const scoutResult = await execute(
       "scout",
       {
         task: `Recon for auto-mode: ${request.task}`,
@@ -172,6 +175,11 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
       request.group_id,
     );
 
+    tokensIn += scoutResult.tokens_in ?? 0;
+    tokensOut += scoutResult.tokens_out ?? 0;
+    if (!scoutResult.success) {
+      throw new Error(scoutResult.errors.join("; ") || "Scout did not complete hydration");
+    }
     const contextResult = parseContextPacketWithReceipt(scoutResult.output);
     if (contextResult?.status === "impossible") {
       throw new Error(
@@ -187,9 +195,6 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
       : typeof scoutResult.output === "string"
         ? scoutResult.output
         : JSON.stringify(scoutResult.output);
-    tokensIn += scoutResult.tokens_in ?? 0;
-    tokensOut += scoutResult.tokens_out ?? 0;
-
     outputs.push({
       step: 1,
       agent: "scout",
@@ -242,7 +247,7 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
     // Single pass — route to appropriate agent and execute
     const agentId = mapAutoTaskToAgent(request.task);
     try {
-      const result = await spawnAgentProcess(
+      const result = await execute(
         agentId,
         {
           task: request.task,
@@ -277,10 +282,10 @@ export async function executeAutoMode(request: AutoModeRequest): Promise<AutoMod
   } else {
     // Multi-step or Epic — iterative execution
     for (let i = 0; i < maxIterations; i++) {
-      const agentId = i === 0 ? "woz" : mapAutoTaskToAgent(request.task);
+      const agentId = mapAutoTaskToAgent(request.task);
 
       try {
-        const result = await spawnAgentProcess(
+        const result = await execute(
           agentId,
           {
             task: request.task,
@@ -399,6 +404,7 @@ function detectExecutionMode(): ExecutionMode {
 
 function inferProcessType(task: string): string {
   if (/\b(debug|fix|bug|error|crash)\b/i.test(task)) return "debug";
+  if (/\b(database|schema|migration|rls|sql)\b/i.test(task)) return "data";
   if (/\b(test|spec|coverage)\b/i.test(task)) return "test";
   if (/\b(refactor|clean|lint)\b/i.test(task)) return "refactor";
   if (/\b(architect|design|plan)\b/i.test(task)) return "architecture";
@@ -416,6 +422,8 @@ export function mapAutoTaskToAgent(task: string): string {
       return "brooks";
     case "devops":
       return "hightower";
+    case "data":
+      return "knuth";
     case "test":
     case "implementation":
     default:

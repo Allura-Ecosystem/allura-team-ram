@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { existsSync, lstatSync, readdirSync, readFileSync } from "node:fs";
+import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { syncCodexSkills } from "./sync-codex-skills.mjs";
+import { validatePackedPlugin } from "./validate-packed-plugin.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MANIFEST_PATH = resolve(ROOT, "PUBLIC_EXPORT.json");
@@ -24,6 +26,27 @@ export function matches(path, pattern) {
   return globRegex(pattern).test(path);
 }
 
+export function validateRuntimeIdentities(source, pkg, claude, codex) {
+  const identity = source.runtimeIdentities ?? {};
+  const errors = [];
+  for (const [field, actual] of [
+    ["packageName", pkg.name],
+    ["claudeManifestName", claude.name],
+    ["codexManifestName", codex.name],
+  ]) {
+    if (!identity[field] || identity[field] !== actual) {
+      errors.push(`${field} must match SOURCE.json runtimeIdentities`);
+    }
+  }
+  if (!identity.codexMarketplaceAlias || codex.name !== identity.codexMarketplaceAlias) {
+    errors.push("Codex manifest name must match the public marketplace alias");
+  }
+  if (!pkg.version || claude.version !== pkg.version || codex.version !== pkg.version) {
+    errors.push("package and runtime manifest versions must match");
+  }
+  return errors;
+}
+
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));
 }
@@ -35,7 +58,18 @@ function trackedFiles() {
     { cwd: ROOT, encoding: "utf8" },
   );
   if (result.status !== 0) throw new Error(result.stderr || "git ls-files failed");
-  return result.stdout.split("\0").filter(Boolean).sort();
+  const files = new Set();
+  const visit = (path) => {
+    if (!existsSync(path)) return;
+    const stat = lstatSync(path);
+    if (!stat.isDirectory() || stat.isSymbolicLink()) {
+      files.add(relative(ROOT, path));
+      return;
+    }
+    for (const name of readdirSync(path)) visit(resolve(path, name));
+  };
+  for (const file of result.stdout.split("\0").filter(Boolean)) visit(resolve(ROOT, file));
+  return [...files].sort();
 }
 
 export function validatePublicExport() {
@@ -43,7 +77,16 @@ export function validatePublicExport() {
   const source = readJson(SOURCE_PATH);
   const pkg = readJson(PACKAGE_PATH);
   const tracked = trackedFiles();
-  const errors = [];
+  const errors = [
+    ...syncCodexSkills(ROOT, true).errors,
+    ...validatePackedPlugin(ROOT).errors,
+    ...validateRuntimeIdentities(
+      source,
+      pkg,
+      readJson(resolve(ROOT, ".claude-plugin/plugin.json")),
+      readJson(resolve(ROOT, ".codex-plugin/plugin.json")),
+    ),
+  ];
 
   if (manifest.canonicalRepository !== source.repository) {
     errors.push("PUBLIC_EXPORT.json canonicalRepository differs from SOURCE.json repository");

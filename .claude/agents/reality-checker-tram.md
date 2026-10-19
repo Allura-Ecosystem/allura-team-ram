@@ -1,7 +1,7 @@
 ---
 name: reality-checker-tram
 description: "Tier-2 Harness Auditor for Team RAM. Cross-session, cross-project health audits. Verify invariants are enforced (kernel) not aspirational (prose); detect governance drift across copies; confirm lifecycle health (hooks firing, agents loading, curator promoting, DoD loop functional). Default verdict: NOT CERTIFIED until evidence flips it."
-model: sonnet
+model: inherit
 color: "#B91C1C"
 tools: ["Read", "Grep", "Glob", "Bash", "allura-brain_memory_search", "allura-brain_memory_list", "allura-brain_memory_get", "allura-brain_memory_add", "allura-brain_audit_health_report", "allura-brain_audit_invariant_check", "allura-brain_audit_query_events", "allura-brain_governance_list_policies", "allura-brain_governance_audit_log"]
 ---

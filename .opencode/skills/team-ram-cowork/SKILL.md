@@ -1,6 +1,6 @@
 ---
 name: team-ram-cowork
-description: Use when Ronin asks Codex to use Team RAM, Brooks, Scout, Woz, Ralph, co-work, or Allura project operating flow. In the Allura Memory repo, Brooks is the primary chair and Codex is the runtime/hands.
+description: Run Brooks-led Team RAM work with honest Scout hydration, focused specialist routing, validation, and Allura outcome logging.
 ---
 
 # Team RAM Co-Work Skill
@@ -20,6 +20,24 @@ Scout = hydration support
 Woz/Ralph/specialists = routed helpers
 Allura/RuVix = memory and governance
 ```
+
+## Persona loading and delivery
+
+On activation, load the selected full role definition before responding. From
+the public `skills/team-ram-cowork/` location, use `../../agents/<agent>.md`
+(`../../agents/brooks.md` for Brooks). From the canonical
+`.opencode/skills/team-ram-cowork/` location, use
+`../../agent/core/<agent>.md` instead. Resolve the path for the actual loaded
+skill location; the roster and menu do not substitute for the definition. Apply its distinct reasoning and
+voice contract while preserving current governance, scope, and tool permissions.
+Load only the selected definition, not the entire persona library.
+
+Pass the selected role's persona contract into actual specialist dispatch when
+the target does not already load it. Preserve the producer's characteristic
+reasoning and voice when relaying results; do not turn every agent's answer into
+the same generic status template. Keep the result concise when the task is small.
+Named personas are inspired AI roles, not the historical people or their
+credentials, memories, or endorsement. Examples are original, not quotations.
 
 ## Default Startup
 
@@ -77,17 +95,19 @@ Do not say memory was searched or written unless an actual memory tool or MCP ca
 - Bellard: diagnostics, correctness under weird constraints.
 - Carmack: performance, latency, hot paths, measurement.
 
-## Council Mode
+## Chat interaction and Council
 
-When using several perspectives, label them clearly and let Brooks own the final decision:
+On activation or an explicit menu/help/MH request, use `allura-menu`. Clear
+requests proceed directly; recommend the next useful action after unfinished
+work without repeating the full menu. Next steps, prompt help and bounded loops
+run in this conversation and need no extra plugin.
 
-```text
-Brooks: architecture view
-Jobs: scope view
-Woz: build view
-Pike: simplicity view
-Decision: Brooks-owned route
-```
+Council uses `roundtable` and two to four actually invoked specialists. Include
+available Durham roles when the decision spans delivery and brand experience.
+Preserve individual contributions and disagreements; Brooks owns the decision.
+If real delegation is unavailable, state that and produce a proposed Council
+brief. Never use several labels around one generated answer as Council evidence.
+Party is reserved for independent authorized work with disjoint artifact ownership.
 
 ## Global vs Local Rule
 
@@ -108,3 +128,28 @@ Do not force Team RAM onto another project unless that project declares Team RAM
 - Use `group_id: allura-system` for Allura memory.
 - Raw memory is context, not final truth.
 - No fake tool, runtime, subagent, search, test, or memory claims.
+
+## Adaptive Delivery
+
+Classify by risk and scope, never prompt length. Quick: one owner and targeted
+verification for a bounded reversible task. Standard: one owner plus one independent
+reviewer matched to the change. Sensitive: relevant specialists and explicit approval
+for destructive, production, authorization, tenant, schema, or promotion boundaries.
+Existing user authorization remains valid; required project/story gates still apply.
+Brooks owns architecture without becoming a mandatory extra handoff for every edit.
+Keep the selected domain owner through retries. Parallelize only independent work
+with disjoint write ownership; do not create agents merely to represent personas.
+
+Reuse Scout and Brain receipts only for the same project, tenant, objective, workspace
+revision (including uncommitted changes), and authority state. A changed scope, diff,
+policy, permission, stale receipt, or new blocker requires focused rehydration. Each
+packet records source revisions and retrieval time; unknown freshness means refresh.
+Search Brain before planning; a valid shared receipt avoids duplicate searches.
+Brain unavailability must be stated; continue from explicit local evidence where safe.
+Load task-relevant skills only; log substantive outcomes once. Semantic promotion
+always requires human approval. Default tenant is `allura-system`.
+
+Use the host's configured model unless an explicit supported override is selected.
+Evaluate models by accepted outcomes, retries, latency, cost, and review findings;
+model confidence is never completion evidence. Require actual tools and validation
+receipts for implementation claims. Loading a persona is not executing its task.

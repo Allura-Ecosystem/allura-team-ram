@@ -34,6 +34,7 @@
       "!**/.claude",
       "!**/.codex",
       "!**/node_modules",
+      "!skills",
       "!**/dist",
       "!**/my-project",
       "!**/bun.lock",

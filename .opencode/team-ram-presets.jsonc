@@ -11,7 +11,6 @@
     "ollama": {
       "brooks":      { "model": "ollama/glm-5.1:cloud",        "variant": "high"  },
       "jobs":        { "model": "ollama/deepseek-v4-pro:cloud","variant": "high"  },
-      "bahari":      { "model": "ollama/kimi-k2.6:cloud",      "variant": "medium"},
       "scout":       { "model": "ollama/nemotron-3-super:cloud","variant": "low"  },
       "woz":         { "model": "ollama/qwen3-coder-next:cloud", "variant": "medium"},
       "bellard":     { "model": "ollama/glm-5.1:cloud",        "variant": "medium"},
@@ -26,7 +25,6 @@
     "openai": {
       "brooks":      { "model": "openai/gpt-5.5",       "variant": "high"  },
       "jobs":        { "model": "openai/gpt-5.5",       "variant": "high"  },
-      "bahari":      { "model": "openai/gpt-5.4-mini",  "variant": "medium"},
       "scout":       { "model": "openai/gpt-5.4-mini",  "variant": "low"  },
       "woz":         { "model": "openai/gpt-5.5",       "variant": "medium"},
       "bellard":     { "model": "openai/gpt-5.4-mini",  "variant": "medium"},
@@ -41,7 +39,6 @@
     "anthropic": {
       "brooks":      { "model": "anthropic/claude-opus-4-6",  "variant": "high"  },
       "jobs":        { "model": "anthropic/claude-opus-4-6",  "variant": "high"  },
-      "bahari":      { "model": "anthropic/claude-sonnet-4",  "variant": "medium"},
       "scout":       { "model": "anthropic/claude-haiku-4-5", "variant": "low"  },
       "woz":         { "model": "anthropic/claude-sonnet-4",  "variant": "medium"},
       "bellard":     { "model": "anthropic/claude-sonnet-4",  "variant": "medium"},
@@ -56,7 +53,6 @@
     "mixed": {
       "brooks":      { "model": "ollama/glm-5.1:cloud",        "variant": "high"  },
       "jobs":        { "model": "openai/gpt-5.5",             "variant": "high"  },
-      "bahari":      { "model": "ollama/kimi-k2.6:cloud",      "variant": "medium"},
       "scout":       { "model": "ollama/nemotron-3-super:cloud","variant": "low"  },
       "woz":         { "model": "ollama/qwen3-coder-next:cloud", "variant": "medium"},
       "bellard":     { "model": "anthropic/claude-sonnet-4",    "variant": "medium"},
@@ -77,7 +73,6 @@
     "chains": {
       "brooks":      ["ollama/glm-5.1:cloud",        "ollama/deepseek-v4-pro:cloud",    "ollama/qwen3-coder-next:cloud"],
       "jobs":        ["ollama/deepseek-v4-pro:cloud","ollama/kimi-k2.6:cloud",           "ollama/glm-5.1:cloud"        ],
-      "bahari":      ["ollama/kimi-k2.6:cloud",      "ollama/deepseek-v4-pro:cloud",    "ollama/glm-5.1:cloud"        ],
       "scout":       ["ollama/nemotron-3-super:cloud","ollama/qwen3:0.6b"                                ],
       "woz":         ["ollama/qwen3-coder-next:cloud","ollama/deepseek-v4-pro:cloud",    "ollama/glm-5.1:cloud"        ],
       "bellard":     ["ollama/glm-5.1:cloud",        "ollama/nemotron-3-super:cloud",   "ollama/qwen3-coder-next:cloud"],

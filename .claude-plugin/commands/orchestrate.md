@@ -60,3 +60,11 @@ Report: what was built, what tests cover it, what invariants were enforced, Brai
 3. Never auto-fix — propose first, then await approval
 4. If 3+ fixes have failed, question the architecture
 5. All DB paths must have `group_id` — no exceptions
+
+## Adaptive routing
+
+Apply `.opencode/contracts/adaptive-workflow.md`: quick uses one owner, standard
+adds one relevant independent reviewer, sensitive work preserves required approval.
+Keep the chosen specialist on the first iteration and retries. Context length does
+not determine task complexity. Reuse hydration only when scoped revisions and
+authority are unchanged; refresh missing or stale evidence.

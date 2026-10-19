@@ -45,7 +45,7 @@
 | Field | Value |
 |-------|-------|
 | **Role** | System architect, orchestrator, conceptual integrity guardian |
-| **Model** | `claude-opus-4-6` |
+| **Model** | Inherit configured host model; see `tooling/agent-sync/models.map.json` |
 | **Category** | `ultrabrain` — architecture decisions |
 | **Mode** | Primary (never a subagent) |
 | **Tools** | Read, Grep, Glob, Bash, Edit, Write, Skill, Task |
@@ -55,7 +55,7 @@
 | **NIGHT_BUILD** | Auto-routes, logs decisions, surfaces blockers |
 | **AUTO** | Orchestrates complexity-based strategy selection |
 
-Brooks is the only agent that orchestrates. He never implements directly. His job is to preserve conceptual integrity across the system — one consistent design, not a patchwork of ideas.
+Brooks owns architecture and cross-domain routing. Bounded tasks proceed with one selected owner; another Brooks handoff is needed only for changed scope, authority, or architecture.
 
 ---
 
@@ -64,7 +64,7 @@ Brooks is the only agent that orchestrates. He never implements directly. His jo
 | Field | Value |
 |-------|-------|
 | **Role** | Strategy, scope definition, intent validation |
-| **Model** | `claude-sonnet-4` |
+| **Model** | Inherit configured host model; see `tooling/agent-sync/models.map.json` |
 | **Category** | `intent` — scope and purpose |
 | **Mode** | Primary |
 | **Tools** | Read, Grep, Glob, Skill |
@@ -79,7 +79,7 @@ Jobs ensures every task has clear goals, acceptance criteria, and boundaries bef
 | Field | Value |
 |-------|-------|
 | **Role** | Implementation, testing, code delivery |
-| **Model** | `claude-sonnet-4` |
+| **Model** | Inherit configured host model; see `tooling/agent-sync/models.map.json` |
 | **Category** | `builder` — implementation |
 | **Mode** | Subagent (dispatched by Brooks) |
 | **Tools** | Read, Write, Edit, Bash, Grep, Glob, Skill, Task |
@@ -95,7 +95,7 @@ Woz is the default writer. In party mode, other agents provide analysis; Woz tur
 | Field | Value |
 |-------|-------|
 | **Role** | File discovery, pattern grep, risk scanning, context hydration |
-| **Model** | `claude-haiku-4.5` |
+| **Model** | Inherit configured host model; see `tooling/agent-sync/models.map.json` |
 | **Category** | `recon` — discovery |
 | **Mode** | Subagent (read-only) |
 | **Tools** | Read, Grep, Glob |
@@ -110,7 +110,7 @@ Scout never writes code. Scout finds things, reports paths, and identifies risks
 | Field | Value |
 |-------|-------|
 | **Role** | API ergonomics, surface area minimization, interface simplicity |
-| **Model** | `claude-haiku-4.5` |
+| **Model** | Inherit configured host model; see `tooling/agent-sync/models.map.json` |
 | **Category** | `review` — interface gate |
 | **Mode** | Subagent (read-only) |
 | **Tools** | Read, Grep, Glob |
@@ -125,7 +125,7 @@ Pike's job is to say "no" to unnecessary complexity. Fewer interfaces, stronger 
 | Field | Value |
 |-------|-------|
 | **Role** | Safe refactoring, lint validation, typecheck enforcement |
-| **Model** | `claude-sonnet-4` |
+| **Model** | Inherit configured host model; see `tooling/agent-sync/models.map.json` |
 | **Category** | `quality` — refactor gate |
 | **Mode** | Subagent (limited writes) |
 | **Tools** | Read, Edit, Bash, Grep, Glob |
@@ -140,7 +140,7 @@ Fowler gates every commit path. No merge without clean lint and typecheck.
 | Field | Value |
 |-------|-------|
 | **Role** | Deep debugging, performance measurement, profiling |
-| **Model** | `claude-sonnet-4` |
+| **Model** | Inherit configured host model; see `tooling/agent-sync/models.map.json` |
 | **Category** | `diagnostics` — measurement |
 | **Mode** | Subagent (read-only) |
 | **Tools** | Read, Bash, Grep, Glob |
@@ -156,7 +156,7 @@ Bellard measures before optimizing. No optimization without measurement.
 | Field | Value |
 |-------|-------|
 | **Role** | Latency reduction, hot path optimization, algorithmic improvement |
-| **Model** | `claude-sonnet-4` |
+| **Model** | Inherit configured host model; see `tooling/agent-sync/models.map.json` |
 | **Category** | `performance` — optimization |
 | **Mode** | Subagent (read-only) |
 | **Tools** | Read, Grep, Glob |
@@ -171,7 +171,7 @@ Carmack optimizes what Bellard measures. The pair ensures optimization is eviden
 | Field | Value |
 |-------|-------|
 | **Role** | Schema design, data structures, migrations, query optimization |
-| **Model** | `claude-sonnet-4` |
+| **Model** | Inherit configured host model; see `tooling/agent-sync/models.map.json` |
 | **Category** | `data` — schema and structure |
 | **Mode** | Subagent (ask first for writes) |
 | **Tools** | Read, Grep, Glob, Bash |
@@ -186,7 +186,7 @@ Knuth designs the data layer. Schema changes require explicit approval even in a
 | Field | Value |
 |-------|-------|
 | **Role** | Docker, CI/CD, deployment, infrastructure configuration |
-| **Model** | `claude-sonnet-4` |
+| **Model** | Inherit configured host model; see `tooling/agent-sync/models.map.json` |
 | **Category** | `infrastructure` — deployment |
 | **Mode** | Subagent (ask first for writes) |
 | **Tools** | Read, Bash, Grep, Glob |
@@ -272,3 +272,28 @@ The harness exposes a REST API on port 7654 (configurable via `HARNESS_PORT`):
 | `/lifecycle/agents` | GET | Yes | All agents with versions |
 | `/lifecycle/promote` | POST | Yes | Promote experimental agent |
 | `/lifecycle/retire` | POST | Yes | Retire agent |
+
+## Adaptive Delivery
+
+Classify by risk and scope, never prompt length. Quick: one owner and targeted
+verification for a bounded reversible task. Standard: one owner plus one independent
+reviewer matched to the change. Sensitive: relevant specialists and explicit approval
+for destructive, production, authorization, tenant, schema, or promotion boundaries.
+Existing user authorization remains valid; required project/story gates still apply.
+Brooks owns architecture without becoming a mandatory extra handoff for every edit.
+Keep the selected domain owner through retries. Parallelize only independent work
+with disjoint write ownership; do not create agents merely to represent personas.
+
+Reuse Scout and Brain receipts only for the same project, tenant, objective, workspace
+revision (including uncommitted changes), and authority state. A changed scope, diff,
+policy, permission, stale receipt, or new blocker requires focused rehydration. Each
+packet records source revisions and retrieval time; unknown freshness means refresh.
+Search Brain before planning; a valid shared receipt avoids duplicate searches.
+Brain unavailability must be stated; continue from explicit local evidence where safe.
+Load task-relevant skills only; log substantive outcomes once. Semantic promotion
+always requires human approval. Default tenant is `allura-system`.
+
+Use the host's configured model unless an explicit supported override is selected.
+Evaluate models by accepted outcomes, retries, latency, cost, and review findings;
+model confidence is never completion evidence. Require actual tools and validation
+receipts for implementation claims. Loading a persona is not executing its task.

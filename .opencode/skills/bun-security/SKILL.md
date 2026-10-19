@@ -1,4 +1,5 @@
 ---
+name: bun-security
 description: Bun security skill. Use when detecting npm vulnerabilities, postinstall hooks, or CanisterWorm indicators. Enforces Bun-only policy.
 mode: subagent
 temperature: 0.1

@@ -166,7 +166,6 @@ For detailed setup and host-project options, see [Installation](docs/installatio
 | Performance | Carmack | Optimizes only measured bottlenecks |
 | Data | Knuth | Reviews schema, migration, query, and data-integrity changes |
 | Infrastructure | Hightower | Reviews CI/CD, containers, deployment, and observability |
-| Memory companion | Bahari | Curates optional Allura Memory interactions; not a software-delivery writer |
 
 The canonical role definitions live in this repository. Runtime mirrors are validated by the repository tooling.
 
@@ -175,13 +174,14 @@ The canonical role definitions live in this repository. Runtime mirrors are vali
 | Surface | Purpose |
 |---|---|
 | `.opencode/team-ram-presets.jsonc` | Canonical model presets and fallback chains |
-| `.opencode/agent/`, `.opencode/command/`, `.opencode/skills/` | OpenCode public harness source |
+| `.opencode/agent/`, `.opencode/command/`, `.opencode/skills/` | Canonical repository source; legacy commands and broad skills remain source-only |
 | `.claude/` and `.claude-plugin/` | Claude Code runtime and plugin surfaces |
 | `.codex/` and `.codex-plugin/` | Codex runtime and plugin surfaces |
-| `.opencode/config/agent-metadata.json` | Lane metadata and routing permissions |
+| `plugin.json` | Portable Team RAM plugin manifest |
+| `codex-public-skills.json` | Explicit ten-skill portable discovery contract |
 | `.mcp.json` | Optional MCP wiring; hosts must supply their own reachable services |
 | `.env.example` | Optional HTTP and memory integration variables |
-| `PUBLIC_EXPORT.json` | Exact public export contract by agents, commands, skills, config, runtime, and docs |
+| `PUBLIC_EXPORT.json` | Exact public export contract by agents, skills, config, runtime, and docs |
 | `SOURCE.json` | Canonical ownership and downstream generation contract |
 
 `opencode.json` is a runnable repository example, not the canonical cross-repository export contract. Host-specific provider or credential configuration should stay local.
@@ -214,11 +214,19 @@ See [Ecosystem relationships and degraded behavior](docs/ecosystem-relationships
 `PUBLIC_EXPORT.json` is the machine-readable allowlist for package source. It defines exactly which agent, command, skill, configuration, runtime, and documentation files are public.
 
 ```bash
+bun run check:codex-skills
+bun run validate:packed
+bun run validate:tarball
 bun run validate:export
 bun run export:public -- ./dist/public-export
+bun run team-ram:doctor
 ```
 
-CI rejects stale patterns, unclassified files under public roots, package/manifest drift, or an authority declaration that no longer names this repository. A future `allura-plugins` update should pin a commit SHA, run the export, and record generation provenance; it must not become a second editable authority.
+CI rejects stale patterns, symlinked or unallowlisted Codex skills, missing or
+extra public agent definitions, unclassified public files, package/manifest drift, or an authority
+declaration that no longer names this repository. A future `allura-plugins`
+update should pin a commit SHA, run the export, and record generation provenance;
+it must not become a second editable authority.
 
 ## Documentation
 
@@ -238,3 +246,21 @@ CI rejects stale patterns, unclassified files under public roots, package/manife
 This repository is the canonical standalone source for Team RAM. Ownership and export semantics are declared in [`SOURCE.json`](SOURCE.json); the public package boundary is declared in [`PUBLIC_EXPORT.json`](PUBLIC_EXPORT.json). Historical planning records may describe earlier ownership arrangements, but they do not override these machine-readable contracts.
 
 MIT licensed. See [LICENSE](LICENSE).
+
+## Adaptive workflows (0.5)
+
+Team RAM now selects quick, standard, or sensitive delivery based on risk and scope.
+See [.opencode/contracts/adaptive-workflow.md](.opencode/contracts/adaptive-workflow.md).
+Scout output length never escalates a task, and the selected specialist owns the
+first iteration as well as retries. Runtime and plugin agents are generated from
+one source; run `node tooling/agent-sync/sync-agents.mjs --check` to detect drift.
+Models inherit the configured host selection. Configure supported explicit tier
+choices in `tooling/agent-sync/models.map.json`, then regenerate with `--apply`.
+
+The standalone HTTP executor is a text-only Anthropic transport, not a workspace
+coding runtime. Direct API mode needs both `ANTHROPIC_API_KEY` and a concrete
+`TEAM_RAM_ANTHROPIC_MODEL`; CLI aliases such as `inherit` are rejected. Without a
+backend it returns a failed diagnostic. Hydration and implementation requests
+require a tool-capable Codex, Claude Code, or OpenCode host; generated text and model
+confidence cannot establish completion. No existing task approval is renewed merely
+because work crosses a persona boundary.

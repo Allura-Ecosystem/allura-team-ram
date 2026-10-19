@@ -1,6 +1,6 @@
 ---
 name: open-ralph-wiggum
-description: Use this skill when user asks for open-ralph-wiggum, Ralph Wiggum loop, or autonomous multi-iteration completion with explicit stopping criteria. Pushy trigger: include words like "open ralph", "run ralph", or "Ralph Wiggum".
+description: "Use this skill when user asks for open-ralph-wiggum, Ralph Wiggum loop, or autonomous multi-iteration completion with explicit stopping criteria. Pushy trigger: include words like \"open ralph\", \"run ralph\", or \"Ralph Wiggum\"."
 allowed-tools: ["Read", "Write", "Edit", "Glob", "Grep", "Bash"]
 ---
 

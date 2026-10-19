@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Review code changes for correctness, regressions, security, contract drift, and missing tests using findings-first output and repo-specific guardrails.
+description: Review changes findings-first for correctness, regressions, security, contract drift, missing tests, and repo-specific guardrails.
 ---
 
 # Code Review

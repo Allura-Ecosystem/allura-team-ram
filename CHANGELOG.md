@@ -1,3 +1,40 @@
+# 0.6.0 — Lean portable overlay
+
+- Preserve all ten canonical Team RAM roles while making Brooks -> Scout -> Woz
+  the default delivery route and keeping specialists on demand.
+- Add a portable root `plugin.json` with compatibility-manifest version parity.
+- Replace broad runtime-specific skill exports with ten explicit, materialized
+  public skills and concise discovery metadata for every packaged runtime.
+- Add read-only setup and doctor workflows for version, cache, skill, agent,
+  mode, metadata, duplicate, and optional Brain diagnostics.
+- Validate install-shaped plugin artifacts, including advertised content and the
+  absence of skill symlinks.
+- Ship exactly the ten canonical GOAT agent definitions; product and compatibility
+  agents remain internal source only.
+- Stage public-skill regeneration with rollback and validate the real Bun publish
+  tarball after extraction.
+- Align public memory, menu, and research skills with authenticated identity,
+  human-governed promotion, executable routes, and Tavily-only current research.
+- Keep canonical skill sources and legacy agent registries source-only; real
+  publish artifacts expose only the ten root skills and ten canonical agents.
+- Make the portable overlay skill-driven through `allura-menu`; legacy command
+  trees remain source-only and are absent from publish artifacts.
+
+# 0.5.1 — Codex marketplace identity
+
+- Match the native Codex manifest name to the public `team-ram-coding` selector.
+- Preserve the standalone Claude and package names and validate their explicit source-owned identities before export.
+
+# 0.5.0 — Adaptive delivery
+
+- Remove Scout-length complexity escalation and preserve specialist ownership.
+- Share risk-based workflow and scoped context freshness rules across agents and entry skills.
+- Inherit configured host models; generate both runtime and plugin agent mirrors.
+- Require explicit direct API models and report non-executable diagnostics honestly.
+- Align package and plugin release versions.
+- Fix native Codex manifest fields and expose deterministic links to eligible canonical skills; retain invocation-disabled restrictions and validate export link parity.
+- Repair three malformed skill metadata headers and let the compatibility reality reviewer inherit the host model.
+
 # Changelog
 
 All notable changes to the Team RAM OpenCode Harness will be documented in this file.
