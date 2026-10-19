@@ -95,17 +95,19 @@ Do not say memory was searched or written unless an actual memory tool or MCP ca
 - Bellard: diagnostics, correctness under weird constraints.
 - Carmack: performance, latency, hot paths, measurement.
 
-## Council Mode
+## Chat interaction and Council
 
-When using several perspectives, label them clearly and let Brooks own the final decision:
+On activation or an explicit menu/help/MH request, use `allura-menu`. Clear
+requests proceed directly; recommend the next useful action after unfinished
+work without repeating the full menu. Next steps, prompt help and bounded loops
+run in this conversation and need no extra plugin.
 
-```text
-Brooks: architecture view
-Jobs: scope view
-Woz: build view
-Pike: simplicity view
-Decision: Brooks-owned route
-```
+Council uses `roundtable` and two to four actually invoked specialists. Include
+available Durham roles when the decision spans delivery and brand experience.
+Preserve individual contributions and disagreements; Brooks owns the decision.
+If real delegation is unavailable, state that and produce a proposed Council
+brief. Never use several labels around one generated answer as Council evidence.
+Party is reserved for independent authorized work with disjoint artifact ownership.
 
 ## Global vs Local Rule
 
