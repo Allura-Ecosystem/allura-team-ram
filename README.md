@@ -1,103 +1,35 @@
 # Team RAM
 
-**A standalone, governed multi-agent software-delivery harness for OpenCode, Claude Code, and Codex.**
+Plan, build, and review software with clear ownership and evidence of what changed.
 
-Turn a software request into a controlled work graph: scope intent, hydrate context, dispatch specialist lanes in the background, reconcile results, review the actual change, and report evidence. Provider presets change models without changing role authority or delivery gates.
+Team RAM supplies ten specialist roles and ten public skills for OpenCode, Claude Code, and Codex. Brooks coordinates the work; Scout finds the relevant context; Woz implements; reviewers inspect the result. The host runtime supplies the model, tools, and permissions. Allura Brain is an optional memory connection.
 
-<p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License" /></a>
-  <a href="https://github.com/Allura-Ecosystem/allura-team-ram/actions"><img src="https://img.shields.io/github/actions/workflow/status/Allura-Ecosystem/allura-team-ram/ci.yml?branch=main&label=CI" alt="CI" /></a>
-  <a href="https://bun.sh"><img src="https://img.shields.io/badge/runtime-Bun%20%E2%89%A51.1-f9f1e1?logo=bun" alt="Bun" /></a>
-</p>
-
----
+Use this repository for the canonical source and project scaffolding. For the Claude/Codex catalog package, follow the [Allura plugin installation guide](https://github.com/Allura-Ecosystem/allura-plugins#installation).
 
 ## How Team RAM operates
 
-### 1. Specialists move as one team
+```text
+Task and acceptance criteria
+  → Repository context and available evidence
+  → Accountable owner and relevant specialists
+  → Implementation and review
+  → Executed checks, result, and remaining limits
+```
 
-<p align="center">
-  <a href="docs/images/specialists-move-as-one-team.png"><img src="docs/images/specialists-move-as-one-team.png" alt="Specialists move as one team: a task is framed, work is coordinated, specialists contribute, and results are verified. Brooks orchestration sits at the center of architecture, implementation, review, test, and governance, producing a verified deliverable." width="900" /></a>
-</p>
-
-Team RAM routes a task brief through **Brooks orchestration** to the lanes that fit it — architecture, implementation, review, test, and governance — and returns a verified deliverable. **Task is framed** → **work is coordinated** → **specialists contribute** → **results are verified**. Clear routing replaces isolated handoffs, and repeatable checkpoints replace ad hoc ones.
-
----
-
-### 2. Every action leaves proof
-
-<p align="center">
-  <a href="docs/images/every-action-leaves-proof.png"><img src="docs/images/every-action-leaves-proof.png" alt="Source, review, and result stay connected to durable evidence record" width="900" /></a>
-</p>
-
-Nothing is silent. Every decision, every change, every check is recorded. Source, review step, and outcome remain connected and auditable forever.
-
----
-
-### 3. Access has boundaries
-
-<p align="center">
-  <a href="docs/images/access-has-boundaries.png"><img src="docs/images/access-has-boundaries.png" alt="Two labeled workspaces on either side of a policy boundary; private work stays in its own workspace" width="900" /></a>
-</p>
-
-Specialist lanes work independently but within clear boundaries. Policy gates prevent accidental or malicious crossing. Tenant isolation and role-based permissions are enforced at every step.
-
----
-
-### 4. Enterprise governance and safety
-
-<p align="center">
-  <a href="docs/images/enterprise-governance-safety.png"><img src="docs/images/enterprise-governance-safety.png" alt="Policy hooks, human approval, and append-only audit evidence surrounding the agent workflow" width="900" /></a>
-</p>
-
-Governance wraps the entire workflow. **Policy hooks** validate actions before dispatch. **Human review** gates protected operations. **Append-only audit trails** capture every decision. Nothing materializes without passing the gate.
-
----
-
-### 5. Persistent agent memory
-
-<p align="center">
-  <a href="docs/images/persistent-agent-memory.png"><img src="docs/images/persistent-agent-memory.png" alt="One PostgreSQL engine with episodic evidence and canonical graph tables, governed retrieval, and tenant-aware controls" width="900" /></a>
-</p>
-
-Optional Allura Brain integration adds durable memory across sessions. One PostgreSQL engine holds both episodic evidence (events, traces) and canonical graph (versioned knowledge). Retrieval is governed and scoped to your tenant.
-
----
-
-### 6. Graph migration and versioning
-
-<p align="center">
-  <a href="docs/images/ad50-canonical-graph-migration.png"><img src="docs/images/ad50-canonical-graph-migration.png" alt="Canonical graph versioning: new nodes supersede old ones while history remains auditable" width="900" /></a>
-</p>
-
-Knowledge evolves through immutable versioning. New versions supersede old ones; the full history stays traceable. Graph-based relationships preserve the why behind every architectural decision.
-
----
+This is the delivery contract, not evidence that agents have run. A bounded correction can keep one owner and a targeted check. Larger changes add independent review; protected operations retain their human approval requirements. See the [adaptive workflow](.opencode/contracts/adaptive-workflow.md).
 
 ## What the harness does
 
-- **Background orchestration:** Brooks decomposes work and dispatches independent read-only or specialist tasks concurrently, then reconciles results before the writer proceeds.
-- **Context-first routing:** Jobs establishes intent and boundaries; Scout discovers the live code, instructions, risks, and validation commands before implementation.
-- **Specialist lanes:** Woz owns implementation while Pike, Fowler, Bellard, Carmack, Knuth, and Hightower apply interface, maintainability, diagnostics, performance, data, and infrastructure expertise.
-- **Review before completion:** Reviewers inspect the real diff and artifacts; mutation, deployment, and self-modification boundaries retain human approval.
-- **Evidence, not completion theater:** A task is complete only with executed checks, concrete outcomes, and explicit blockers or exclusions.
-- **Role-stable presets:** Ollama, OpenAI, Anthropic, and mixed presets change model assignments while keeping permissions and lane responsibilities intact.
-- **Optional governed memory:** Allura Memory can add cross-session retrieval and evidence traces. Without it, the core orchestration and review flow remains usable.
+- **Clarifies the task:** Jobs helps establish the goal, acceptance criteria, and boundaries when those are missing.
+- **Finds the context:** Scout identifies source files, existing decisions, risks, and relevant checks before implementation.
+- **Routes specialist work:** Brooks assigns useful responsibilities and reconciles results. Independent tasks can run concurrently when the host supports real delegation.
+- **Builds and reviews:** Woz owns implementation; relevant specialists review interfaces, maintainability, data, infrastructure, or measured performance.
+- **Reports evidence:** Completion claims identify actual changes, checks, outcomes, and unresolved limits.
+- **Uses memory when authorized:** Allura Brain adds scoped retrieval and outcome persistence. Missing memory is reported; local work can continue where the evidence is sufficient.
 
 ## Delivery flow
 
-```text
-Request
-  -> Jobs: intent and acceptance boundaries
-  -> Brooks: plan and background work graph
-  -> Scout: repository context packet
-  -> Specialist lane(s): analysis or implementation
-  -> Pike/Fowler and domain review: inspect the actual result
-  -> Verification: run declared checks and collect evidence
-  -> Human gate: approve protected or destructive transitions
-```
-
-The harness supports interactive `DAY_BUILD`, bounded unattended `NIGHT_BUILD`, and the six-step `AUTO` contract (`Observe -> Choose -> Act -> Verify -> Record -> Stop`). None of these modes grants permission to cross destructive, production, credential, or governance boundaries silently.
+The harness defines interactive `DAY_BUILD`, bounded unattended `NIGHT_BUILD`, and a six-step `AUTO` contract: `Observe → Choose → Act → Verify → Record → Stop`. Runtime support and project authority determine which operations can execute. A mode does not grant permission for destructive, production, credential, or governance changes.
 
 ## Quick start
 
@@ -127,7 +59,9 @@ node ./bin/team-ram.mjs init --target /path/to/project --runtime opencode
 
 Use `--runtime claude`, `--runtime codex`, or `--runtime all` for another public runtime surface. Existing files are preserved unless `--force` is supplied.
 
-### 3. Select models
+### 3. Review optional model configuration
+
+The default is to inherit the configured host model. Apply a preset only when you intend to change runtime configuration:
 
 ```bash
 ./scripts/apply-preset.sh --dry-run
@@ -139,16 +73,17 @@ Preset application edits runtime configuration. Review the dry run first, especi
 
 ### 4. Start a governed task
 
-In the selected agent runtime, invoke the orchestrator or a command such as:
+In a host that exposes the installed agent, give Brooks a concrete request:
 
 ```text
 @brooks add validation to the account import flow and prove it with tests
-/start-session
-/party review this proposed API from interface, data, and operations lanes
-/auto fix the failing parser test without changing the public schema
 ```
 
-Expect context discovery before edits, one accountable writer, specialist review, and a final evidence summary.
+Ask for **Menu** or **Help** to see Next steps, Help with a prompt, Council, Work, Loop, Validate, and More. A clear request proceeds directly. These chat choices route to installed skills; they do not guarantee matching slash commands in every runtime.
+
+Council can examine one decision with relevant RAM and Durham specialists when real delegation is available. Otherwise, prepare a council brief and state that specialists have not run. Loops need a goal, checks, iteration limit, and stopping conditions.
+
+Expect context discovery before edits, an accountable owner, review appropriate to the change, and a factual result summary.
 
 For detailed setup and host-project options, see [Installation](docs/installation.md). For models, permissions, memory, and service settings, see [Configuration](docs/configuration.md).
 
@@ -188,7 +123,7 @@ The canonical role definitions live in this repository. Runtime mirrors are vali
 
 ## Optional HTTP service
 
-The Bun service exposes authenticated invocation and governed lifecycle endpoints for external orchestrators:
+The optional Bun service exposes authenticated invocation and lifecycle endpoints for external orchestrators. Its executor is a text-only Anthropic transport; repository implementation and hydration require a tool-capable host.
 
 ```bash
 cp .env.example .env
@@ -224,9 +159,7 @@ bun run team-ram:doctor
 
 CI rejects stale patterns, symlinked or unallowlisted Codex skills, missing or
 extra public agent definitions, unclassified public files, package/manifest drift, or an authority
-declaration that no longer names this repository. A future `allura-plugins`
-update should pin a commit SHA, run the export, and record generation provenance;
-it must not become a second editable authority.
+declaration that no longer names this repository. The `allura-plugins` catalog consumes a pinned commit, runs the export, and records generation provenance. It is a generated distribution, not a second content authority.
 
 ## Documentation
 
@@ -238,8 +171,8 @@ it must not become a second editable authority.
 - [Dual-runtime guide](docs/dual-runtime.md)
 - [Quick reference](docs/quick-reference.md)
 - [Testing](docs/TESTING.md)
-- [Architecture](ARCHITECTURE.md)
-- [Contributing](CONTRIBUTING.md)
+- [Architecture](https://github.com/Allura-Ecosystem/allura-team-ram/blob/main/ARCHITECTURE.md)
+- [Contributing](https://github.com/Allura-Ecosystem/allura-team-ram/blob/main/CONTRIBUTING.md)
 
 ## Canonical source
 
@@ -247,9 +180,9 @@ This repository is the canonical standalone source for Team RAM. Ownership and e
 
 MIT licensed. See [LICENSE](LICENSE).
 
-## Adaptive workflows (0.5)
+## Adaptive workflows
 
-Team RAM now selects quick, standard, or sensitive delivery based on risk and scope.
+Team RAM selects quick, standard, or sensitive delivery based on risk and scope.
 See [.opencode/contracts/adaptive-workflow.md](.opencode/contracts/adaptive-workflow.md).
 Scout output length never escalates a task, and the selected specialist owns the
 first iteration as well as retries. Runtime and plugin agents are generated from
