@@ -39,12 +39,7 @@
     "longDescription": "A portable harness with the ten canonical Team RAM specialists. Brooks routes, Scout hydrates context, Woz builds, and other specialists join on demand. Every packaged runtime discovers the same focused ten-skill catalog.",
     "developerName": "Team RAM",
     "category": "Coding",
-    "capabilities": [
-      "Read",
-      "Write",
-      "Interactive",
-      "Memory"
-    ],
+    "capabilities": ["Read", "Write", "Interactive", "Memory"],
     "brandColor": "#7C3AED",
     "defaultPrompt": [
       "Start a session and check harness health",

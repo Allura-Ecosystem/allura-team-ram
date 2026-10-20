@@ -23,16 +23,9 @@
     "longDescription": "A portable overlay with ten canonical Team RAM specialists and ten focused public skills. Brooks routes, Scout hydrates context, Woz builds, and other specialists join on demand. Allura Brain is optional and human-governed.",
     "developerName": "Team RAM",
     "category": "Coding",
-    "capabilities": [
-      "Read",
-      "Write",
-      "Interactive",
-      "Memory"
-    ],
+    "capabilities": ["Read", "Write", "Interactive", "Memory"],
     "brandColor": "#7C3AED",
-    "defaultPrompt": [
-      "Use Brooks, Scout, and Woz to complete this task with focused validation."
-    ]
+    "defaultPrompt": ["Use Brooks, Scout, and Woz to complete this task with focused validation."]
   },
   "mcpServers": "./.mcp.json"
 }
