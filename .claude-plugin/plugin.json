@@ -1,6 +1,6 @@
 {
   "name": "team-ram-harness",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "Team RAM OpenCode Harness \u2014 self-evolving multi-agent orchestration with 10 specialists, SONA learning, coherence monitoring, and HITL governance. Portable harness for deterministic AI-powered software development.",
   "author": {
     "name": "Team RAM Contributors"
