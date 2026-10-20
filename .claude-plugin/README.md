@@ -1,44 +1,47 @@
-# Team RAM — The Surgical Team
+# Team RAM for Claude Code
 
-> "The purpose of organization is to reduce the amount of communication and coordination necessary." — Frederick Brooks
-
-**10 AI agents modeled after computing pioneers.** Instead of 10 generalists, you get one architect and nine specialists who own their domains completely.
-
-## The Team
-
-| Agent | Persona | What They Do |
-|-------|---------|-------------|
-| **Brooks** | Frederick Brooks | Architect & orchestrator — owns the vision |
-| **Jobs** | Steve Jobs | Intent gate — crisp objectives before any work |
-| **Woz** | Steve Wozniak | Builder — ships working code with tests |
-| **Pike** | Rob Pike | Interface gate — read-only complexity review |
-| **Scout** | — | Recon — fast codebase search and discovery |
-| **Bellard** | Fabrice Bellard | Diagnostics — measurement-first debugging |
-| **Carmack** | John Carmack | Optimization — latency and hot path specialist |
-| **Fowler** | Martin Fowler | Maintainability — safe incremental refactoring |
-| **Knuth** | Donald Knuth | Data architect — schema and query correctness |
-| **Hightower** | Kelsey Hightower | Infrastructure — one-command deployments |
+Software planning, implementation, and review through ten specialist roles. Brooks coordinates the task; the current Claude runtime supplies execution tools and permissions.
 
 ## Install
 
-Add the Allura marketplace in Cowork:
+Use the Allura plugin marketplace:
 
+```text
+/plugin marketplace add Allura-Ecosystem/allura-plugins
+/plugin install team-ram-coding@allura-ecosystem
 ```
-GitHub → Allura-Ecosystem/Allura_Memory
-```
 
-Then install the **Team RAM** plugin.
+`team-ram-coding` is the catalog alias. This standalone source retains the Claude manifest identity `team-ram-harness`; [source ownership](../SOURCE.json) and the [public export contract](../PUBLIC_EXPORT.json) define the relationship.
 
-## How It Works
+For project scaffolding and local development, follow the [main README](../README.md#quick-start).
 
-Tasks flow through a Brooksian pipeline:
+## Start a task
 
-1. **Jobs** gates intent — "What exactly are we building?"
-2. **Brooks** plans — "Here's how we'll build it"
-3. **Scout** reconnoiters — "Here's what exists"
-4. **Specialist** executes — Woz, Knuth, Hightower, etc.
-5. **Pike/Fowler** review — "Is this simple and maintainable?"
+Give Brooks the goal, relevant inputs, constraints, and desired checks. For example:
 
-## License
+> Review this API change for interface complexity and migration risk. Report findings with file references before proposing edits.
 
-MIT — built by Sabir Asheed / Team RAM
+Ask for **Menu** or **Help** when you need next steps, prompt help, Council, a work loop, or validation guidance. Clear requests proceed directly.
+
+## Roles
+
+| Agent | Responsibility |
+|---|---|
+| Brooks | Architecture, ownership, and coordination |
+| Jobs | Intent, scope, and acceptance criteria |
+| Scout | Read-only repository discovery |
+| Woz | Implementation and targeted checks |
+| Pike | Interface simplicity |
+| Fowler | Maintainability and safe refactoring |
+| Bellard | Diagnostics and measurement |
+| Carmack | Measured performance improvements |
+| Knuth | Data models, queries, and integrity |
+| Hightower | Infrastructure and delivery |
+
+Roles describe responsibilities. A role definition does not prove invocation, and plugin installation does not grant new permissions. Optional memory requires an authorized Allura Brain connection.
+
+## Source and license
+
+Agent mirrors are generated from canonical `.opencode/` source. Make changes there and regenerate; do not hand-edit the mirrors. See [agent sync](../tooling/agent-sync/README.md).
+
+MIT — see [LICENSE](../LICENSE).
