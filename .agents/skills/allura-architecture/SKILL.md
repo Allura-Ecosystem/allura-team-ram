@@ -43,7 +43,7 @@ Load `allura-team-ram` skill. This provides:
 ### Step 2: Scout Hydration (Gate 1)
 
 ```
-1. Read local context: AGENTS.md, .opencode/, docs/allura/
+1. Read local context: CLAUDE.md, .opencode/, docs/allura/
 2. Search Allura Brain:
    - group_id: "allura-system"
    - query: "ARCHITECTURE_DECISION {topic} blockers decisions outcomes"
@@ -121,7 +121,6 @@ Log the architecture decision to Allura Brain:
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "brooks-architect",
   content: "ADR_CREATED: AD-{number} {decision title}; rationale={...}; alternatives={...}; consequences={...}",
   metadata: {
     source: "conversation",
@@ -178,14 +177,6 @@ At the end of every `allura-architecture` execution, emit:
 ├─ Action Taken: Architecture decision AD-{number} — {title}
 ├─ Principle Applied: Conceptual Integrity (Brooks)
 ├─ Event Logged: ADR_CREATED
-├─ Neo4j Promoted: {Yes/No — only if promotion criteria met}
+├─ Canonical promotion: {Approved receipt / Not requested — human approval required}
 └─ Confidence: {High/Medium/Low}
 ```
-
----
-
-> [!NOTE]
-> **AI-Assisted Documentation**
-> Portions of this document were drafted with the assistance of an AI language model.
-> Content has been reviewed against architectural principles and should be kept in sync with source-of-truth docs.
-> When in doubt, defer to code, schemas, and team consensus.

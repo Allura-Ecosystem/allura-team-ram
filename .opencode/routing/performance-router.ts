@@ -12,6 +12,7 @@
  */
 
 import { memory_add, memory_search } from 'mcp:allura-memory';
+import { normalizeMemorySearch } from '../../src/memory-search-response';
 
 // SONA pattern integration (v3) — loaded dynamically since this file
 // runs in harness runtime where relative imports may differ
@@ -59,15 +60,15 @@ export async function selectAgent(
     });
     
     // Analyze success rates
-    const agentScores = analyzePerformance(results);
+    const agentScores = analyzePerformance(normalizeMemorySearch(results));
     
     // Select best agent (with ε-greedy exploration)
     const selectedAgent = selectBestAgentWithExploration(agentScores, taskType, config);
     
-    console.log(`[Router] Selected ${selectedAgent} for ${taskType}`);
+    console.log('[Router] Agent selected');
     return selectedAgent;
-  } catch (error) {
-    console.error('[Router] Failed to query performance history:', error);
+  } catch {
+    console.error('[Router] Performance history unavailable; using default routing');
     // Fallback to default routing
     return getDefaultAgent(taskType);
   }
@@ -76,12 +77,13 @@ export async function selectAgent(
 /**
  * Analyze performance results from Allura
  */
-function analyzePerformance(memories: any[]): Record<string, AgentPerformance> {
+function analyzePerformance(memories: unknown[]): Record<string, AgentPerformance> {
   const agentStats: Record<string, AgentPerformance> = {};
   
   for (const memory of memories) {
-    const agentId = memory.metadata?.agent_id;
-    if (!agentId) continue;
+    const metadata = performanceMetadata(memory);
+    if (!metadata) continue;
+    const agentId = metadata.agent_id;
     
     if (!agentStats[agentId]) {
       agentStats[agentId] = {
@@ -95,14 +97,63 @@ function analyzePerformance(memories: any[]): Record<string, AgentPerformance> {
     const stats = agentStats[agentId];
     stats.taskCount++;
     
-    // Calculate success rate from metadata
-    if (memory.metadata?.event_type === 'TASK_COMPLETE') {
-      const confidence = memory.metadata?.confidence || 0.5;
+    // Preserve the existing confidence heuristic; this is not measured success.
+    if (metadata.event_type === 'TASK_COMPLETE') {
+      const confidence = metadata.confidence || 0.5;
       stats.successRate = (stats.successRate * (stats.taskCount - 1) + confidence) / stats.taskCount;
     }
   }
   
   return agentStats;
+}
+
+interface PerformanceMetadata {
+  agent_id: string;
+  event_type: string;
+  confidence?: number;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isConfidence(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 1;
+}
+
+/** Decode stored evidence only; never derive a measured success rate from an outcome label. */
+function performanceMetadata(memory: unknown): PerformanceMetadata | null {
+  if (!isRecord(memory)) return null;
+  const metadata = memory.metadata;
+  // Legacy telemetry has an event_type. Plain canonical metadata.agent_id is
+  // authenticated attribution, not evidence of a routing role or task outcome.
+  if (
+    isRecord(metadata) && typeof metadata.agent_id === 'string' && metadata.agent_id &&
+    typeof metadata.event_type === 'string' && metadata.event_type &&
+    (metadata.confidence === undefined || isConfidence(metadata.confidence))
+  ) {
+    return {
+      agent_id: metadata.agent_id,
+      event_type: metadata.event_type,
+      confidence: metadata.confidence,
+    };
+  }
+  if (typeof memory.content !== 'string' || !memory.content.startsWith('Task completed: ')) return null;
+  try {
+    // Hook JSON is one line even when the task description contains newlines.
+    const details: unknown = JSON.parse(memory.content.slice(memory.content.lastIndexOf('\n') + 1));
+    if (
+      !isRecord(details) || details.schema_version !== 1 || details.event_type !== 'TASK_COMPLETE' ||
+      typeof details.agent_role !== 'string' || !details.agent_role || !isConfidence(details.confidence)
+    ) return null;
+    return {
+      agent_id: details.agent_role,
+      event_type: details.event_type,
+      confidence: details.confidence,
+    };
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -125,7 +176,7 @@ function selectBestAgentWithExploration(
   // Cold start: no performance data at all, use default
   if (agents.length === 0) {
     const defaultAgent = getDefaultAgent(taskType);
-    console.log(`[Router] Cold start — using default: ${defaultAgent}`);
+    console.log('[Router] Cold start — using default routing');
     return defaultAgent;
   }
   
@@ -149,11 +200,7 @@ function selectBestAgentWithExploration(
       const suggestion = patterns.find((p: any) => p.suggestedAgent && p.suggestedAgent !== bestAgent);
       if (suggestion) {
         logExplorationStep(taskType, bestAgent, suggestion.suggestedAgent, adjustedEpsilon);
-        console.log(
-          `[Router] 🧠 SONA-informed (ε=${adjustedEpsilon.toFixed(3)}): ` +
-          `chose ${suggestion.suggestedAgent} over ${bestAgent} for ${taskType} ` +
-          `(${suggestion.description})`
-        );
+        console.log('[Router] SONA-informed exploration selected');
         return suggestion.suggestedAgent;
       }
     } catch {
@@ -167,10 +214,7 @@ function selectBestAgentWithExploration(
     if (candidates.length > 0) {
       const exploredAgent = candidates[Math.floor(Math.random() * candidates.length)].agentId;
       logExplorationStep(taskType, bestAgent, exploredAgent, adjustedEpsilon);
-      console.log(
-        `[Router] 🎲 Blind exploration (ε=${adjustedEpsilon.toFixed(3)}): ` +
-        `chose ${exploredAgent} over ${bestAgent} for ${taskType}`
-      );
+      console.log('[Router] Blind exploration selected');
       return exploredAgent;
     }
   }
@@ -190,23 +234,22 @@ async function logExplorationStep(
   epsilon: number
 ): Promise<void> {
   try {
+    const details = {
+      event_type: 'EXPLORATION_STEP',
+      task_type: taskType,
+      default_agent: defaultAgent,
+      explored_agent: exploredAgent,
+      epsilon,
+      timestamp: new Date().toISOString(),
+    };
     await memory_add({
       group_id: 'allura-system',
-      user_id: 'performance-router',
-      content: `Exploration step: ${taskType}`,
-      metadata: {
-        source: 'performance-router',
-        event_type: 'EXPLORATION_STEP',
-        task_type: taskType,
-        default_agent: defaultAgent,
-        explored_agent: exploredAgent,
-        epsilon: epsilon,
-        timestamp: new Date().toISOString()
-      }
+      content: `Exploration step: ${taskType}\n${JSON.stringify(details)}`,
+      metadata: { source: 'conversation' },
     });
-  } catch (error) {
+  } catch {
     // Best effort — don't block routing if logging fails
-    console.error('[Router] Failed to log exploration step:', error);
+    console.error('[Router] Exploration logging unavailable');
   }
 }
 

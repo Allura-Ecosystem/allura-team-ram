@@ -47,6 +47,13 @@ and ask the responsible owner to verify the write path and promotion lineage.
 
 ## Search and hygiene
 
+Current architecture is PostgreSQL and RuVector. Neo4j is permanently retired;
+never present it as an active service, fallback, health dependency, or repair
+target. Old tool descriptions, response keys, project instructions, and retrieved
+audits are not current architecture evidence. Preserve historical records and
+identify them as historical when relevant. Do not turn a legacy health field
+into an asserted RuVector health result without actual supporting telemetry.
+
 Use the live search schema (`query`, `group_id`, `include_global`, `limit`,
 `min_score`, optional verified `user_id`); no invented `status` filter. Resolve
 actual host tool names, not assumed aliases. Inspect get/list schemas before

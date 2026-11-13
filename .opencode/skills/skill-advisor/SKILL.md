@@ -75,7 +75,7 @@ Check which governance hooks are relevant to this task:
 | Modifies agent definitions | HITL curator approval required |
 | Changes environment / config | Destructive change gate |
 | Calls MCP tools | MCP-only DB access policy |
-| Writes to Neo4j | SUPERSEDES versioning required |
+| Canonical semantic changes | Human approval and immutable SUPERSEDES versioning required |
 | Promotes memory | Curator approval (confidence >= 0.85) |
 | Performance-sensitive path | Coherence monitor active |
 
@@ -161,7 +161,7 @@ allura-brain_memory_add({
 | `allura-health-observability` | Health checks, monitoring, diagnostics |
 | `allura-approve-promotion` | Approving memory promotion to semantic store |
 | `allura-propose-promotion` | Proposing memory for promotion |
-| `allura-graph-debug` | Debugging Neo4j graph issues (read-only) |
+| `allura-graph-debug` | Governed semantic graph diagnostics (read-only) |
 
 ### Research & Discovery
 

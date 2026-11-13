@@ -125,7 +125,6 @@ Log the retrospective outcome to Allura Brain:
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "brooks-architect",
   content: "RETROSPECTIVE: {epic name} — {summary}; lessons={...}; action_items={...}",
   metadata: {
     source: "conversation",
@@ -165,6 +164,6 @@ At the end of every `allura-retrospective` execution, emit:
 ├─ Action Taken: Retrospective for {epic name}
 ├─ Principle Applied: Plan to Throw One Away (Brooks)
 ├─ Event Logged: RETROSPECTIVE
-├─ Neo4j Promoted: {Yes/No}
+├─ Canonical promotion: {Approved receipt / Not requested — human approval required}
 └─ Confidence: {High/Medium/Low}
 ```

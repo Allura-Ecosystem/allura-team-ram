@@ -1,3 +1,14 @@
+---
+description: "Promote a memory trace using the 3-agent curator team (group_id: allura-system)"
+argument-hint: "<trace_id>"
+allowed-tools:
+  - Read
+  - Bash
+  - Grep
+  - mcp__allura-brain__memory_search
+  - mcp__allura-brain__memory_add
+---
+
 # /curator-team-promote
 
 Promote a memory trace using the 3-agent curator team.
@@ -31,8 +42,8 @@ Promote a memory trace using the 3-agent curator team.
 ## Output
 
 - ADR with all three perspectives
-- PostgreSQL event log
-- Neo4j insight (if approved)
+- PostgreSQL event log (group_id: `allura-system`)
+- Canonical insight (only with human approval, authorized group_id: `allura-system`)
 
 ## Cost
 

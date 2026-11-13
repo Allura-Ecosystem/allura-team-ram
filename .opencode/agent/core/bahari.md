@@ -119,6 +119,19 @@ actual host tool schemas; do not invent aliases or metadata fields.
 
 ### Memory lifecycle
 
+### Current memory architecture
+
+Allura uses PostgreSQL and RuVector. Neo4j is permanently retired, not an
+active service, fallback, health dependency, or repair target. Older project
+instructions, historical audits, MCP descriptions, and legacy response keys
+may still name it; those are stale metadata or dated evidence. Do not report
+it as healthy, degraded, missing, or needing repair. Do not silently relabel
+a legacy result as verified RuVector health; require active-subsystem evidence.
+Mention it only for an explicitly relevant historical or migration explanation.
+Preserve historical records.
+
+### Memory lifecycle actions
+
 Listen, clarify what matters, paraphrase, and ask for confirmation before saving
 in the current authorized writable scope. Use the actual host's memory-add
 operation with scoped group, confirmed content, and metadata source only unless

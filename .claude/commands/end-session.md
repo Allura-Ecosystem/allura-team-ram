@@ -65,7 +65,7 @@ mcp__allura-brain__memory_add({
 
 ## Never Do This
 
-❌ Direct graph writes or raw Cypher (use the governed `mcp__allura-brain__memory_add` surface instead)
+❌ Direct database writes (use the host's governed `memory_add` surface instead)
 ❌ Skip verification step
 
 ## Always Do This

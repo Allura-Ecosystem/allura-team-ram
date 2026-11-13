@@ -13,7 +13,7 @@ tests, approved architecture decisions, or the user's current request.
 
 - PostgreSQL is the append-only episodic and audit layer.
 - RuVector/PostgreSQL is the production semantic, graph, and vector backend.
-- Neo4j is a fallback backend only where the active runtime explicitly selects it.
+- No retired backend is an active service, fallback, health dependency, or repair target.
 - RuVix enforces identity, tenant, policy, and evidence gates.
 - Semantic promotion is human-governed. An agent may write an episodic outcome
   but must not approve or promote its own result.
@@ -50,7 +50,11 @@ Never use the retired `allura-roninmemory` or `allura-team-ram` tenant names.
 
 ## Canonical call shapes
 
-Use the tool name exposed by the current host; do not invent an alias.
+Use the tool name and parameter schema exposed by the current host; do not invent
+an alias. Check capabilities before calling. These search/add examples use the
+supported `query`, `group_id`, `limit`, `content`, and `metadata.source` fields;
+inspect the exposed schema for get/list/promotion identifiers. Never substitute
+raw database access when a governed capability is unavailable.
 
 ```javascript
 memory_search({
@@ -74,7 +78,7 @@ identity.
 
 Episodic history is append-only. Correct a false or stale claim with a new trace
 that identifies the superseded claim. Semantic changes require the governed
-curator path and versioned lineage; never directly rewrite canonical history.
+curator path and immutable `SUPERSEDES` lineage; never directly rewrite canonical history.
 
 ## Completion receipt
 

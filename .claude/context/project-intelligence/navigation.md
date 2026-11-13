@@ -1,55 +1,47 @@
-<!-- Context: project-intelligence/nav | Priority: critical | Version: 1.2 | Updated: 2026-04-17 -->
+<!-- Context: project-intelligence/nav | Priority: critical | Version: 1.1 | Updated: 2026-04-11 -->
 
-# Project Intelligence — Allura Memory
+# Project Intelligence Navigation
 
-> Memory layer for Allura Agent-OS with provable governance, tenant isolation, and auditable promotion.
-
-> **Reading order:** `system-authority.md` first (it overrides all defaults), then `informant.md` for field manual.
+> This section is an Allura-specific project intelligence overlay. It documents the Allura memory system and related repo context; it is not the generic harness identity.
 
 ## Quick Routes
 
-| What You Need       | File                      | Key Content                  |
-| ------------------- | ------------------------- | ---------------------------- |
-| **Start here**      | `navigation.md`           | This file - quick overview   |
-| **System authority**| `system-authority.md`     | SYSTEM — overrides all agent defaults |
-| **v1 blockers**     | `v1-blockers.md`           | Active — must resolve before v1 GO |
-| **How to build**    | `technical-domain.md`     | Stack, patterns, conventions |
-| **Why this exists** | `business-domain.md`      | Positioning vs mem0          |
-| **Architecture**    | `business-tech-bridge.md` | Business → tech mapping      |
-| **Decisions**       | `decisions-log.md`        | Why decisions were made      |
-| **Current state**   | `living-notes.md`         | Active issues, debt          |
-| **Repo truth**      | `informant.md`            | Maintainer field manual      |
+| What You Need | File | Key Content |
+|---------------|------|-------------|
+| **Start here** | `navigation.md` | This file - quick overview |
+| **How to build** | `technical-domain.md` | Stack, patterns, conventions |
+| **Why this exists** | `business-domain.md` | Positioning vs mem0 |
+| **Architecture** | `business-tech-bridge.md` | Business → tech mapping |
+| **Decisions** | `decisions-log.md` | Why decisions were made |
+| **Current state** | `living-notes.md` | Active issues, debt |
+| **Repo truth** | `informant.md` | Maintainer field manual |
 
 ## Tech Stack at a Glance
-
 ```
 Next.js 16 + TypeScript 5.9 (strict) + Bun 1.3
-PostgreSQL 16 (events) + Neo4j 5.26 (knowledge) + RuVector (vectors)
+PostgreSQL (append-only events and canonical graph) + RuVector (semantic/vector retrieval)
 OpenCode 1.4.3 (agent runtime) + MCP (tool protocol)
 ```
 
 ## Key Invariants
-
 - ✅ `group_id` on every database write (tenant isolation)
 - ✅ PostgreSQL = append-only raw traces
-- ✅ Neo4j = curated knowledge with SUPERSEDES
-- ✅ No agent writes to Neo4j without human approval
+- ✅ Canonical knowledge preserves immutable SUPERSEDES lineage
+- ✅ Canonical promotion requires human approval through governed interfaces
 
 ## Quick Commands
-
 ```bash
 bun install              # Install dependencies
-bun run dev              # Start dev server
-bun test                 # Run tests
-bun run typecheck        # TypeScript check
+npm run dev              # Start dev server
+npm test                 # Run tests (85% passing)
+npm run typecheck        # TypeScript check
 docker compose up -d     # Start infrastructure
 ```
 
 ## Integration
 
 Referenced from:
-
-- `docs/allura/RISKS-AND-DECISIONS.md` - Architecture decisions
+- `memory-bank/systemPatterns.md` - Architecture patterns
 - `AGENTS.md` - Agent operating handbook
 - `docs/allura/` - Human documentation canon
 

@@ -2,7 +2,7 @@
  * Curator Governance - Manages promotion workflow for high-value insights
  * 
  * This module handles the human-in-the-loop approval process
- * for promoting insights from episodic (PostgreSQL) to semantic (Neo4j) memory.
+ * for recording episodic proposal evidence in PostgreSQL/RuVector memory.
  */
 
 import { memory_add } from 'mcp:allura-memory';
@@ -16,10 +16,10 @@ interface PromotionProposal {
 }
 
 /**
- * Propose an insight for promotion to Neo4j
+ * Record a canonical review candidate.
  * 
- * If confidence ≥ 0.85 and PROMOTION_MODE = 'auto': promoted immediately
- * If confidence < 0.85 or PROMOTION_MODE = 'soc2': queued for curator approval
+ * Confidence is evidence only. Canonical promotion always requires human approval
+ * through a supported governed capability; an episodic event is not promotion.
  */
 export async function proposePromotion(params: PromotionProposal): Promise<void> {
   const { insight, rationale, confidence, agentId, group_id = 'allura-system' } = params;
@@ -47,7 +47,9 @@ export async function proposePromotion(params: PromotionProposal): Promise<void>
 /**
  * Approve a promotion proposal (curator action)
  * 
- * This creates a memory_promoted event and triggers Neo4j write
+ * This legacy helper records an episodic approval claim only, not a verified
+ * canonical promotion. Callers must use a supported authenticated curator
+ * capability and verify its receipt and canonical retrieval before claiming success.
  */
 export async function approvePromotion(params: {
   proposalId: string;

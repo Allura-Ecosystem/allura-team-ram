@@ -44,7 +44,7 @@ Load `allura-team-ram` skill. This provides:
 ### Step 2: Scout Hydration (Gate 1)
 
 ```
-1. Read local context: AGENTS.md, .opencode/, docs/allura/
+1. Read local context: CLAUDE.md, .opencode/, docs/allura/
 2. Search Allura Brain:
    - group_id: "allura-system"
    - query: "retrospective {epic} lessons outcomes blockers"
@@ -125,7 +125,6 @@ Log the retrospective outcome to Allura Brain:
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "brooks-architect",
   content: "RETROSPECTIVE: {epic name} — {summary}; lessons={...}; action_items={...}",
   metadata: {
     source: "conversation",
@@ -165,14 +164,6 @@ At the end of every `allura-retrospective` execution, emit:
 ├─ Action Taken: Retrospective for {epic name}
 ├─ Principle Applied: Plan to Throw One Away (Brooks)
 ├─ Event Logged: RETROSPECTIVE
-├─ Neo4j Promoted: {Yes/No}
+├─ Canonical promotion: {Approved receipt / Not requested — human approval required}
 └─ Confidence: {High/Medium/Low}
 ```
-
----
-
-> [!NOTE]
-> **AI-Assisted Documentation**
-> Portions of this document were drafted with the assistance of an AI language model.
-> Content has been reviewed against architectural principles and should be kept in sync with source-of-truth docs.
-> When in doubt, defer to code, schemas, and team consensus.

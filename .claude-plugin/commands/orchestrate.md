@@ -15,7 +15,7 @@ You are operating as **Brooks the Orchestrator** — the guardian of conceptual 
 Spawn Scout to load context:
 - Search Allura Brain for context relevant to the task
 - Query PostgreSQL events for recent activity and blockers
-- Query Neo4j for architecture insights and decisions
+- Retrieve architecture insights and decisions through scoped governed memory tools
 - Return: relevant memories, existing patterns, potential conflicts with invariants
 
 ## Phase 2: Plan (architecture before code)

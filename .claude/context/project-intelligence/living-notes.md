@@ -26,7 +26,7 @@
 | Item | Impact | Priority | Status |
 |------|--------|----------|--------|
 | `memory()` wrapper PENDING | Primary write-back blocker; agents can't log to Brain mid-task | High | Acknowledged |
-| Neo4j memory graph dirty data | `search_memories` / `read_graph` blocked by malformed entities | High | Known |
+| Historical retired graph dirty-data issue | Old graph retrieval was blocked by malformed entities | Historical | Backend retired; not a repair target |
 | RuVector stubs | `ruvector_hybrid_search()` and other learning/agent functions are stubs; don't call them | Med | Deferred |
 
 ### Technical Debt Details
@@ -38,12 +38,12 @@
 *Proposed Solution:* Implement memory() wrapper in kernel layer, expose via MCP  
 *Status:* Acknowledged — Story 1.2 dependency
 
-**Neo4j Memory Graph — Dirty Entities**  
+**Historical Retired Graph — Dirty Entities**
 *Priority:* High  
 *Impact:* `mcp__MCP_DOCKER__read_graph` and `mcp__MCP_DOCKER__search_memories` both fail with Pydantic validation errors  
 *Root Cause:* Entities `Spec-Driven System` and `Prompt System` have spaces in their `type` field (violates `^[A-Za-z_][A-Za-z0-9_]*$` pattern) and null `observations`  
-*Workaround:* Use `mcp__MCP_DOCKER__execute_sql` for Postgres reads; avoid neo4j-memory graph search until cleaned  
-*Fix Plan:* Cypher query to delete or fix the malformed entities  
+*Current handling:* Use governed PostgreSQL/RuVector retrieval; no direct database fallback.
+*Disposition:* Historical backend retired; no cleanup or repair operation is authorized by this note.
 *Status:* Known — blocking session memory hydration
 
 **RuVector Stubs**  
@@ -60,7 +60,7 @@
 | Question | Stakeholders | Status | Next Action |
 |----------|--------------|--------|-------------|
 | When does `memory()` wrapper land? | Brooks, Woz | Open | Scope into Story 1.2 or create Story 1.3 |
-| Neo4j graph cleanup — safe to delete dirty entities? | Brooks | Open | Run read-only Cypher to audit scope first |
+| Historical retired graph cleanup question | Brooks | Closed by retirement | Preserve evidence; no service or data repair |
 | RuVector stubs — promote to real or remove? | Brooks, Bellard | Deferred | Post-Epic-1 decision |
 
 ---
@@ -69,7 +69,7 @@
 
 | Issue | Severity | Workaround | Status |
 |-------|----------|------------|--------|
-| Neo4j memory search blocked | High | Use Postgres SQL via execute_sql | Known |
+| Historical retired graph search blocked | Historical | Governed retrieval only | Backend retired |
 | `test:mcp` needs live dev server | Med | Run `bun run dev` first; `USE_REAL_MCP_DOCKER=true` for full validation | Known (by design) |
 | ADAS test runs not completing | Med | See V1-BLOCKERS-AND-FIXES.md | In Progress |
 
@@ -79,7 +79,7 @@
 
 - **`group_id` on every DB operation** — enforced at PostgreSQL CHECK constraint, not application layer. This is the invariant that keeps multi-tenancy safe.
 - **Append-only traces** — never UPDATE/DELETE on `events` table. Everything is recoverable.
-- **Curator approve before Neo4j write** — `bun run curator:approve` is the only sanctioned promotion path in SOC2 mode.
+- **Human approval before canonical promotion** — use a supported governed curator capability and verify its receipt and canonical retrieval.
 - **`retrieveMemories()` for hybrid search** — `src/lib/ruvector/bridge.ts` two-pass RRF fusion (vector ANN + BM25). This works; the extension stubs do not.
 
 ## Gotchas for Maintainers
@@ -96,7 +96,7 @@
 | Project | Goal | Owner | Status |
 |---------|------|-------|--------|
 | Story 1.2 TraceMiddleware | Full HTTP request tracing for agent operations | Woz | In Progress |
-| Neo4j graph cleanup | Fix dirty entities blocking memory search | Brooks | Queued |
+| Historical retired graph cleanup | Preserved as evidence, no active repair | Brooks | Closed by retirement |
 | Brand docs alignment | Sync all planning/context docs to finalized brand | Brooks | In Progress |
 
 ---

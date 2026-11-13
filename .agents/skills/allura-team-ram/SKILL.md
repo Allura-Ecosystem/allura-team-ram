@@ -36,7 +36,7 @@ Allura Core Layer (shared governance)
 
 Before any implementation or review:
 
-1. Load local context files: `AGENTS.md`, `.opencode/`, `.Codex/`, `docs/allura/`
+1. Load local context files: `CLAUDE.md`, `.opencode/`, `.claude/`, `docs/allura/`
 2. Search Allura Brain with `group_id=allura-system` for:
    - Recent Brooks events and blockers
    - Architecture decisions (AD-##)
@@ -107,7 +107,6 @@ After completing any significant action:
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "brooks-architect",
   content: "EVENT_TYPE: what was done; evidence=...; counterfactuals=...",
   metadata: { source: "conversation", agent_id: "brooks-architect", confidence: 0.85 }
 })
@@ -170,17 +169,9 @@ At the end of every substantive Allura workflow response, emit:
 ├─ Action Taken: {what was done}
 ├─ Principle Applied: {which Brooksian principle}
 ├─ Event Logged: {event_type written to Brain, or "None"}
-├─ Neo4j Promoted: {Yes/No}
+├─ Canonical promotion: {Approved receipt / Not requested — human approval required}
 └─ Confidence: {High/Medium/Low}
 ```
-
----
-
-> [!NOTE]
-> **AI-Assisted Documentation**
-> Portions of this document were drafted with the assistance of an AI language model.
-> Content has been reviewed against architectural principles and should be kept in sync with source-of-truth docs.
-> When in doubt, defer to code, schemas, and team consensus.
 
 ## Adaptive Delivery
 

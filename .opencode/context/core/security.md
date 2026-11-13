@@ -14,9 +14,9 @@ max_age_days: 30
 
 ## Access Control
 - **RuVix Kernel** (`src/kernel/`) enforces all database access policies
-- No agent may write directly to Neo4j — must go through promotion pipeline
+- No agent may write directly to canonical storage — use the human-governed promotion pipeline
 - `POL-004`: Rejects non-canonical agent IDs in trace calls — graceful degradation
-- `POL-001`: Direct Neo4j writes are blocked at the kernel level
+- `POL-001`: Direct canonical database writes must not bypass governance
 
 ## Credential Management
 - `CREDENTIALS_DIR` must be chmod 700 (was world-writable — fixed 2026-04-28)
@@ -29,7 +29,7 @@ max_age_days: 30
 - Structured error responses — no stack traces or internal details in production
 
 ## Container Security
-- Neo4j: HEAP_MAX=512m, PAGECACHE=256m (container limit 2GB, was crash-looping)
+- Use current supported diagnostic evidence for active PostgreSQL/RuVector capacity; historical limits are not deployment instructions
 - All 6 containers healthy as of 2026-05-03
 - `EMBEDDING_BASE_URL=http://host.docker.internal:11434` for container → host Ollama
 
@@ -45,7 +45,7 @@ max_age_days: 30
 - `.opencode/rules/mcp-integration.md` defines routing rules
 
 ## Anti-Patterns (DO NOT)
-- ❌ Direct Neo4j writes from agent code
+- ❌ Direct canonical database writes from agent code
 - ❌ Hardcoded secrets or credentials
 - ❌ Raw SQL from agent surfaces (use MCP tools)
 - ❌ `web_fetch` on Notion URLs (use Notion API)

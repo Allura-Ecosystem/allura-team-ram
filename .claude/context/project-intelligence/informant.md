@@ -19,7 +19,7 @@
 For current v1 work, the authoritative runtime is:
 
 - **PostgreSQL 16** for append-only trace/event storage
-- **Neo4j 5.26** for promoted semantic memory and version lineage
+- **PostgreSQL/RuVector** for human-approved semantic memory and immutable SUPERSEDES lineage
 - **Next.js + TypeScript + Bun** for app/runtime/tooling
 - **Canonical 5-operation memory interface**:
   - `memory_add`
@@ -61,14 +61,13 @@ If a plan disagrees with the running code, trust the running code until the plan
 
 ### Deferred / Not Part of v1 Ship Gate
 
-- RuVector as authoritative runtime architecture
 - optimization/materialized views required for bootstrap
 - full docs reconciliation with older Notion architecture references
 - broad historical cleanup of every stale route/doc path
 
 ### Deprecated / Risky Assumptions
 
-- `project/project-context.md` was removed (2026-04-17); use `project-intelligence/technical-domain.md` instead
+- `project/project-context.md` is deprecated; prefer `project-intelligence/`
 - older docs may still reference root `postgres-init/` paths that are no longer the real bootstrap path
 - older docs may still assume admin/dashboard routes or MCP entrypoints that are no longer authoritative
 
@@ -93,12 +92,12 @@ Then verify the stack, app, and tests with the current branch commands.
 
 - Compose: `docker-compose.yml`
 - Postgres init: `docker/postgres-init/`
-- Neo4j indexes script: `scripts/neo4j-memory-indexes.cypher`
+- Semantic diagnostics: supported governed capabilities with authorized tenant scope
 
 ### Minimum Runtime Expectations
 
 - Postgres comes up with the required schema
-- Neo4j comes up healthy
+- Semantic health requires current subsystem evidence, not inferred TCP reachability
 - canonical proposal table exists
 - app typecheck passes
 

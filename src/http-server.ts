@@ -70,7 +70,7 @@ interface AgentResult {
 interface HealthStatus {
   status: "healthy" | "degraded" | "unhealthy";
   postgres: "healthy" | "degraded" | "unhealthy";
-  graph: "healthy" | "degraded" | "unhealthy";
+  graph: "healthy" | "degraded" | "unhealthy" | "unverified";
   sona: { active: boolean; trajectories?: number; agents?: number; taskTypes?: number };
   coherence: { score: number; level: string };
   uptime_ms: number;
@@ -386,18 +386,11 @@ async function checkPostgres(): Promise<"healthy" | "unhealthy"> {
 }
 
 /**
- * Probe the canonical graph (PostgreSQL graph tables) by checking the
- * same PostgreSQL instance — graph_memories and graph_supersedes tables
- * live alongside episodic data in the single PostgreSQL engine.
- * Returns "graph_unavailable" as "unhealthy" when the PG probe fails.
+ * PostgreSQL/RuVector graph health needs governed subsystem evidence.
+ * A TCP connection cannot verify graph tables, indexes, or semantic freshness.
  */
-async function checkGraph(): Promise<"healthy" | "unhealthy"> {
-  // Graph tables reside in the same PostgreSQL instance as episodic data.
-  // Reuse the PostgreSQL TCP probe — if PG is reachable, graph tables are
-  // available. A dedicated probe is unnecessary after the Neo4j sunset (AD-50).
-  const host = process.env.POSTGRES_HOST || "localhost";
-  const port = Number(process.env.POSTGRES_PORT) || 5432;
-  return (await probeTcp(host, port)) ? "healthy" : "unhealthy";
+async function checkGraph(): Promise<"unverified"> {
+  return "unverified";
 }
 
 // ---------------------------------------------------------------------------

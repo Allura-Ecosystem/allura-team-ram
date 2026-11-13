@@ -34,7 +34,7 @@ Memory score ≥ threshold in SOC2 mode, or explicit request to "propose this me
 ## Guardrails
 - **Propose only.** This skill creates proposals — it does NOT approve or reject them. Approval requires the `allura-approve-promotion` skill or direct HITL action.
 - **group_id required.** Every call must include group_id. Reject if missing.
-- **No direct Neo4j writes.** Promotion goes through the curator pipeline (`canonical_proposals` table), never directly to Neo4j.
+- **No direct database writes.** Promotion goes through the supported governed curator pipeline with human approval; inspect available tool schemas rather than querying internal tables.
 - **No auto-approval.** Even when `PROMOTION_MODE=auto`, this skill only proposes. The `auto-promote.ts` service handles the approval side.
 - **Verify before proposing.** Always `memory_get` to confirm the memory exists and is eligible (not already proposed, not deleted).
 - **One proposal per memory.** If a proposal already exists for this memory ID, return the existing proposal_id — do not create duplicates.

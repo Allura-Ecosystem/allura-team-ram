@@ -43,7 +43,7 @@ Promote a memory trace using the 3-agent curator team.
 
 - ADR with all three perspectives
 - PostgreSQL event log (group_id: `allura-system`)
-- Neo4j insight (if approved, group_id: `allura-system`)
+- Canonical insight (only with human approval, authorized group_id: `allura-system`)
 
 ## Cost
 

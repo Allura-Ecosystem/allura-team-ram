@@ -34,7 +34,7 @@ Returns system health status.
 {
   "status": "healthy|degraded|unhealthy",
   "postgres": "healthy|degraded|unhealthy",
-  "neo4j": "healthy|degraded|unhealthy",
+  "graph": "unverified",
   "uptime_ms": 12345
 }
 ```
@@ -100,9 +100,6 @@ POSTGRES_PORT=5432
 POSTGRES_USER=ronin4life
 POSTGRES_PASSWORD=...
 POSTGRES_DB=memory
-NEO4J_URI=bolt://localhost:7687
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=...
 AGENT_TIMEOUT_MS=30000               # Max time per agent execution (default: 30s)
 ```
 
@@ -131,7 +128,7 @@ See `.opencode/contracts/allura-harness-invocation.md` Section 4 for the full ma
 - Returns typed `AgentResult`
 
 **Health Check:** `src/http-server.ts`
-- Probes Postgres and Neo4j with 2-second timeouts
+- Probes PostgreSQL TCP reachability with a 2-second timeout; graph health remains unverified without governed subsystem evidence
 - Caches result for 5 seconds
 - Always returns overall "healthy" (harness can serve via static routing)
 
@@ -215,4 +212,4 @@ For issues with the HTTP service or contract, check:
 1. `.opencode/hooks/` — Lifecycle logging (session-start, task-complete)
 2. `src/agent-executor.ts` — Agent invocation pipeline
 3. PostgreSQL `events` table — Audit trail of all invocations
-4. Neo4j `PROCESS_RESULT` nodes — Semantic memory of successful executions
+4. Human-approved canonical memory — Immutable semantic SUPERSEDES lineage through governed PostgreSQL/RuVector interfaces

@@ -167,4 +167,4 @@ Allura                          Harness
 
 ### 6.4 Promotion Rule
 
-Events with `confidence >= 0.85` are candidates for promotion from PostgreSQL (episodic) to Neo4j (semantic). Promotion requires HITL curator approval via `curator:approve` -- it is never autonomous.
+Events with `confidence >= 0.85` are candidates for canonical semantic review in PostgreSQL/RuVector. Promotion requires explicit human approval through a supported governed curator capability -- it is never autonomous.
