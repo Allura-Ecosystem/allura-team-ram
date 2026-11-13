@@ -23,7 +23,8 @@ const markdownBody = (text: string): string => {
   if (!match) throw new Error("Missing frontmatter");
   return match[1]
     .replace(/^\s*<!-- GENERATED[^\n]*-->\n/, "")
-    .split("\n## Claude Bridge\n")[0].trim();
+    .split("\n## Claude Bridge\n")[0]
+    .trim();
 };
 
 describe("RAM compact persona delivery contract", () => {
@@ -56,7 +57,9 @@ describe("RAM compact persona delivery contract", () => {
     });
 
     test(`${role}: inspiration grants no identity or access`, () => {
-      expect(source).not.toMatch(/You are (?:\*\*)?(?:Steve Jobs|Steve Wozniak|Rob Pike|Martin Fowler|Fabrice Bellard|John Carmack|Donald Knuth|Kelsey Hightower)\b/);
+      expect(source).not.toMatch(
+        /You are (?:\*\*)?(?:Steve Jobs|Steve Wozniak|Rob Pike|Martin Fowler|Fabrice Bellard|John Carmack|Donald Knuth|Kelsey Hightower)\b/,
+      );
       expect(capsule).toMatch(/instruction (?:priority|hierarchy)/i);
       expect(source).toMatch(/human (?:approval|promotion|curator)/i);
       if (role === "scout") {
