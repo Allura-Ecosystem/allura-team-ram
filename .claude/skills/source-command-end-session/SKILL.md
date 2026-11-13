@@ -34,7 +34,6 @@ This command persists a durable session reflection and verifies write success us
 // episodic; auto-queued for curator:approve — never a direct graph write
 mcp__allura-brain__memory_add({
   group_id: "allura-system",
-  user_id: "openagent",
   content: "Session reflection (" + new Date().toISOString() + "): " + summary,
   metadata: { source: "manual", agent_id: "openagent" }
 });
@@ -60,7 +59,6 @@ Instead of creating new Reflection entities, you can add observations to Memory 
 // episodic; auto-queued for curator:approve — never a direct graph write
 mcp__allura-brain__memory_add({
   group_id: "allura-system",
-  user_id: "openagent",
   content: "2026-04-03: Completed session - hardened governed memory integration",
   metadata: { source: "manual", agent_id: "openagent" }
 });
@@ -68,7 +66,7 @@ mcp__allura-brain__memory_add({
 
 ## Never Do This
 
-❌ Direct graph writes or raw Cypher (use the governed `mcp__allura-brain__memory_add` surface instead)
+❌ Direct database writes (use the host's governed `memory_add` surface instead)
 ❌ Skip verification step
 
 ## Always Do This

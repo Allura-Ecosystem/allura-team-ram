@@ -1,6 +1,6 @@
 ---
 name: bmad-sprint-loop
-description: 'Autonomous EPIC execution loop under Allura governance. Brooks orchestrates from the main thread; dispatches real Allura-governed Team RAM subagents (Scout, Woz, Knuth, Pike, Fowler) via the Task tool to implement, review, and close every story in an epic — searching Allura Brain before each story and writing outcome traces after — then runs the retrospective. Use when the user says "sprint loop", "run the epic", "dev loop", or "run the whole epic".'
+description: "Run a governed Team RAM epic to verified completion."
 ---
 
 # Sprint Loop — Autonomous Epic Execution via Allura-Governed Team RAM
@@ -17,8 +17,8 @@ description: 'Autonomous EPIC execution loop under Allura governance. Brooks orc
 
 1. **Brain-first.** Before recon/implementation on a story, Brooks runs `allura-brain__memory_search` (or `MCP_DOCKER` Brain tools) for prior blockers, decisions, and outcomes on that story/domain. Findings flow into the subagent briefs.
 2. **Outcome traces.** After each story closes (and at epic close), Brooks writes an outcome trace via `allura-brain__memory_add`, `group_id=allura-system`, `source=manual`, `agent_id=brooks`.
-3. **HITL for promotion.** Subagents NEVER autonomously promote to Neo4j or flip curator proposals. Promotion routes through `curator:approve` / the governed HITL path only.
-4. **Append-only.** No UPDATE/DELETE on PostgreSQL event/trace rows. Neo4j versioning via `SUPERSEDES`.
+3. **HITL for promotion.** Subagents NEVER autonomously promote canonical memory or flip curator proposals. Promotion requires explicit human approval through the supported governed path.
+4. **Append-only.** No UPDATE/DELETE on PostgreSQL event/trace rows. Immutable semantic versioning via `SUPERSEDES`.
 5. **Tenant namespace.** `group_id` matches `^allura-[a-z0-9-]+$`. Default tenant: `allura-system`. Flag any legacy non-`allura` tenant as drift.
 6. **DB ops via MCP only.** Never `docker exec`; use `allura-brain__*` or `MCP_DOCKER__*` tools.
 
@@ -115,7 +115,7 @@ allura-brain__memory_search(
 )
 ```
 
-If `allura-brain__*` is unreachable, fall back to read-only `MCP_DOCKER__query_database` / `MCP_DOCKER__read_neo4j_cypher` (read-only fallback; never docker exec, never a legacy graph write). If Brain is fully down, note the degraded state, proceed with the un-governed `bmad-*` path, and flag it in the story's Debug Log. Summarize any prior blockers/decisions into the recon brief so subagents inherit the institutional memory.
+If governed Brain capabilities are unavailable, report the limitation and continue only work supported by local evidence and existing authorization. Never bypass governance with direct database queries. Summarize prior blockers/decisions into the recon brief so subagents inherit the institutional memory.
 
 ## PHASE A — RECON (parallel subagents)
 
@@ -144,7 +144,7 @@ Task(   // only if story touches data/schema
   prompt: "You are Knuth (Allura-governed Team RAM). For story {story_key}, assess any
     data/schema implications under Allura governance: confirm group_id scoping
     (^allura-[a-z0-9-]+$, default allura-system), append-only event/trace rows,
-    Neo4j SUPERSEDES versioning, and that no mutation of historical rows is implied.
+    immutable semantic SUPERSEDES versioning, and that no mutation of historical rows is implied.
     Report constraints the builder MUST honor. Under 250 words. Do NOT write code."
 )
 ```
@@ -176,7 +176,7 @@ Task(
 
     PROJECT INVARIANTS (non-negotiable):
     - group_id on every DB read/write (^allura-[a-z0-9-]+$)
-    - PostgreSQL events append-only; Neo4j versioning via SUPERSEDES
+    - PostgreSQL events append-only; semantic versioning via SUPERSEDES
     - HITL for promotion — never wire autonomous promotion
     - Bun only; no npm/npx
     - ASCII quotes only in source (no Unicode curly quotes — they break esbuild)
@@ -226,7 +226,6 @@ Synthesize Pike + Fowler verdicts:
   ```
   allura-brain__memory_add(
     group_id: "allura-system",
-    user_id: "sabir",
     content: "STORY_COMPLETE: {story_key} — <one-line what shipped>. Verified: <how>. Pike/Fowler approved. Files: {changed_files}.",
     metadata: { source: "manual", agent_id: "brooks" }
   )

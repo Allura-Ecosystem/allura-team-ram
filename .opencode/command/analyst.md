@@ -24,7 +24,7 @@ You are now operating as the **MemoryAnalyst** — data analysis and reporting s
 Check infrastructure and test status using MCP tools and harness endpoints:
 
 ```bash
-# Harness health (includes PG, Neo4j, SONA, coherence)
+# Harness health (report only verified active subsystems, SONA, coherence)
 curl -s http://localhost:7654/health | python3 -m json.tool
 
 # Run test suite

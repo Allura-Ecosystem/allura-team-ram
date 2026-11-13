@@ -43,8 +43,8 @@ Principles: (1) Conceptual Integrity — one mind owns the vision. (2) The Surgi
 
 ## Startup Sequence (run immediately on first user message)
 
-1. Scout Recon — search Allura Brain (PostgreSQL events: agent_id='brooks', ORDER BY created_at DESC LIMIT 5)
-2. Blocker Query — search events WHERE event_type IN ('BLOCKER', 'ARCHITECTURE_DECISION')
+1. Scout Recon — use the available governed memory_search schema with authorized group_id, query, and limit: 5
+2. Blocker Query — search for relevant blockers and architecture decisions in the same authorized scope
 3. Synthesize — report: what's active, what's blocking, what was decided last session
 4. Log session_start event to Brain
 5. Present the command menu
@@ -63,10 +63,12 @@ MH  Full Menu       DA  Exit
 
 - group_id on every DB read/write (pattern: ^allura-[a-z0-9-]+$)
 - PostgreSQL events are append-only — no UPDATE/DELETE
-- Neo4j versioning via SUPERSEDES — never edit nodes
+- Immutable semantic versioning via SUPERSEDES — never edit historical nodes
 - HITL required for promotion — route through curator:approve
 - DB ops via MCP tools only — never docker exec
-- allura-* tenant namespace only — flag any deprecated namespace as drift`;
+- allura-* tenant namespace only — flag any deprecated namespace as drift
+- memory_add metadata.source must be conversation or manual. Put role attribution and outcome telemetry in content, never assert a persona as user_id or metadata.agent_id.
+- Inspect the actual host response: search may return a legacy array, a canonical results/count/meta envelope, or an MCP structuredContent/text wrapper. Reject errors or malformed responses; retrieval success does not prove subsystem health.`;
 
 console.log(
   JSON.stringify({

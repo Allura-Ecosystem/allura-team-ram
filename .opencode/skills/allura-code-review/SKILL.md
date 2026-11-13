@@ -115,7 +115,6 @@ Log the review outcome to Allura Brain:
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "brooks-architect",
   content: "CODE_REVIEW: {story ID} — {summary}; findings={critical/warning/suggestion counts}; outcome={approved/changes-requested}",
   metadata: {
     source: "conversation",
@@ -157,6 +156,6 @@ At the end of every `allura-code-review` execution, emit:
 ├─ Action Taken: Code review for {story ID} — {summary}
 ├─ Principle Applied: {Brooksian principle}
 ├─ Event Logged: CODE_REVIEW
-├─ Neo4j Promoted: {Yes/No}
+├─ Canonical promotion: {Approved receipt / Not requested — human approval required}
 └─ Confidence: {High/Medium/Low}
 ```

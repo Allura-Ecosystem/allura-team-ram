@@ -22,7 +22,7 @@ Request approval for a pending MCP server (Brooks only).
 
 ```
 /mcp-approve postgresql         # Approve PostgreSQL client
-/mcp-approve neo4j              # Approve Neo4j Cypher executor
+/mcp-approve <server>           # Approve a verified capability within task scope
 /mcp-approve github             # Approve GitHub integration
 ```
 

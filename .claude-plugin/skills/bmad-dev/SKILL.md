@@ -78,7 +78,7 @@ Apply this checklist to every piece of code you write:
       UPDATE or DELETE event/trace rows. Policy versions are never modified — create a
       new version that supersedes the old one.
 - [ ] **Include group_id.** Every database read and write includes the tenant group_id.
-- [ ] **Parameterized queries only.** No string interpolation in SQL or Cypher.
+- [ ] **Parameterized queries only.** No string interpolation in database queries.
 - [ ] **No secrets in code.** Credentials come from environment variables.
 - [ ] **Explicit return types.** Exported functions have explicit TypeScript return types.
 - [ ] **Import discipline.** `import type` for type-only imports. External packages first,

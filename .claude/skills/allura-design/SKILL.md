@@ -37,7 +37,6 @@ Before invoking huashu-design, run this protocol:
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "brooks-architect",
   content: "Design session started. Brain hydration: found N design assets. Delegated to huashu-design.",
   metadata: { agent_id: "brooks-architect", workflow: "allura-design", step: "hydration" }
 })
@@ -69,7 +68,6 @@ After huashu-design delivers, store these artifacts:
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "woz-builder",
   content: "Brand spec for [Project]: colors=..., fonts=..., logo path=..., product images=...",
   metadata: { type: "brand-spec", agent_id: "woz-builder", project: "[project_name]" }
 })
@@ -79,7 +77,6 @@ allura-brain_memory_add({
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "woz-builder",
   content: "Chose [direction] because [reasoning]. Rejected alternatives: [...]",
   metadata: { type: "design-decision", agent_id: "woz-builder" }
 })
@@ -89,14 +86,13 @@ allura-brain_memory_add({
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "pike-interface-review",
   content: "5-dimension review: Philosophy=8, Hierarchy=7, Details=9, Functionality=8, Innovation=6. Radar chart path: /artifacts/...",
   metadata: { type: "design-review", project: "[project_name]" }
 })
 ```
 
 ### 4. Promotion gate
-- If average review score ≥ 8.0 / 10 → call `allura-brain_memory_promote` to elevate from episodic to Neo4j
+- If average review score ≥ 8.0 / 10, nominate for canonical review through an available governed capability. A score never authorizes promotion; require explicit human approval and verify the resulting receipt and retrieval.
 - Rationale: "Validated by 5-dimension review, ready as canonical design system"
 
 ## Team RAM Routing

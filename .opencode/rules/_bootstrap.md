@@ -30,7 +30,7 @@ User: Sabir Asheed | Domain: Allura Agent-OS
 
 ### Essential (run at boot)
 1. ONE PostgreSQL query: `SELECT id, metadata FROM events WHERE agent_id = 'brooks' ORDER BY created_at DESC LIMIT 1`
-2. Optional ONE Neo4j / insight lookup when the command is architecture-sensitive
+2. Optional ONE governed semantic insight lookup when the command is architecture-sensitive
 
 ### Deferred (run ONLY when a specific command is invoked)
 - Notion search → only on `BP` / `CR` commands

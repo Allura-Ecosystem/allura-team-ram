@@ -121,7 +121,6 @@ Log the PRD creation to Allura Brain:
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "brooks-architect",
   content: "PRD_CREATED: {PRD title}; B#s={...}; F#s={...}; acceptance_criteria={...}",
   metadata: {
     source: "conversation",
@@ -162,6 +161,6 @@ At the end of every `allura-product-intake` execution, emit:
 ├─ Action Taken: PRD created — {title}
 ├─ Principle Applied: {Brooksian principle}
 ├─ Event Logged: PRD_CREATED
-├─ Neo4j Promoted: {Yes/No}
+├─ Canonical promotion: {Approved receipt / Not requested — human approval required}
 └─ Confidence: {High/Medium/Low}
 ```

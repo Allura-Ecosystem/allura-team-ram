@@ -18,7 +18,7 @@ This contract defines how Open Ralph Wiggum integrates with the Allura harness f
 | Agent / Tool | Role | When to Use |
 |--------------|------|-------------|
 | **Brooks (Architect)** | System design, ADRs, decisions | Architecture work |
-| **Brooks (Conductor)** | Todo orchestration | Task coordination |
+| **Jobs (Conductor)** | Todo orchestration | Task coordination |
 | **Woz (Implementer)** | Deep implementation | Complex features |
 | **Ralph tool** | Autonomous iteration harness | Clear criteria, NIGHT_BUILD |
 
@@ -52,7 +52,7 @@ This contract defines how Open Ralph Wiggum integrates with the Allura harness f
 
 **Reason**: DAY_BUILD requires approval gates for every decision. Ralph is designed for autonomous execution.
 
-**Alternative**: Use standard OpenCode workflow with ContextScout → Brooks → Approval → Implementation.
+**Alternative**: Use standard OpenCode workflow with ContextScout → OpenAgent → Approval → Implementation.
 
 ### NIGHT_BUILD Mode
 
@@ -77,13 +77,13 @@ This contract defines how Open Ralph Wiggum integrates with the Allura harness f
 | Task Type | Primary Agent | Fallback | Condition |
 |-----------|---------------|-----------|-----------|
 | Discovery | ContextScout | None | Always |
-| Intent/Scope | Brooks | None | Always |
+| Intent/Scope | OpenAgent | None | Always |
 | Architecture | brooks-architect | None | Always |
-| Implementation (DAY) | CoderAgent | Woz | With approval gates |
+| Implementation (DAY) | CoderAgent | OpenCoder | With approval gates |
 | Implementation (NIGHT) | **Ralph tool** | CoderAgent | Autonomous |
-| Refactor | Fowler | Ralph tool | If clear criteria |
-| Performance | Woz | None | Only if perf constraint |
-| Validation | Fowler | Ralph tool | If automated tests |
+| Refactor | OpenCoder | Ralph tool | If clear criteria |
+| Performance | OpenCoder | None | Only if perf constraint |
+| Validation | OpenCoder | Ralph tool | If automated tests |
 
 ### Fallback Logic
 
@@ -149,8 +149,8 @@ When using Ralph with Allura, these rules MUST be enforced:
 2. **Postgres is append-only** — INSERT only, never UPDATE/DELETE on events table
 3. **group_id required** — every DB operation must include group_id with allura-* format
 4. **Kernel routing** — trace writes go through RuVixKernel.syscall('trace'), not direct inserts
-5. **Neo4j versioning** — use SUPERSEDES relationships, never edit existing nodes
-6. **HITL** — never autonomously promote to Neo4j without going through curator flow
+5. **Semantic versioning** — preserve immutable SUPERSEDES lineage, never edit historical nodes
+6. **HITL** — canonical promotion requires human approval through the governed curator flow
 7. **MCP_DOCKER tools only** — never docker exec for database operations
 
 These rules should be included in the prompt file passed to Ralph.

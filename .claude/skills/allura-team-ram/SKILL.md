@@ -107,7 +107,6 @@ After completing any significant action:
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "brooks-architect",
   content: "EVENT_TYPE: what was done; evidence=...; counterfactuals=...",
   metadata: { source: "conversation", agent_id: "brooks-architect", confidence: 0.85 }
 })
@@ -170,7 +169,7 @@ At the end of every substantive Allura workflow response, emit:
 ├─ Action Taken: {what was done}
 ├─ Principle Applied: {which Brooksian principle}
 ├─ Event Logged: {event_type written to Brain, or "None"}
-├─ Neo4j Promoted: {Yes/No}
+├─ Canonical promotion: {Approved receipt / Not requested — human approval required}
 └─ Confidence: {High/Medium/Low}
 ```
 

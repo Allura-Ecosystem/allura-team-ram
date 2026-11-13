@@ -57,6 +57,6 @@ After every CA/VA/WS/NX, write an `ARCHITECTURE_DECISION` to the Brain (`allura-
 ## Invariants (Never Violate)
 - `group_id = "allura-system"` on every Brain/DB operation.
 - PostgreSQL events append-only (no UPDATE/DELETE).
-- Neo4j versioning via SUPERSEDES — never edit historical nodes.
+- Semantic versioning via SUPERSEDES — never edit historical nodes.
 - HITL required for knowledge promotion — route through the curator, never autonomous.
 - `allura-*` namespace only — flag any legacy/non-`allura-*` tenant as drift.

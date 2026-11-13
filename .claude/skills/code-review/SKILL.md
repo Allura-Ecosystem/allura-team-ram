@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Review code changes for correctness, regressions, security, contract drift, and missing tests using findings-first output and repo-specific guardrails.
+description: Review changes findings-first for correctness, regressions, security, contract drift, missing tests, and repo-specific guardrails.
 ---
 
 # Code Review
@@ -35,7 +35,7 @@ Always check for these repository invariants:
 
 - Enforce `group_id` on DB read and write paths
 - Preserve append-only PostgreSQL trace behavior
-- Preserve Neo4j lineage via `SUPERSEDES` instead of mutation
+- Preserve immutable semantic lineage via `SUPERSEDES` instead of mutation
 - Require HITL for behavior-changing promotion flows
 - Validate external boundaries with Zod
 - Prevent server-only modules from being imported into client code

@@ -9,7 +9,7 @@ Run at the start of every session. Verifies infrastructure, hydrates context fro
 ## Step 1: Health Check
 
 Verify Brain connectivity:
-- Search Allura Brain with `memory_list` or `memory_search` to confirm both PostgreSQL and Neo4j are responding
+- Search Allura Brain with a supported `memory_search` schema to verify retrieval availability; individual PostgreSQL/RuVector subsystem health remains unverified
 - Report status. If either fails, warn before continuing.
 
 ## Step 2: Scout Hydration
@@ -17,7 +17,7 @@ Verify Brain connectivity:
 Search for recent context:
 1. **Recent activity** — PostgreSQL events: `agent_id='brooks'`, ORDER BY `created_at` DESC LIMIT 5
 2. **Blockers** — events WHERE `event_type` IN ('BLOCKER', 'ARCHITECTURE_DECISION')
-3. **Insights** — Neo4j insights matching `allura-system`
+3. **Insights** — Governed semantic insights in authorized `allura-system` scope
 
 ## Step 3: Synthesize
 

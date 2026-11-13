@@ -1,3 +1,9 @@
+---
+name: allura-graph-debug
+description: >
+  "show me the graph for X", "debug graph connections", "what does the memory graph look like", "trace relationships for X"
+---
+
 # Allura Graph Debug (Read-Only)
 
 ## Trigger
@@ -12,8 +18,7 @@
 
 ## MCP Tool Allowlist
 - `mcp__allura-brain__memory_search` — governed Brain search (lead with this)
-- `mcp__allura-brain__memory_list` — governed list by group_id/user_id
-- `MCP_DOCKER__read_graph` — read-only fallback (never docker exec): full graph dump (use sparingly, only when query is broad)
+- Use the host's exposed list/graph diagnostic schema only within authorized tenant scope; never assert persona identity or request an unscoped graph dump
 
 ## Output Contract
 ```json
@@ -29,6 +34,6 @@
 ## Guardrails
 - **READ-ONLY.** This skill must NEVER create, update, or delete any entity or relationship.
 - **group_id required.** Every call must include group_id. Reject if missing.
-- **No Cypher writes.** Lead with `mcp__allura-brain__memory_search` / `memory_list`; raw `read_graph` is a read-only fallback (never docker exec). Never construct raw Cypher writes.
+- **Governed access only.** Inspect host schemas for `memory_search` / `memory_list` and supported graph diagnostics. If absent, report the capability unavailable; no direct database fallback. Preserve immutable `SUPERSEDES` lineage.
 - **Depth cap.** Never traverse beyond depth 4 — risk of OOM on large graphs.
 - **No exfiltration.** Never return data from a group_id the caller doesn't belong to.

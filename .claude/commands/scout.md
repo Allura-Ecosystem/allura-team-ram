@@ -1,3 +1,12 @@
+---
+description: "Invoke Scout to search Allura Brain memory for past decisions, patterns, and blockers"
+argument-hint: "<query>"
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+---
+
 # /scout — Brain Search Command
 
 ## Usage
@@ -8,7 +17,7 @@
 
 ## Description
 
-Invoke **Scout** (Grace Hopper persona) to search Allura Brain memory. Scout retrieves past decisions, learned patterns, and recurring blockers from both PostgreSQL (episodic traces) and Neo4j (semantic insights).
+Invoke **Scout** (Grace Hopper persona) to search Allura Brain memory. Scout retrieves past decisions, learned patterns, and recurring blockers through governed PostgreSQL/RuVector episodic and semantic retrieval.
 
 ## Query Patterns
 
@@ -43,19 +52,17 @@ Invoke **Scout** (Grace Hopper persona) to search Allura Brain memory. Scout ret
 ## How It Works
 
 1. **Query Analysis** — Scout parses your natural language query
-2. **Dual Search** — Searches both PostgreSQL (traces) and Neo4j (insights)
+2. **Governed Search** — Retrieves episodic traces and semantic insights in authorized tenant scope
 3. **Synthesis** — Combines results into actionable summary
 4. **Logging** — Records query as `SCOUT_QUERY` event for audit trail
 
 ## Tool Access
 
 Scout uses read-only tools (lead with the governed Brain surface):
-- `mcp__allura-brain__memory_search` — governed hybrid PG + Neo4j search (primary)
+- Use the exposed `memory_search` schema for governed PostgreSQL/RuVector retrieval
 - `mcp__allura-brain__memory_list` — governed list by group_id/user_id
 - `mcp__allura-brain__audit_query_events` — governed audit/event lookup
-- `mcp__MCP_DOCKER__query_database` — read-only fallback (never docker exec): natural language SQL
-- `mcp__MCP_DOCKER__execute_sql` — read-only fallback (never docker exec): raw SELECT queries
-- `mcp__MCP_DOCKER__read_neo4j_cypher` — read-only fallback (never docker exec): Neo4j graph queries
+- If governed capabilities are unavailable, report the limitation; never use direct database fallbacks
 
 ## Limitations
 
@@ -73,7 +80,7 @@ Scout uses read-only tools (lead with the governed Brain surface):
 - ADR-015: Session Management (2026-04-03)
 - ADR-023: OAuth2 Integration (2026-04-05)
 
-**Neo4j Insights:**
+**Canonical Insights:**
 - Decision: "Use proof-gated mutation for auth"
 - Principle: Conceptual Integrity
 - Confidence: 0.92

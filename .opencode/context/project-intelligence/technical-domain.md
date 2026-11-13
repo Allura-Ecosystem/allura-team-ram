@@ -16,7 +16,7 @@
 | Language | TypeScript | 5.9 strict | Type safety for memory operations |
 | Runtime | Bun | 1.3.11 | Faster than Node for scripts |
 | Database (Events) | PostgreSQL | 16 | Append-only raw traces |
-| Database (Knowledge) | Neo4j | 5.26 + APOC | Versioned knowledge graph |
+| Database (Knowledge) | PostgreSQL/RuVector | Current deployment | Immutable versioned knowledge graph |
 | Database (Vectors) | RuVector | latest | Vector embeddings |
 | Styling | Tailwind | v4 | Utility-first CSS |
 | UI Components | shadcn/ui | latest | Accessible, composable |
@@ -33,7 +33,7 @@
 ├─────────────────────────────────────────────┤
 │ Layer 3: Agent Runtime (OpenCode)            │
 ├─────────────────────────────────────────────┤
-│ Layer 2: PostgreSQL + Neo4j + RuVector       │
+│ Layer 2: PostgreSQL + RuVector              │
 ├─────────────────────────────────────────────┤
 │ Layer 1: RuVix Kernel (Proof-gated mutation)│
 └─────────────────────────────────────────────┘
@@ -47,7 +47,7 @@ src/
 ├── lib/
 │   ├── memory/    # Embedding providers, config
 │   ├── postgres/  # PostgreSQL connection
-│   ├── neo4j/     # Neo4j connection
+│   ├── graph-adapter/ # Governed graph storage seam
 │   ├── ruvector/  # Vector DB connection
 │   └── dedup/     # Duplicate detection
 ├── mcp/           # MCP tools and server
@@ -96,7 +96,7 @@ export function MemoryCard({ content, confidence }: MemoryCardProps) {
 - Zod validation at all boundaries
 - `group_id` on EVERY database operation
 - PostgreSQL events are append-only
-- Neo4j uses SUPERSEDES (never edit)
+- Semantic history uses immutable SUPERSEDES lineage (never edit)
 - Server guards on DB modules
 
 ## 📂 Codebase References

@@ -107,7 +107,6 @@ Log the outcome to Allura Brain:
 ```
 allura-brain_memory_add({
   group_id: "allura-system",
-  user_id: "brooks-architect",
   content: "TASK_COMPLETE: {story ID} — {summary}; evidence={...}",
   metadata: {
     source: "conversation",
@@ -151,6 +150,6 @@ At the end of every `allura-dev-story` execution, emit:
 ├─ Action Taken: {story ID} — {summary}
 ├─ Principle Applied: {Brooksian principle}
 ├─ Event Logged: TASK_COMPLETE or BLOCKED
-├─ Neo4j Promoted: {Yes/No}
+├─ Canonical promotion: {Approved receipt / Not requested — human approval required}
 └─ Confidence: {High/Medium/Low}
 ```

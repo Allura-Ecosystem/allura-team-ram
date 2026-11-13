@@ -19,15 +19,15 @@
 ## Tech Stack at a Glance
 ```
 Next.js 16 + TypeScript 5.9 (strict) + Bun 1.3
-PostgreSQL 16 (events) + Neo4j 5.26 (knowledge) + RuVector (vectors)
+PostgreSQL (append-only events and canonical graph) + RuVector (semantic/vector retrieval)
 OpenCode 1.4.3 (agent runtime) + MCP (tool protocol)
 ```
 
 ## Key Invariants
 - ✅ `group_id` on every database write (tenant isolation)
 - ✅ PostgreSQL = append-only raw traces
-- ✅ Neo4j = curated knowledge with SUPERSEDES
-- ✅ No agent writes to Neo4j without human approval
+- ✅ Canonical knowledge preserves immutable SUPERSEDES lineage
+- ✅ Canonical promotion requires human approval through governed interfaces
 
 ## Quick Commands
 ```bash
