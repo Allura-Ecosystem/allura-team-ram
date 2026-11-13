@@ -1,64 +1,45 @@
-# agent-sync — one persona, three runtimes (Codex · OpenCode · Claude)
+# Agent sync
 
-**Problem this fixes:** Brooks (and every Team RAM agent) existed as two hand-edited files —
-`.opencode/agent/core/<name>.md` (Codex) and `.claude/agents/<name>.md` (Claude). They were
-*supposed* to differ only by model, but hand-editing two surfaces let them drift (four Brooks
-copies, contradictory model fields). Two edit surfaces always drift — Allura already ruled this
-out for Notion/GitHub ("prevents two parallel edit surfaces").
+Keep Team RAM role instructions consistent across OpenCode, Claude Code, and Codex.
 
-**The rule:**
+Author the role body in `.opencode/agent/core/<name>.md`. The generator copies that body into runtime adapters and plugin agent files, applying the runtime-specific format and model setting. Generated files carry a source banner and should not be edited by hand.
 
-- **Author once** in `.opencode/agent/core/<name>.md` — the source of truth (body + persona + protocols).
-- The **only** per-runtime difference is the **model**, declared in `models.map.json` by tier.
-- `.claude/agents/<name>.md` is a **generated mirror**. Never hand-edit it (it carries a DO-NOT-EDIT banner).
-- Run the generator after editing any source agent. CI runs `--check` and fails on drift.
-
-## Usage
+## Use from the repository root
 
 ```bash
-# refresh mirrors + align source models to the map
+# Read-only preview of files that would change
 node tooling/agent-sync/sync-agents.mjs
 
-# CI / pre-commit: fail if anything is out of sync
+# Read-only drift check; exits nonzero on differences
 node tooling/agent-sync/sync-agents.mjs --check
+
+# Regenerate mirrors and align source model frontmatter
+node tooling/agent-sync/sync-agents.mjs --apply
 ```
 
-## How models are decided
+The default command is a dry run. Only `--apply` writes files. Review the source and model map before applying, then inspect the diff and run the check.
 
-`models.map.json` maps each agent to a **tier**, and each tier to a per-runtime model:
+## Source and generated paths
 
-| Tier | Codex (`.codex/*.toml`) | OpenCode (`.opencode/*.md`) | Claude (`.claude/*.md`) |
-| --- | --- | --- | --- |
-| ultrabrain | `gpt-5.5` * | `openai/gpt-5.5` | `opus` |
-| standard | `gpt-5` * | `ollama-cloud/minimax-m3` | `sonnet` |
-| cheap | `gpt-5` * | `ollama-cloud/minimax-m3` | `haiku` |
+| Path | Role |
+|---|---|
+| `.opencode/agent/core/<name>.md` | Canonical body and OpenCode frontmatter |
+| `tooling/agent-sync/models.map.json` | Agent tiers and per-runtime model policy |
+| `.claude/agents/<name>.md` | Generated Claude adapter |
+| `.codex/agents/<name>.toml` | Generated Codex adapter |
+| `agents/<name>.md` | Generated portable plugin agent |
+| `.claude-plugin/agents/<name>.md` | Generated Claude plugin agent |
 
-Change a model in one place (the map), regenerate, done. Brooks = `ultrabrain`.
+The script reads only source agents listed in the model map. The public export contract separately controls which roles ship in a package.
 
-**Three surfaces, three formats:** Codex = TOML (`developer_instructions` = body), OpenCode &
-Claude = Markdown. The body is identical across all three; only model + format differ.
+## Model inheritance
 
-**\* Codex model binding is different:** the model is NOT stored in the `.codex/*.toml` agent
-file — it lives in `.codex/config.toml` (profiles) / per-thread. The generator writes it only as
-a reference comment. Confirm the exact Codex model ids (`gpt-5.x` / `gpt-5.x-codex` family) with
-`codex`'s model list — `gpt-5.5`/`gpt-5` above are placeholders.
+All current tiers inherit the host's configured model: Claude uses `inherit`, OpenCode omits a model field, and the Codex adapter records inheritance in a comment. A Codex adapter does not select the session model.
 
-## Precedent
+Tiers describe responsibility; they do not establish a fixed model name or prove capability. If an explicit override is needed, verify that the target runtime supports it, change the map deliberately, then regenerate. The generator also removes source `fallback_model` fields because provider fallback belongs to host configuration.
 
-Pattern validated against `MichelKerkmeester/Opencode_Dev_Environment` (`.opencode` source →
-`.claude`/`.codex` mirrors), `wshobson/agents` ("never hand-edit generated files; CI fails on
-drift"), and `madebywild/agent-harness` (single source + per-runtime overrides).
+The standalone direct API executor has a separate contract: it requires a concrete supported `TEAM_RAM_ANTHROPIC_MODEL` and offers text generation without workspace tools. CLI aliases such as `inherit` cannot stand in for a direct API model identifier.
 
-## Verify before trusting model ids (needs shell)
+## Validation limits
 
-- `opencode models openai` → confirm `gpt-5.5` exists
-- confirm an `ollama-cloud` provider block is defined (root `opencode.jsonc` references it but
-  doesn't define it — if undefined, those models won't resolve)
-- confirm `opus`/`sonnet`/`haiku` aliases resolve in the `.claude` runtime
-
-## TODO (needs shell — bash sandbox was down at authoring time)
-
-1. `node sync-agents.mjs` to regenerate all `.claude` mirrors from `.opencode` source.
-2. Delete the stale forks (`allura-memory/.opencode` + `.claude` brooks copies, worktree copies)
-   so `.opencode/agent/core/` in this harness is the only source.
-3. Wire `--check` into CI / a pre-commit hook.
+A clean drift check establishes that these files match the generator's output. It does not verify model availability, agent execution, tool access, or behavior in a live runtime. Those claims require runtime evidence.
